@@ -45,22 +45,3 @@
     © <span id="year"></span> CBC Business — RDC uniquement
   </div>
 </footer>
-
-
-
-
-
-
-const y = document.getElementById("year");
-if(y) y.textContent = new Date().getFullYear();
-
-
-<div id="footer-container"></div>
-
-<script>
-fetch("partials/footer.html")
-  .then(res => res.text())
-  .then(html => {
-    document.getElementById("footer-container").innerHTML = html;
-  });
-</script>
