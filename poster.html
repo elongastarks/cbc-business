@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poster une mission – CBC Business</title>
+<style>
+  body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f5f6f9; }
+  header { background:#0B5FFF; color:white; padding:15px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+  header .logo { font-weight:bold; font-size:20px; }
+  header nav a { color:white; text-decoration:none; margin-left:15px; font-weight:500; }
+  .container { max-width: 720px; margin:40px auto; background:#fff; padding:30px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.1); }
+  h2 { text-align:center; margin-bottom:25px; }
+  .input-group { margin-bottom:15px; }
+  .input-group label { display:block; font-weight:600; margin-bottom:6px; }
+  .input-group input, .input-group textarea, .input-group select { width:90%; padding:10px; border:1px solid #ccc; border-radius:6px; font-size:15px; }
+  .input-group textarea { resize: vertical; min-height:100px; }
+  .btn { display:block; width:90%; padding:14px; background:#0B5FFF; color:white; border:none; border-radius:8px; font-size:16px; font-weight:600; cursor:pointer; margin-top:10px; }
+  .alert { padding:12px; border-radius:6px; margin-bottom:15px; display:none; }
+  .alert.error { background:#f8d7da; color:#721c24; }
+  .alert.success { background:#d4edda; color:#155724; }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">CBC Business</div>
+  <br><br>
+  <nav>
+    <a href="/dashboard.html">Dashboard</a>
+    <a href="/">Accueil</a>
+    <a href="/logout.html">Déconnexion</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h2>Publier une mission / annonce</h2>
+  <div id="alertBox" class="alert"></div>
+
+  <!-- TITRE -->
+  <div class="input-group">
+    <label>Titre de la mission *</label>
+    <input type="text" id="titre" placeholder="Ex : Développeur web React" required>
+  </div>
+
+  <!-- DESCRIPTION -->
+  <div class="input-group">
+    <label>Description complète *</label>
+    <textarea id="description" placeholder="Décrivez la mission, tâches, attentes..." required></textarea>
+  </div>
+
+  <!-- CATÉGORIE -->
+  <div class="input-group">
+    <label>Catégorie *</label>
+    <select id="categorie" required>
+      <option value="">-- Sélectionner --</option>
+      <!-- (ta liste complète est conservée telle quelle) -->
+      <option value="Développement Web">Développement Web</option>
+      <option value="Graphisme">Graphisme</option>
+      <option value="Marketing digital">Marketing digital</option>
+      <option value="Rédaction">Rédaction</option>
+      <option value="Autres">Autres</option>
+    </select>
+  </div>
+
+  <!-- TAGS -->
+  <div class="input-group">
+    <label>Tags (optionnel)</label>
+    <input
+      type="text"
+      id="tags"
+      placeholder="Ex : logo, freelance, react, cv"
+    >
+    <small>Sépare les tags par des virgules</small>
+  </div>
+
+  <!-- VILLE -->
+  <div class="input-group">
+    <label>Ville *</label>
+    <select id="ville" required>
+      <option value="">-- Sélectionner une ville --</option>
+      <option value="Kinshasa">Kinshasa</option>
+      <option value="Lubumbashi">Lubumbashi</option>
+      <option value="Goma">Goma</option>
+      <option value="Bukavu">Bukavu</option>
+      <option value="Matadi">Matadi</option>
+    </select>
+  </div>
+
+  <!-- PROVINCE -->
+  <div class="input-group">
+    <label>Province *</label>
+    <select id="province" required>
+      <option value="">-- Sélectionner une province --</option>
+      <option value="Kinshasa">Kinshasa</option>
+      <option value="Haut-Katanga">Haut-Katanga</option>
+      <option value="Nord-Kivu">Nord-Kivu</option>
+      <option value="Sud-Kivu">Sud-Kivu</option>
+    </select>
+  </div>
+
+  <!-- LIEU -->
+  <div class="input-group">
+    <label>Quartier / Lieu (optionnel)</label>
+    <input type="text" id="lieu" placeholder="Ex : Gombe">
+  </div>
+
+  <!-- LICENCE -->
+  <div class="input-group">
+    <label>Licence / Diplôme demandé (optionnel)</label>
+    <select id="licence">
+      <option value="">-- Sélectionner --</option>
+      <option value="Autodidacte">Autodidacte</option>
+      <option value="Bac">Bac</option>
+      <option value="Licence">Licence</option>
+      <option value="Master">Master</option>
+      <option value="Doctorat">Doctorat</option>
+      <option value="Certification">Certification</option>
+    </select>
+  </div>
+
+  <!-- SALAIRE -->
+  <div class="input-group">
+    <label>Salaire / Budget (optionnel)</label>
+    <input type="number" id="salaire" placeholder="Ex : 300">
+  </div>
+
+  <!-- PDF -->
+  <div class="input-group">
+    <label>Document PDF (optionnel)</label>
+    <input
+      type="url"
+      id="pdf_url"
+      placeholder="Lien du PDF (Google Drive, Firebase, etc.)"
+    >
+  </div>
+
+  <button id="postBtn" class="btn">Publier l’annonce</button>
+</div>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+  import { 
+    getFirestore, 
+    collection, 
+    addDoc, 
+    serverTimestamp 
+  } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBla3D7OS8-Hx82m8Tz6ZPIS7FSLury3ew",
+    authDomain: "cbc-business.firebaseapp.com",
+    projectId: "cbc-business",
+    storageBucket: "cbc-business.firebasestorage.app",
+    messagingSenderId: "295952883135",
+    appId: "1:295952883135:web:4624174a452c1f6aad950a",
+    measurementId: "G-580W4D6J7E"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const alertBox = document.getElementById("alertBox");
+
+  function showAlert(type, msg) {
+    alertBox.className = "alert " + type;
+    alertBox.textContent = msg;
+    alertBox.style.display = "block";
+  }
+
+  // Sécurité : attendre l’auth
+  onAuthStateChanged(auth, user => {
+    if (!user) {
+      showAlert("error", "Vous devez être connecté pour publier une annonce.");
+    }
+  });
+
+  document.getElementById("postBtn").addEventListener("click", async () => {
+    alertBox.style.display = "none";
+
+    const user = auth.currentUser;
+    if (!user) {
+      showAlert("error", "Utilisateur non connecté.");
+      return;
+    }
+
+    // Champs obligatoires
+    const titre = document.getElementById("titre").value.trim();
+    const description = document.getElementById("description").value.trim();
+    const categorie = document.getElementById("categorie").value;
+    const ville = document.getElementById("ville").value;
+    const province = document.getElementById("province").value;
+
+    // Champs optionnels
+    const lieu = document.getElementById("lieu").value.trim();
+    const licence = document.getElementById("licence").value;
+    const salaireInput = document.getElementById("salaire").value;
+    const pdf_url = document.getElementById("pdf_url")?.value.trim() || "";
+
+    const tagsRaw = document.getElementById("tags")?.value || "";
+    const tags = tagsRaw
+      .split(",")
+      .map(t => t.trim())
+      .filter(t => t.length > 0);
+
+    const salaire = salaireInput ? Number(salaireInput) : 0;
+
+    if (!titre || !description || !categorie || !ville || !province) {
+      showAlert("error", "Veuillez remplir tous les champs obligatoires.");
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "annonces"), {
+        userID: user.uid,
+        titre,
+        description,
+        categorie,
+        tags,
+        ville,
+        province,
+        lieu: lieu || "",
+        licence: licence || "",
+        salaire,
+        etat: "actif",
+        urgence: false,
+        copywriting: false,
+        boost: false,
+        connecte: false,
+        pdf_url,
+        clicks: 0,
+        views: 0,
+        commands: 0,
+        republis: 0,
+        date_creation: serverTimestamp()
+      });
+
+      showAlert("success", "Annonce publiée avec succès !");
+      setTimeout(() => {
+        window.location.href = "/dashboard.html";
+      }, 1500);
+
+    } catch (err) {
+      console.error(err);
+      showAlert("error", "Erreur lors de la publication.");
+    }
+  });
+</script>
+
+</body>
+</html>
+
+  
