@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CBC Business – Connexion</title>
+
+<!-- STYLE INTÉGRÉ -->
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        background: #f5f6fa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .login-container {
+        width: 100%;
+        max-width: 380px;
+        background: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 25px;
+        font-weight: bold;
+        color: #2c3e50;
+    }
+
+    .login-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #2c3e50;
+    }
+
+    .input-group {
+        margin-bottom: 15px;
+    }
+
+    .input-group label {
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 15px;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        background: #0066ff;
+        color: #fff;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: 0.3s;
+    }
+
+    .btn:hover {
+        background: #004acc;
+    }
+
+    .loader {
+        display: none;
+        margin-top: 10px;
+        text-align: center;
+        font-size: 14px;
+        color: #555;
+    }
+
+    .error-msg {
+        margin-top: 10px;
+        color: #e74c3c;
+        font-size: 14px;
+        display: none;
+        text-align: center;
+    }
+
+    .register-link {
+        margin-top: 15px;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .register-link a {
+        color: #0066ff;
+        text-decoration: none;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="login-container">
+    <div class="logo">CBC Business</div>
+    <h2>Connexion</h2>
+
+    <div class="input-group">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="Votre email" />
+    </div>
+
+    <div class="input-group">
+        <label>Mot de passe</label>
+        <input type="password" id="password" placeholder="Votre mot de passe" />
+    </div>
+
+    <button class="btn" id="loginBtn">Se connecter</button>
+
+    <div class="loader" id="loader">Connexion en cours...</div>
+
+    <div class="error-msg" id="errorMsg"></div>
+
+    <div class="register-link">
+        Pas de compte ? <a href="register.html">Créer un compte</a>
+    </div>
+</div>
+
+<!-- FIREBASE AUTH -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBla3D7OS8-Hx82m8Tz6ZPIS7FSLury3ew",
+        authDomain: "cbc-business.firebaseapp.com",
+        projectId: "cbc-business",
+        storageBucket: "cbc-business.firebasestorage.app",
+        messagingSenderId: "295952883135",
+        appId: "1:295952883135:web:4624174a452c1f6aad950a",
+        measurementId: "G-580W4D6J7E"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Elements
+    const loginBtn = document.getElementById("loginBtn");
+    const errorMsg = document.getElementById("errorMsg");
+    const loader = document.getElementById("loader");
+
+    loginBtn.addEventListener("click", () => {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+
+        errorMsg.style.display = "none";
+
+        if (email === "" || password === "") {
+            errorMsg.textContent = "Veuillez remplir tous les champs.";
+            errorMsg.style.display = "block";
+            return;
+        }
+
+        loader.style.display = "block";
+        loginBtn.disabled = true;
+
+        signInWithEmailAndPassword(auth, email, password)
+            .then(() => {
+                loader.textContent = "Connexion réussie !";
+                setTimeout(() => {
+                    window.location.href = "dashboard.html";
+                }, 800);
+            })
+            .catch((error) => {
+                loader.style.display = "none";
+                loginBtn.disabled = false;
+
+                let message = "Erreur inconnue.";
+
+                if (error.code === "auth/user-not-found") message = "Utilisateur introuvable.";
+                if (error.code === "auth/wrong-password") message = "Mot de passe incorrect.";
+                if (error.code === "auth/invalid-email") message = "Email invalide.";
+
+                errorMsg.textContent = message;
+                errorMsg.style.display = "block";
+            });
+    });
+</script>
+
+</body>
+</html>

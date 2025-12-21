@@ -1,0 +1,58 @@
+<header class="site-header">
+  <div class="header-inner">
+
+    <!-- LOGO -->
+    <a href="/" class="logo">
+      <div class="mark">
+        <img src="/assets/cbc.jpg" alt="CBC">
+      </div>
+      <span class="logo-text">CBC Business</span>
+    </a>
+
+    <!-- SEARCH -->
+    <div class="search-box">
+      <input type="text" placeholder="Rechercher une mission, un service…">
+      <button id="search-btn">🔍</button>
+    </div>
+
+    <!-- NAV DESKTOP -->
+    <nav class="nav-links desktop-nav">
+      <a href="/explorer.html">Explorer</a>
+      <a href="/plan.html">Plans</a>
+      <a href="/login.html" class="btn-primary">Connexion</a>
+    </nav>
+
+    <!-- HAMBURGER -->
+    <div class="hamburger" id="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+  </div>
+
+  <!-- NAV MOBILE -->
+  <nav class="mobile-nav" id="mobile-nav">
+    <a href="/explorer.html">Explorer</a>
+    <a href="/plan.html">Plans</a>
+    <a href="/login.html">Connexion</a>
+  </nav>
+</header>
+
+
+
+
+// Injecter le header
+fetch('/components/header.html')
+  .then(res => res.text())
+  .then(html => {
+    document.getElementById('site-header').innerHTML = html;
+
+    // Hamburger toggle
+    const burger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobile-nav');
+
+    burger.addEventListener('click', () => {
+      mobileNav.classList.toggle('show');
+    });
+  });
