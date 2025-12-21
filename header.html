@@ -42,17 +42,4 @@
 
 
 
-// Injecter le header
-fetch('/components/header.html')
-  .then(res => res.text())
-  .then(html => {
-    document.getElementById('site-header').innerHTML = html;
-
-    // Hamburger toggle
-    const burger = document.getElementById('hamburger');
-    const mobileNav = document.getElementById('mobile-nav');
-
-    burger.addEventListener('click', () => {
-      mobileNav.classList.toggle('show');
-    });
-  });
+ 
