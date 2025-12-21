@@ -242,6 +242,30 @@ body{ margin:0; background:#fff; }
   box-shadow:0 4px 10px rgba(0,0,0,0.05);
   font-size:15px;
 }
+   .t-head{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:10px;
+}
+
+.t-avatar{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  object-fit:cover;
+  flex-shrink:0;
+}
+
+.t-placeholder{
+  background:#0d6efd;
+  color:#fff;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:15px;
+   }
 
 /* ================================================================
    CTA FINAL
@@ -639,11 +663,18 @@ async function loadTestimonials(){
   snap.forEach(doc=>{
     const d = doc.data();
     list.innerHTML += `
-      <div class="t-item">
-        <strong>${d.name || "Utilisateur"}</strong><br>
-        <p>${d.comment || ""}</p>
-      </div>
-    `;
+  <div class="t-item">
+    <div class="t-head">
+      ${
+        d.photoURL
+          ? `<img src="${d.photoURL}" class="t-avatar" alt="photo">`
+          : `<div class="t-avatar t-placeholder">${(d.name || "U").charAt(0)}</div>`
+      }
+      <strong>${d.name || "Utilisateur"}</strong>
+    </div>
+    <p>${d.comment || ""}</p>
+  </div>
+`;
   });
 }
 loadTestimonials();
