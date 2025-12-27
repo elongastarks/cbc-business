@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 - Page introuvable</title>
+<style>
+  body {
+    margin:0;
+    font-family: Arial, sans-serif;
+    background: #f7f8fa;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    overflow:hidden;
+    flex-direction:column;
+    color:#0B5FFF;
+    text-align:center;
+  }
+
+  h1 {
+    font-size: 6rem;
+    margin: 0;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin: 10px 0 30px;
+  }
+
+  a {
+    display:inline-block;
+    padding: 12px 25px;
+    background:#0B5FFF;
+    color:#fff;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:600;
+    transition:0.3s;
+  }
+
+  a:hover {
+    opacity:0.85;
+  }
+
+  /* Animation trou noir */
+  .hole {
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle at center, #000 0%, #222 70%, #000 100%);
+    border-radius:50%;
+    position:relative;
+    margin:40px auto;
+    overflow:hidden;
+  }
+
+  .falling {
+    width:40px;
+    height:40px;
+    background:#0B5FFF;
+    border-radius:50%;
+    position:absolute;
+    top:-50px;
+    left:80px;
+    animation: fall 3s infinite;
+  }
+
+  @keyframes fall {
+    0% { top:-50px; transform: rotate(0deg);}
+    25% { top:40px; transform: rotate(90deg);}
+    50% { top:100px; transform: rotate(180deg);}
+    75% { top:160px; transform: rotate(270deg);}
+    100% { top:200px; transform: rotate(360deg);}
+  }
+
+  /* Petit texte d'info */
+  .info {
+    max-width: 400px;
+    margin:auto;
+    font-size:1rem;
+    color:#555;
+  }
+</style>
+</head>
+<body>
+
+<h1>404</h1>
+<h2>Oups ! Vous vous êtes perdu…</h2>
+
+<div class="hole">
+  <div class="falling">🌠</div>
+</div>
+
+<div class="info">
+  La page que vous cherchez n'existe pas ou a été déplacée. <br>
+  Vous pouvez retourner à l'accueil pour continuer votre exploration.
+</div>
+
+<a href="index.html">Retour à l'accueil</a>
+
+</body>
+</html>
