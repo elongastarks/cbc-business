@@ -169,168 +169,166 @@
 </div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
+/* ================= FIREBASE ================= */
 const firebaseConfig = {
   apiKey: "AIzaSyBla3D7OS8-Hx82m8Tz6ZPIS7FSLury3ew",
   authDomain: "cbc-business.firebaseapp.com",
   projectId: "cbc-business",
   storageBucket: "cbc-business.firebasestorage.app",
   messagingSenderId: "295952883135",
-  appId: "1:295952883135:web:4624174a452c1f6aad950a",
-  measurementId: "G-580W4D6J7E"
+  appId: "1:295952883135:web:4624174a452c1f6aad950a"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+/* ================= DOM ================= */
 const cardsContainer = document.getElementById("cardsContainer");
 const noResults = document.getElementById("noResults");
 
-// Inputs
 const searchInput = document.getElementById("search");
 const categorieSelect = document.getElementById("categorie");
 const provinceSelect = document.getElementById("province");
 const licenceSelect = document.getElementById("licence");
 const applyFiltersBtn = document.getElementById("applyFilters");
 
-// Fonction pour récupérer les annonces depuis Firestore
-async function fetchAnnonces() {
-  const annoncesRef = collection(db, "annonces");
-  // Filtre de base : uniquement les annonces actives
-  const q = query(annoncesRef, where("etat", "==", "actif"));
-  const snapshot = await getDocs(q);
-  let annonces = [];
-  snapshot.forEach(doc => {
-    const data = doc.data();
-    data.id = doc.id; // ajouter id pour le lien
-    annonces.push(data);
-  });
-  return annonces;
+/* ================= URL PARAMS ================= */
+const params = new URLSearchParams(window.location.search);
+const onlyBoost = params.get("boost") === "true";
+const onlyUrgent = params.get("urgent") === "true";
+const onlyVerified = params.get("verified") === "true";
+
+/* ================= HELPERS ================= */
+function isUrgentActive(a) {
+  if (!a.urgence || !a.start_date || !a.end_date) return false;
+  const now = new Date();
+  return (
+    a.start_date.toDate() <= now &&
+    a.end_date.toDate() >= now
+  );
 }
 
-// Fonction pour appliquer les filtres côté JS
-function filterAnnonces(annonces) {
+function getPriorityScore(a) {
+  let score = 0;
+  if (isUrgentActive(a)) score += 1000;
+  if (a.boost) score += 500;
+  if (a.verified) score += 100;
+  return score;
+}
+
+/* ================= FILTER ================= */
+function filterAnnonces(list) {
   const search = searchInput.value.trim().toLowerCase();
   const categorie = categorieSelect.value;
   const province = provinceSelect.value;
   const licence = licenceSelect.value;
 
-  return annonces.filter(a => {
-    // Filtrage Firestore déjà par etat
+  return list.filter(a => {
     if (categorie && a.categorie !== categorie) return false;
     if (province && a.province !== province) return false;
     if (licence && a.licence !== licence) return false;
+
+    if (onlyBoost && !a.boost) return false;
+    if (onlyVerified && !a.verified) return false;
+    if (onlyUrgent && !isUrgentActive(a)) return false;
+
     if (search) {
-      const combined = (a.titre + " " + a.description + " " + (a.tags || []).join(" ")).toLowerCase();
-      if (!combined.includes(search)) return false;
+      const text = (
+        a.titre +
+        " " +
+        a.description +
+        " " +
+        (a.tags || []).join(" ")
+      ).toLowerCase();
+      if (!text.includes(search)) return false;
     }
+
     return true;
   });
 }
 
-// Fonction pour trier les annonces premium
-function sortAnnonces(annonces) {
-  // Urgence > Boost > Vérifié > normal
-  return annonces.sort((a, b) => {
-    const score = x => (x.urgence ? 1000 : 0) + (x.boost ? 500 : 0) + (x.verified ? 100 : 0);
-    return score(b) - score(a);
-  });
-}
-
-// Fonction pour créer les cartes HTML
-function displayAnnonces(annonces) {
+/* ================= DISPLAY ================= */
+function displayAnnonces(list) {
   cardsContainer.innerHTML = "";
-  if (annonces.length === 0) {
+
+  if (list.length === 0) {
     noResults.style.display = "block";
     return;
-  } else {
-    noResults.style.display = "none";
   }
+  noResults.style.display = "none";
 
-  annonces.forEach(a => {
-    // Boost x5 : dupliquer si boost
-    const repeat = a.boost ? 5 : 1;
-    for (let i = 0; i < repeat; i++) {
-      const card = document.createElement("div");
-      card.className = "card";
+  list.forEach(a => {
+    const card = document.createElement("div");
+    card.className = "card";
 
-      const title = document.createElement("h3");
-      title.textContent = a.titre || "Titre manquant";
-      card.appendChild(title);
+    card.innerHTML = `
+      <h3>${a.titre || "Titre manquant"}</h3>
+      <p>${a.description || ""}</p>
+      <p>${a.categorie || "-"} | ${a.province || "-"}, ${a.ville || "-"}</p>
+      <p>Niveau : ${a.licence || "-"}</p>
+      ${a.salaire ? `<p>Salaire : ${a.salaire}</p>` : ""}
+      <p>Vues : ${a.views || 0} | Clics : ${a.clicks || 0}</p>
+    `;
 
-      const desc = document.createElement("p");
-      desc.textContent = a.description || "";
-      card.appendChild(desc);
+    const badges = document.createElement("div");
+    badges.className = "badges";
 
-      const info = document.createElement("p");
-      info.textContent = `${a.categorie || "-"} | ${a.province || "-"}, ${a.ville || "-"}`;
-      card.appendChild(info);
-
-      const licence = document.createElement("p");
-      licence.textContent = `Niveau: ${a.licence || "-"}`;
-      card.appendChild(licence);
-
-      if (a.salaire) {
-        const salaire = document.createElement("p");
-        salaire.textContent = `Salaire: ${a.salaire}`;
-        card.appendChild(salaire);
-      }
-
-      const stats = document.createElement("p");
-      stats.textContent = `Vues: ${a.views || 0} | Clics: ${a.clicks || 0} | Commandes: ${a.commands || 0}`;
-      card.appendChild(stats);
-
-      // Badges
-      const badges = document.createElement("div");
-      badges.className = "badges";
-      if (a.urgence) {
-        const b = document.createElement("span");
-        b.className = "badge urgent";
-        b.textContent = "🔴 Urgent";
-        badges.appendChild(b);
-      }
-      if (a.boost) {
-        const b = document.createElement("span");
-        b.className = "badge boost";
-        b.textContent = "⭐ Boost";
-        badges.appendChild(b);
-      }
-      if (a.verified) {
-        const b = document.createElement("span");
-        b.className = "badge verified";
-        b.textContent = "🔰 Vérifié";
-        badges.appendChild(b);
-      }
-      card.appendChild(badges);
-
-      // Bouton voir annonce
-      const btn = document.createElement("button");
-      btn.textContent = "Voir l'annonce";
-      btn.onclick = () => {
-        // Incrémenter le clic ici si nécessaire (update Firestore)
-        window.location.href = `https://elongastarks.github.io/cbc-business/annonce.html?id=${a.id}`;
-      };
-      card.appendChild(btn);
-
-      cardsContainer.appendChild(card);
+    if (isUrgentActive(a)) {
+      badges.innerHTML += `<span class="badge urgent">🔴 Urgent</span>`;
     }
+    if (a.boost) {
+      badges.innerHTML += `<span class="badge boost">⭐ Boost</span>`;
+    }
+    if (a.verified) {
+      badges.innerHTML += `<span class="badge verified">🔰 Vérifié</span>`;
+    }
+
+    card.appendChild(badges);
+
+    const btn = document.createElement("button");
+    btn.textContent = "Voir l'annonce";
+    btn.onclick = () => {
+      window.location.href = `https://elongastarks.github.io/cbc-business/annonce.html?id=${a.id}`;
+    };
+
+    card.appendChild(btn);
+    cardsContainer.appendChild(card);
   });
 }
 
-// Fonction principale
-async function loadAnnonces() {
-  const annonces = await fetchAnnonces();
-  const filtered = filterAnnonces(annonces);
-  const sorted = sortAnnonces(filtered);
-  displayAnnonces(sorted);
+/* ================= REALTIME ================= */
+function loadRealtimeAnnonces() {
+  const annoncesRef = collection(db, "annonces");
+  const q = query(annoncesRef, where("etat", "==", "actif"));
+
+  onSnapshot(q, snap => {
+    let annonces = [];
+    snap.forEach(doc => {
+      annonces.push({ id: doc.id, ...doc.data() });
+    });
+
+    const filtered = filterAnnonces(annonces);
+    const sorted = filtered.sort(
+      (a, b) => getPriorityScore(b) - getPriorityScore(a)
+    );
+
+    displayAnnonces(sorted);
+  });
 }
 
-// Event filtre
-applyFiltersBtn.addEventListener("click", loadAnnonces);
+/* ================= EVENTS ================= */
+applyFiltersBtn.addEventListener("click", loadRealtimeAnnonces);
 
-// Charger au départ
-loadAnnonces();
+/* ================= INIT ================= */
+loadRealtimeAnnonces();
 </script>
 </body>
 </html>
