@@ -142,7 +142,7 @@
       <option value="Marketing digital">Marketing digital</option>
       <!-- Ajouter toutes les catégories possibles -->
     </select>
-    <select id="province">
+     <select id="province">
       <option value="">Toutes les provinces</option>
       <option value="Kinshasa">Kinshasa</option>
       <option value="Haut-Katanga">Haut-Katanga</option>
@@ -167,17 +167,17 @@
     Aucune annonce trouvée.
   </div>
 </div>
-<script type="module">
+ <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
 import {
   getFirestore,
   collection,
+  getDocs,
   query,
-  where,
-  onSnapshot
+  where
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-/* ================= FIREBASE ================= */
+/* -------------------- Firebase -------------------- */
 const firebaseConfig = {
   apiKey: "AIzaSyBla3D7OS8-Hx82m8Tz6ZPIS7FSLury3ew",
   authDomain: "cbc-business.firebaseapp.com",
@@ -190,7 +190,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* ================= DOM ================= */
+/* -------------------- DOM -------------------- */
 const cardsContainer = document.getElementById("cardsContainer");
 const noResults = document.getElementById("noResults");
 
@@ -200,135 +200,158 @@ const provinceSelect = document.getElementById("province");
 const licenceSelect = document.getElementById("licence");
 const applyFiltersBtn = document.getElementById("applyFilters");
 
-/* ================= URL PARAMS ================= */
-const params = new URLSearchParams(window.location.search);
-const onlyBoost = params.get("boost") === "true";
-const onlyUrgent = params.get("urgent") === "true";
-const onlyVerified = params.get("verified") === "true";
+/* -------------------- Utils -------------------- */
+function getURLParams() {
+  return new URLSearchParams(window.location.search);
+}
 
-/* ================= HELPERS ================= */
-function isUrgentActive(a) {
-  if (!a.urgence || !a.start_date || !a.end_date) return false;
-  const now = new Date();
-  return (
-    a.start_date.toDate() <= now &&
-    a.end_date.toDate() >= now
+/* -------------------- DATA -------------------- */
+let allAnnonces = [];
+let verifiedMap = {}; // userID => true/false
+
+/* -------------------- Firestore -------------------- */
+async function fetchAnnonces() {
+  const q = query(
+    collection(db, "annonces"),
+    where("etat", "==", "actif")
   );
+
+  const snap = await getDocs(q);
+  const annonces = [];
+
+  snap.forEach(doc => {
+    const d = doc.data();
+    annonces.push({ ...d, id: doc.id });
+  });
+
+  return annonces;
 }
 
-function getPriorityScore(a) {
-  let score = 0;
-  if (isUrgentActive(a)) score += 1000;
-  if (a.boost) score += 500;
-  if (a.verified) score += 100;
-  return score;
+async function fetchUsersVerified(userIDs) {
+  verifiedMap = {};
+  if (userIDs.length === 0) return;
+
+  // Firestore limite "in" à 10 → découpage
+  const chunks = [];
+  while (userIDs.length) chunks.push(userIDs.splice(0, 10));
+
+  for (const chunk of chunks) {
+    const q = query(
+      collection(db, "users"),
+      where("userID", "in", chunk)
+    );
+    const snap = await getDocs(q);
+    snap.forEach(doc => {
+      const u = doc.data();
+      verifiedMap[u.userID] = u.verified === true;
+    });
+  }
 }
 
-/* ================= FILTER ================= */
-function filterAnnonces(list) {
+/* -------------------- FILTERS -------------------- */
+function applyFilters(annonces) {
   const search = searchInput.value.trim().toLowerCase();
   const categorie = categorieSelect.value;
   const province = provinceSelect.value;
   const licence = licenceSelect.value;
 
-  return list.filter(a => {
+  return annonces.filter(a => {
     if (categorie && a.categorie !== categorie) return false;
     if (province && a.province !== province) return false;
     if (licence && a.licence !== licence) return false;
 
-    if (onlyBoost && !a.boost) return false;
-    if (onlyVerified && !a.verified) return false;
-    if (onlyUrgent && !isUrgentActive(a)) return false;
-
     if (search) {
-      const text = (
-        a.titre +
+      const txt = (
+        (a.titre || "") +
         " " +
-        a.description +
+        (a.description || "") +
         " " +
         (a.tags || []).join(" ")
       ).toLowerCase();
-      if (!text.includes(search)) return false;
+      if (!txt.includes(search)) return false;
     }
-
     return true;
   });
 }
 
-/* ================= DISPLAY ================= */
-function displayAnnonces(list) {
+/* -------------------- SORT -------------------- */
+function sortAnnonces(annonces) {
+  return annonces.sort((a, b) => {
+    const score = x =>
+      (x.urgence ? 1000 : 0) +
+      (x.boost ? 500 : 0) +
+      (verifiedMap[x.userID] ? 100 : 0);
+
+    return score(b) - score(a);
+  });
+}
+
+/* -------------------- RENDER -------------------- */
+function renderAnnonces(annonces) {
   cardsContainer.innerHTML = "";
 
-  if (list.length === 0) {
+  if (!annonces.length) {
     noResults.style.display = "block";
     return;
   }
   noResults.style.display = "none";
 
-  list.forEach(a => {
-    const card = document.createElement("div");
-    card.className = "card";
+  annonces.forEach(a => {
+    const repeat = a.boost ? 5 : 1;
 
-    card.innerHTML = `
-      <h3>${a.titre || "Titre manquant"}</h3>
-      <p>${a.description || ""}</p>
-      <p>${a.categorie || "-"} | ${a.province || "-"}, ${a.ville || "-"}</p>
-      <p>Niveau : ${a.licence || "-"}</p>
-      ${a.salaire ? `<p>Salaire : ${a.salaire}</p>` : ""}
-      <p>Vues : ${a.views || 0} | Clics : ${a.clicks || 0}</p>
-    `;
+    for (let i = 0; i < repeat; i++) {
+      const card = document.createElement("div");
+      card.className = "card";
 
-    const badges = document.createElement("div");
-    badges.className = "badges";
+      card.innerHTML = `
+        <h3>${a.titre || "Sans titre"}</h3>
+        <p>${a.description || ""}</p>
+        <p>${a.categorie || "-"} • ${a.province || "-"}, ${a.ville || "-"}</p>
+        <p>Niveau : ${a.licence || "-"}</p>
+        ${a.salaire ? `<p>Salaire : ${a.salaire}</p>` : ""}
+        <p>👁 ${a.views || 0} | 🖱 ${a.clicks || 0} | 📦 ${a.commands || 0}</p>
+      `;
 
-    if (isUrgentActive(a)) {
-      badges.innerHTML += `<span class="badge urgent">🔴 Urgent</span>`;
+      const badges = document.createElement("div");
+      badges.className = "badges";
+
+      if (a.urgence) badges.innerHTML += `<span class="badge urgent">🔴 Urgent</span>`;
+      if (a.boost) badges.innerHTML += `<span class="badge boost">⭐ Boost</span>`;
+      if (verifiedMap[a.userID]) badges.innerHTML += `<span class="badge verified">🔰 Vérifié</span>`;
+
+      card.appendChild(badges);
+
+      const btn = document.createElement("button");
+      btn.textContent = "Voir l’annonce";
+      btn.onclick = () => {
+        window.location.href = `https://elongastarks.github.io/cbc-business/annonce.html?id=${a.id}`;
+      };
+      card.appendChild(btn);
+
+      cardsContainer.appendChild(card);
     }
-    if (a.boost) {
-      badges.innerHTML += `<span class="badge boost">⭐ Boost</span>`;
-    }
-    if (a.verified) {
-      badges.innerHTML += `<span class="badge verified">🔰 Vérifié</span>`;
-    }
-
-    card.appendChild(badges);
-
-    const btn = document.createElement("button");
-    btn.textContent = "Voir l'annonce";
-    btn.onclick = () => {
-      window.location.href = `https://elongastarks.github.io/cbc-business/annonce.html?id=${a.id}`;
-    };
-
-    card.appendChild(btn);
-    cardsContainer.appendChild(card);
   });
 }
 
-/* ================= REALTIME ================= */
-function loadRealtimeAnnonces() {
-  const annoncesRef = collection(db, "annonces");
-  const q = query(annoncesRef, where("etat", "==", "actif"));
+/* -------------------- MAIN -------------------- */
+async function loadExplorer() {
+  allAnnonces = await fetchAnnonces();
 
-  onSnapshot(q, snap => {
-    let annonces = [];
-    snap.forEach(doc => {
-      annonces.push({ id: doc.id, ...doc.data() });
-    });
+  const userIDs = [...new Set(allAnnonces.map(a => a.userID))];
+  await fetchUsersVerified([...userIDs]);
 
-    const filtered = filterAnnonces(annonces);
-    const sorted = filtered.sort(
-      (a, b) => getPriorityScore(b) - getPriorityScore(a)
-    );
-
-    displayAnnonces(sorted);
-  });
+  const filtered = applyFilters(allAnnonces);
+  const sorted = sortAnnonces(filtered);
+  renderAnnonces(sorted);
 }
 
-/* ================= EVENTS ================= */
-applyFiltersBtn.addEventListener("click", loadRealtimeAnnonces);
+/* -------------------- EVENTS -------------------- */
+applyFiltersBtn.addEventListener("click", () => {
+  loadExplorer();
+});
 
-/* ================= INIT ================= */
-loadRealtimeAnnonces();
-</script>
+/* -------------------- INIT -------------------- */
+loadExplorer();
+ </script>
 </body>
 </html>
