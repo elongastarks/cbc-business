@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chat CBC Business</title>
+<style>
+  body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f7f8fa; }
+  .header, .footer { background:#fff; padding:15px 20px; box-shadow:0 2px 6px rgba(0,0,0,0.05); display:flex; align-items:center; justify-content:space-between; }
+  .header a.logo, .footer p { color:#0B5FFF; text-decoration:none; font-weight:700; font-size:20px; }
+  .container { max-width:1000px; margin:auto; padding:20px; display:flex; flex-direction:column; height:calc(100vh - 120px); }
+
+  /* Chat Header */
+  .chat-header { display:flex; align-items:center; gap:10px; padding:10px; background:#fff; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.05); margin-bottom:15px; }
+  .chat-header img { width:40px; height:40px; border-radius:50%; object-fit:cover; }
+  .chat-header .user-info { display:flex; flex-direction:column; }
+  .chat-header .user-info span { font-size:14px; color:#555; }
+  .chat-header .user-info .verified { color:#34C759; font-weight:700; }
+
+  /* Messages */
+  .messages { flex:1; overflow-y:auto; padding:10px; display:flex; flex-direction:column; gap:10px; }
+  .message { max-width:70%; padding:10px 15px; border-radius:12px; font-size:14px; line-height:1.4; word-wrap:break-word; }
+  .from-me { background:#0B5FFF; color:#fff; align-self:flex-end; border-bottom-right-radius:2px; }
+  .from-them { background:#F1F2F6; color:#000; align-self:flex-start; border-bottom-left-radius:2px; }
+
+  /* Formulaire envoi */
+  .chat-form { display:flex; gap:10px; margin-top:10px; }
+  .chat-form textarea { flex:1; padding:10px; border-radius:12px; border:1px solid #ccc; resize:none; font-size:14px; }
+  .chat-form button { padding:10px 18px; background:#0B5FFF; color:#fff; border:none; border-radius:12px; cursor:pointer; font-weight:600; }
+  .chat-info { font-size:12px; color:#555; text-align:right; margin-top:5px; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <a href="/" class="logo">CBC Business</a>
+  <div id="user-status">Non connecté</div>
+</div>
+
+<div class="container">
+
+  <!-- Chat Header -->
+  <div class="chat-header">
+    <img id="dest-photo" src="default.png" alt="Photo profil">
+    <div class="user-info">
+      <strong id="dest-name">Nom utilisateur</strong>
+      <span id="dest-verified" class="verified" style="display:none;">🔰 Vérifié</span>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div class="messages" id="messages"></div>
+
+  <!-- Formulaire envoi -->
+  <div class="chat-form">
+    <textarea id="msg-input" rows="2" placeholder="Écrire un message..."></textarea>
+    <button id="send-btn">Envoyer</button>
+  </div>
+  <div class="chat-info" id="chat-info">0 / 70 messages</div>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <p>© CBC Business 2025</p>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import {
+  getFirestore,
+  doc,
+  collection,
+  query,
+  where,
+  getDocs,
+  getDoc,
+  addDoc,
+  onSnapshot,
+  updateDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+/* ================= FIREBASE ================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyBla3D7OS8-Hx82m8Tz6ZPIS7FSLury3ew",
+  authDomain: "cbc-business.firebaseapp.com",
+  projectId: "cbc-business",
+  storageBucket: "cbc-business.firebasestorage.app",
+  messagingSenderId: "295952883135",
+  appId: "1:295952883135:web:4624174a452c1f6aad950a"
+};
+
+initializeApp(firebaseConfig);
+const db = getFirestore();
+const auth = getAuth();
+
+/* ================= PARAM URL ================= */
+const params = new URLSearchParams(window.location.search);
+const toID = params.get("to");
+
+if (!toID) {
+  alert("Utilisateur non spécifié");
+  location.href = "/";
+}
+
+/* ================= VARS ================= */
+let currentUser = null;
+let chatRef = null;
+let MSG_LIMIT = 70;
+const CHAT_LIMIT = 5;
+
+/* ================= AUTH ================= */
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    alert("Veuillez vous connecter");
+    location.href = "/login.html";
+    return;
+  }
+
+  currentUser = user;
+  document.getElementById("user-status").textContent = "Connecté";
+
+  const chatsCol = collection(db, "chats");
+
+  /* ======= 1️⃣ Chercher chat existant ======= */
+  const q1 = query(chatsCol, where("userID1", "==", currentUser.uid));
+  const q2 = query(chatsCol, where("userID2", "==", currentUser.uid));
+
+  const snap1 = await getDocs(q1);
+  const snap2 = await getDocs(q2);
+
+  let foundChat = null;
+
+  [...snap1.docs, ...snap2.docs].forEach(d => {
+    const c = d.data();
+    if (
+      (c.userID1 === currentUser.uid && c.userID2 === toID) ||
+      (c.userID2 === currentUser.uid && c.userID1 === toID)
+    ) {
+      foundChat = d;
+    }
+  });
+
+  /* ======= 2️⃣ Si pas trouvé → vérifier limite 5 chats ======= */
+  if (!foundChat) {
+    const activeChats =
+      snap1.docs.filter(d => d.data().active).length +
+      snap2.docs.filter(d => d.data().active).length;
+
+    if (activeChats >= CHAT_LIMIT) {
+      alert("Limite atteinte : 5 conversations maximum");
+      location.href = "/";
+      return;
+    }
+
+    const newChat = await addDoc(chatsCol, {
+      userID1: currentUser.uid,
+      userID2: toID,
+      createdAt: serverTimestamp(),
+      lastMessage: "",
+      lastTimestamp: serverTimestamp(),
+      active: true,
+      limite: MSG_LIMIT
+    });
+
+    chatRef = doc(db, "chats", newChat.id);
+  } else {
+    chatRef = doc(db, "chats", foundChat.id);
+    MSG_LIMIT = foundChat.data().limite || 70;
+  }
+
+  /* ================= MESSAGES LIVE ================= */
+  const messagesCol = collection(chatRef, "messages");
+
+  onSnapshot(messagesCol, (snap) => {
+    const box = document.getElementById("messages");
+    box.innerHTML = "";
+
+    snap.docs.forEach(d => {
+      const m = d.data();
+      const div = document.createElement("div");
+      div.className = m.from === currentUser.uid ? "message from-me" : "message from-them";
+      div.textContent = m.message;
+      box.appendChild(div);
+
+      if (m.to === currentUser.uid && m.status !== "read") {
+        updateDoc(doc(messagesCol, d.id), { status: "read" });
+      }
+    });
+
+    box.scrollTop = box.scrollHeight;
+    document.getElementById("chat-info").textContent =
+      `${snap.size} / ${MSG_LIMIT} messages`;
+  });
+
+  /* ================= ENVOI MESSAGE ================= */
+  document.getElementById("send-btn").onclick = async () => {
+    const input = document.getElementById("msg-input");
+    const text = input.value.trim();
+    if (!text) return;
+
+    const snap = await getDocs(messagesCol);
+    if (snap.size >= MSG_LIMIT) {
+      alert("Limite de messages atteinte");
+      return;
+    }
+
+    await addDoc(messagesCol, {
+      from: currentUser.uid,
+      to: toID,
+      message: text,
+      timestamp: serverTimestamp(),
+      status: "sent"
+    });
+
+    await updateDoc(chatRef, {
+      lastMessage: text,
+      lastTimestamp: serverTimestamp()
+    });
+
+    input.value = "";
+  };
+
+  /* ================= INFO DEST ================= */
+  const userSnap = await getDoc(doc(db, "users", toID));
+  if (userSnap.exists()) {
+    const u = userSnap.data();
+    document.getElementById("dest-name").textContent = u.name || "Utilisateur";
+    if (u.photoURL) document.getElementById("dest-photo").src = u.photoURL;
+    if (u.verified) document.getElementById("dest-verified").style.display = "inline";
+  }
+});
+</script>
+</body>
+</html>
