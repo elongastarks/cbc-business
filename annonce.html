@@ -274,12 +274,15 @@
 
 </body>
 
-  </div>
-<script type="module">
+</div>
+  <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-import { getFirestore, doc, getDoc, updateDoc, collection, query, where, getDocs, addDoc, increment } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import { 
+  getFirestore, doc, getDoc, updateDoc, collection, query, where, getDocs, addDoc, increment 
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 
+// Config Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBla3D7OS8-Hx82m8Tz6ZPIS7FSLury3ew",
   authDomain: "cbc-business.firebaseapp.com",
@@ -307,7 +310,6 @@ let currentUser = null;
 
 onAuthStateChanged(auth, (user) => {
   currentUser = user;
-  // On reload l'annonce si utilisateur change pour réafficher boutons
   if(annonceID) loadAnnonce();
 });
 
@@ -320,14 +322,13 @@ async function loadAnnonce(){
     window.location.href = "/";
     return;
   }
-  
+
   const annonce = annonceSnap.data();
 
   // --- Badges ---
   document.getElementById("badge-urgent").style.display = annonce.urgence ? "inline-block" : "none";
   document.getElementById("badge-boost").style.display = annonce.boost ? "inline-block" : "none";
-  document.getElementById("badge-verified").style.display = annonce.verified ? "inline-block" : "none";
-
+  
   // --- Infos principales ---
   document.getElementById("titre").textContent = annonce.titre;
   document.getElementById("meta-info").textContent = `${annonce.categorie} • ${annonce.ville} / ${annonce.province} • ${new Date(annonce.date_creation.seconds * 1000).toLocaleDateString()}`;
@@ -356,7 +357,7 @@ async function loadAnnonce(){
     document.getElementById("attachments").style.display = "none";
   }
 
-  // Auteur
+  // Auteur / entreprise
   const userRef = doc(db,"users",annonce.userID);
   const userSnap = await getDoc(userRef);
   if(userSnap.exists()){
@@ -365,10 +366,13 @@ async function loadAnnonce(){
     document.getElementById("author-type").textContent = `Type : ${user.type}`;
     document.getElementById("author-status").textContent = user.verified ? "🔰 Vérifié" : "Normal";
 
-    const q = query(collection(db,"annonces"), where("userID","==",annonce.userID));
-    const userAnnonces = await getDocs(q);
+    const userAnnoncesQuery = query(collection(db,"annonces"), where("userID","==",annonce.userID));
+    const userAnnonces = await getDocs(userAnnoncesQuery);
     document.getElementById("author-count").textContent = `Nombre d'annonces publiées : ${userAnnonces.size}`;
     document.getElementById("author-link").href = `/explorer?user=${annonce.userID}`;
+
+    // Badge verified
+    document.getElementById("badge-verified").style.display = user.verified ? "inline-block" : "none";
   }
 
   // --- Incrémenter les vues ---
@@ -386,7 +390,7 @@ async function loadAnnonce(){
       btnPostuler.style.display = "none";
       btnContacter.style.display = "none";
 
-      // Ajout bouton "Marquer comme rendue"
+      // Bouton "Marquer comme rendue"
       if(!document.getElementById("btn-rendu")){
         const rendueBtn = document.createElement("button");
         rendueBtn.textContent = "Marquer comme rendue";
@@ -404,7 +408,11 @@ async function loadAnnonce(){
       btnLogin.style.display = "none";
       btnPostuler.style.display = "inline-block";
       btnContacter.style.display = "inline-block";
-      btnContacter.href = `https://elongastarks.github.io/cbc-business/chat.html?to=${annonce.userID}`;
+
+      // CORRECTION : bouton contacter fonctionne
+      btnContacter.onclick = () => {
+        window.location.href = `https://elongastarks.github.io/cbc-business/chat.html?to=${annonce.userID}`;
+      };
     }
   } else {
     btnLogin.style.display = "inline-block";
@@ -416,51 +424,46 @@ async function loadAnnonce(){
   btnPostuler.onclick = () => {
     document.getElementById("postuler-form").style.display = "block";
   };
-  
+
   document.getElementById("btn-publier").onclick = async () => {
-  if(!currentUser) return alert("Connectez-vous pour postuler.");
-  
-  // Bloc de sécurité
-  if(currentUser.uid === annonce.userID) {
-    return alert("Vous êtes le propriétaire de cette annonce et ne pouvez pas postuler.");
-  }
-  if(annonce.etat === "rendu") {
-    return alert("Cette annonce est déjà marquée comme rendue. Vous ne pouvez plus postuler.");
-  }
+    if(!currentUser) return alert("Connectez-vous pour postuler.");
 
-  const message = document.getElementById("cv_message").value.trim();
-  if(message.length < 5) return alert("Veuillez écrire un message ou résumé de candidature.");
+    if(currentUser.uid === annonce.userID) {
+      return alert("Vous êtes le propriétaire de cette annonce et ne pouvez pas postuler.");
+    }
+    if(annonce.etat === "rendu") {
+      return alert("Cette annonce est déjà marquée comme rendue. Vous ne pouvez plus postuler.");
+    }
 
-  // Vérifie si déjà postulé
-  const cmdQuery = query(collection(db,"commands"),
-    where("annonceID","==",annonceID),
-    where("gestID","==",currentUser.uid)
-  );
-  const cmdSnap = await getDocs(cmdQuery);
-  if(!cmdSnap.empty) return alert("Vous avez déjà postulé à cette annonce.");
+    const message = document.getElementById("cv_message").value.trim();
+    if(message.length < 5) return alert("Veuillez écrire un message ou résumé de candidature.");
 
-  // Création du doc dans commands
-  await addDoc(collection(db,"commands"), {
-    name: currentUser.displayName || "Anonyme",
-    count_annonce: annonce.count || 0,
-    cv_message: message,
-    date_commande: new Date(),
-    contacts: currentUser.email || "",
-    annonceID: annonceID,
-    gestID: currentUser.uid
-  });
+    const cmdQuery = query(collection(db,"commands"),
+      where("annonceID","==",annonceID),
+      where("gestID","==",currentUser.uid)
+    );
+    const cmdSnap = await getDocs(cmdQuery);
+    if(!cmdSnap.empty) return alert("Vous avez déjà postulé à cette annonce.");
 
-  // Incrément commands
-  const annonceRef = doc(db,"annonces",annonceID);
-  await updateDoc(annonceRef, { commands: increment(1) });
+    await addDoc(collection(db,"commands"), {
+      name: currentUser.displayName || "Anonyme",
+      count_annonce: annonce.count || 0,
+      cv_message: message,
+      date_commande: new Date(),
+      contacts: currentUser.email || "",
+      annonceID: annonceID,
+      gestID: currentUser.uid
+    });
 
-  document.getElementById("commands").textContent = (annonce.commands || 0) + 1;
-  alert("Candidature envoyée !");
-  document.getElementById("postuler-form").style.display = "none";
-  document.getElementById("cv_message").value = "";
-  btnPostuler.disabled = true;
-};
+    await updateDoc(annonceRef, { commands: increment(1) });
+
+    document.getElementById("commands").textContent = (annonce.commands || 0) + 1;
+    alert("Candidature envoyée !");
+    document.getElementById("postuler-form").style.display = "none";
+    document.getElementById("cv_message").value = "";
+    btnPostuler.disabled = true;
+  };
 }
-</script>
+  </script>
 </body>
 </html>
