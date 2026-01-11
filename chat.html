@@ -172,29 +172,40 @@ onAuthStateChanged(auth, async (user) => {
     MSG_LIMIT = foundChat.data().limite || 70;
   }
 
+
   /* ================= MESSAGES LIVE ================= */
-  const messagesCol = collection(chatRef, "messages");
+const messagesCol = collection(chatRef, "messages");
 
-  onSnapshot(messagesCol, (snap) => {
-    const box = document.getElementById("messages");
-    box.innerHTML = "";
+// onSnapshot avec tri par timestamp ascendant
+onSnapshot(messagesCol, (snap) => {
+  const box = document.getElementById("messages");
+  box.innerHTML = "";
 
-    snap.docs.forEach(d => {
-      const m = d.data();
-      const div = document.createElement("div");
-      div.className = m.from === currentUser.uid ? "message from-me" : "message from-them";
-      div.textContent = m.message;
-      box.appendChild(div);
-
-      if (m.to === currentUser.uid && m.status !== "read") {
-        updateDoc(doc(messagesCol, d.id), { status: "read" });
-      }
+  // trier par timestamp
+  const msgs = snap.docs
+    .map(d => ({ id: d.id, ...d.data() }))
+    .sort((a, b) => {
+      const tA = a.timestamp ? a.timestamp.toMillis() : 0;
+      const tB = b.timestamp ? b.timestamp.toMillis() : 0;
+      return tA - tB; // du plus ancien au plus récent
     });
 
-    box.scrollTop = box.scrollHeight;
-    document.getElementById("chat-info").textContent =
-      `${snap.size} / ${MSG_LIMIT} messages`;
+  msgs.forEach(m => {
+    const div = document.createElement("div");
+    div.className = m.from === currentUser.uid ? "message from-me" : "message from-them";
+    div.textContent = m.message;
+    box.appendChild(div);
+
+    // marquer comme lu
+    if (m.to === currentUser.uid && m.status !== "read") {
+      updateDoc(doc(messagesCol, m.id), { status: "read" });
+    }
   });
+
+  box.scrollTop = box.scrollHeight; // scroll en bas
+  document.getElementById("chat-info").textContent =
+    `${msgs.length} / ${MSG_LIMIT} messages`;
+});
 
   /* ================= ENVOI MESSAGE ================= */
   document.getElementById("send-btn").onclick = async () => {
