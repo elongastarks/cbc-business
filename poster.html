@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poster une mission – CBC Business</title>
+<style>
+  body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f5f6f9; }
+  header { background:#0B5FFF; color:white; padding:15px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+  header .logo { font-weight:bold; font-size:20px; }
+  header nav a { color:white; text-decoration:none; margin-left:15px; font-weight:500; }
+  .container { max-width: 720px; margin:40px auto; background:#fff; padding:30px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.1); }
+  h2 { text-align:center; margin-bottom:25px; }
+  .input-group { margin-bottom:15px; }
+  .input-group label { display:block; font-weight:600; margin-bottom:6px; }
+  .input-group input, .input-group textarea, .input-group select { width:90%; padding:10px; border:1px solid #ccc; border-radius:6px; font-size:15px; }
+  .input-group textarea { resize: vertical; min-height:100px; }
+  .btn { display:block; width:90%; padding:14px; background:#0B5FFF; color:white; border:none; border-radius:8px; font-size:16px; font-weight:600; cursor:pointer; margin-top:10px; }
+  .alert { padding:12px; border-radius:6px; margin-bottom:15px; display:none; }
+  .alert.error { background:#f8d7da; color:#721c24; }
+  .alert.success { background:#d4edda; color:#155724; }
+
+  /* AJOUT SIMPLE POUR LA SECTION COMMENTAIRE */
+  .comment-section {
+    margin-top:50px;
+    padding-top:30px;
+    border-top:1px solid #ddd;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">CBC Business</div>
+  <br><br>
+  <nav>
+    <a href="/dashboard.html">Dashboard</a>
+    <a href="/">Accueil</a>
+    <a href="/logout.html">Déconnexion</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h2>Publier une mission / annonce</h2>
+  <div id="alertBox" class="alert"></div>
+
+  <!-- TITRE -->
+  <div class="input-group">
+    <label>Titre de la mission *</label>
+    <input type="text" id="titre" placeholder="Ex : Développeur web React" required>
+  </div>
+
+  <!-- DESCRIPTION -->
+  <div class="input-group">
+    <label>Description complète *</label>
+    <textarea id="description" placeholder="Décrivez la mission, tâches, attentes..." required></textarea>
+  </div>
+
+  <!-- CATÉGORIE -->
+  <div class="input-group">
+    <label>Catégorie *</label>
+    <select id="categorie" required>
+      <option value="">-- Sélectionner --</option>
+      <option value="Développement Web">Développement Web</option>
+      <option value="Graphisme">Graphisme</option>
+      <option value="Marketing digital">Marketing digital</option>
+      <option value="Rédaction">Rédaction</option>
+      <option value="Autres">Autres</option>
+    </select>
+  </div>
+
+  <!-- TAGS -->
+  <div class="input-group">
+    <label>Tags (optionnel)</label>
+    <input type="text" id="tags" placeholder="Ex : logo, freelance, react, cv">
+    <small>Sépare les tags par des virgules</small>
+  </div>
+
+  <!-- VILLE -->
+  <div class="input-group">
+    <label>Ville *</label>
+    <select id="ville" required>
+      <option value="">-- Sélectionner une ville --</option>
+      <option value="Kinshasa">Kinshasa</option>
+      <option value="Lubumbashi">Lubumbashi</option>
+      <option value="Goma">Goma</option>
+      <option value="Bukavu">Bukavu</option>
+      <option value="Matadi">Matadi</option>
+    </select>
+  </div>
+
+  <!-- PROVINCE -->
+  <div class="input-group">
+    <label>Province *</label>
+    <select id="province" required>
+      <option value="">-- Sélectionner une province --</option>
+      <option value="Kinshasa">Kinshasa</option>
+      <option value="Haut-Katanga">Haut-Katanga</option>
+      <option value="Nord-Kivu">Nord-Kivu</option>
+      <option value="Sud-Kivu">Sud-Kivu</option>
+    </select>
+  </div>
+
+  <!-- LIEU -->
+  <div class="input-group">
+    <label>Quartier / Lieu (optionnel)</label>
+    <input type="text" id="lieu" placeholder="Ex : Gombe">
+  </div>
+
+  <!-- LICENCE -->
+  <div class="input-group">
+    <label>Licence / Diplôme demandé (optionnel)</label>
+    <select id="licence">
+      <option value="">-- Sélectionner --</option>
+      <option value="Autodidacte">Autodidacte</option>
+      <option value="Bac">Bac</option>
+      <option value="Licence">Licence</option>
+      <option value="Master">Master</option>
+      <option value="Doctorat">Doctorat</option>
+      <option value="Certification">Certification</option>
+    </select>
+  </div>
+
+  <!-- SALAIRE -->
+  <div class="input-group">
+    <label>Salaire / Budget (optionnel)</label>
+    <input type="number" id="salaire" placeholder="Ex : 300">
+  </div>
+
+  <!-- PDF -->
+  <div class="input-group">
+    <label>Document PDF (optionnel)</label>
+    <input type="url" id="pdf_url" placeholder="Lien du PDF (Google Drive, Firebase, etc.)">
+  </div>
+
+  <button id="postBtn" class="btn">Publier l’annonce</button>
+
+  <!-- ================= AJOUT : COMMENTAIRE ================= -->
+  <div class="comment-section">
+    <h2>Laisser un commentaire</h2>
+    <div id="commentAlert" class="alert"></div>
+
+    <div class="input-group">
+      <label>Votre nom *</label>
+      <input type="text" id="commentName" placeholder="Votre nom">
+    </div>
+
+    <div class="input-group">
+      <label>Votre commentaire *</label>
+      <textarea id="commentText" placeholder="Votre commentaire..."></textarea>
+    </div>
+
+    <button id="commentBtn" class="btn">Envoyer le commentaire</button>
+  </div>
+
+</div>
+<!-- Ajouter ce div juste après ton bouton Publier l’annonce dans ton HTML -->
+<div id="verifyDiv" style="display:none; margin-top:15px; text-align:center;">
+  <p>Votre compte n'est pas vérifié. Voulez-vous être vérifié par l’admin ?</p>
+  <button id="verifyNowBtn" class="btn" style="width:auto; margin-right:10px;">Maintenant</button>
+  <button id="verifyLaterBtn" class="btn" style="width:auto; background:#ccc; color:#000;">Plus tard</button>
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  getDoc,
+  doc,
+  query,
+  where,
+  serverTimestamp,
+  Timestamp
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+/* ================= CONFIG ================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyBla3D7OS8-Hx82m8Tz6ZPIS7FSLury3ew",
+  authDomain: "cbc-business.firebaseapp.com",
+  projectId: "cbc-business",
+  storageBucket: "cbc-business.firebasestorage.app",
+  messagingSenderId: "295952883135",
+  appId: "1:295952883135:web:4624174a452c1f6aad950a"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+/* ================= UI HELPERS ================= */
+const alertBox = document.getElementById("alertBox");
+
+function showAlert(type, msg) {
+  alertBox.className = "alert " + type;
+  alertBox.textContent = msg;
+  alertBox.style.display = "block";
+}
+
+/* ================= UTILS ================= */
+function startOfMonth() {
+  const d = new Date();
+  d.setDate(1);
+  d.setHours(0,0,0,0);
+  return Timestamp.fromDate(d);
+}
+
+function hasActiveSubscription(abonnements = []) {
+  const now = new Date();
+  return abonnements.some(a => new Date(a.expires) > now);
+}
+
+/* ================= MAIN ================= */
+let currentUserData = null;
+
+onAuthStateChanged(auth, async user => {
+  if (!user) {
+    showAlert("error", "Vous devez être connecté.");
+    return;
+  }
+
+  // Charger user depuis users
+  const q = query(collection(db, "users"), where("userID", "==", user.uid));
+  const snap = await getDocs(q);
+
+  if (snap.empty) {
+    showAlert("error", "Profil utilisateur introuvable.");
+    return;
+  }
+
+  currentUserData = { id: snap.docs[0].id, ...snap.docs[0].data() };
+});
+
+/* ================= POST ANNONCE ================= */
+document.getElementById("postBtn").addEventListener("click", async () => {
+  alertBox.style.display = "none";
+
+  const user = auth.currentUser;
+  if (!user || !currentUserData) return;
+
+  // CHAMPS OBLIGATOIRES
+  const titre = document.getElementById("titre").value.trim();
+  const description = document.getElementById("description").value.trim();
+  const categorie = document.getElementById("categorie").value;
+  const ville = document.getElementById("ville").value;
+  const province = document.getElementById("province").value;
+
+  if (!titre || !description || !categorie || !ville || !province) {
+    showAlert("error", "Veuillez remplir tous les champs obligatoires.");
+    return;
+  }
+
+  // CHAMPS OPTIONNELS
+  const tagsRaw = document.getElementById("tags")?.value || "";
+  const tags = tagsRaw
+    .split(",")
+    .map(t => t.trim())
+    .filter(t => t.length > 0);
+
+  const lieu = document.getElementById("lieu")?.value.trim() || "";
+  const licence = document.getElementById("licence")?.value || "";
+  const salaireInput = document.getElementById("salaire")?.value;
+  const salaire = salaireInput ? Number(salaireInput) : 0;
+  const pdf_url = document.getElementById("pdf_url")?.value.trim() || "";
+
+  // LIMITATION POUR NON-ABONNÉS
+  const startMonth = startOfMonth();
+  const qAds = query(
+    collection(db, "annonces"),
+    where("userID", "==", user.uid),
+    where("date_creation", ">=", startMonth)
+  );
+  const adsSnap = await getDocs(qAds);
+
+  const hasSub = hasActiveSubscription(currentUserData.abonnements || []);
+  if (!hasSub && adsSnap.size >= 2) {
+    showAlert("error", "Limite atteinte (2 annonces/mois sans abonnement).");
+    return;
+  }
+
+  // AJOUT DE L'ANNONCE DANS FIRESTORE
+  try {
+    await addDoc(collection(db, "annonces"), {
+      userID: user.uid,
+      titre,
+      description,
+      categorie,
+      tags,
+      ville,
+      province,
+      lieu,
+      licence,
+      salaire,
+      pdf_url,
+      etat: "actif",
+      urgence: false,
+      copywriting: false,
+      boost: false,
+      connecte: false,
+      verified_author: currentUserData.verified === true,
+      date_creation: serverTimestamp()
+    });
+
+    // SI UTILISATEUR NON VÉRIFIÉ
+    if (!currentUserData.verified) {
+      showAlert(
+        "success",
+        "Annonce publiée. Votre compte n'est pas vérifié."
+      );
+
+      // Affiche le div avec les boutons "Maintenant / Plus tard"
+      const verifyDiv = document.getElementById("verifyDiv");
+      verifyDiv.style.display = "block";
+
+      document.getElementById("verifyNowBtn").onclick = () => {
+        window.location.href = "getVerified.html"; // redirection page vérification
+      };
+
+      document.getElementById("verifyLaterBtn").onclick = () => {
+        window.location.href = "dashboard.html"; // retour dashboard
+      };
+
+      return; // stop redirect automatique
+    }
+
+    // UTILISATEUR VÉRIFIÉ
+    showAlert("success", "Annonce publiée avec succès.");
+    setTimeout(() => location.href = "/dashboard.html", 1500);
+
+  } catch (err) {
+    console.error(err);
+    showAlert("error", "Erreur lors de la publication.");
+  }
+});
+
+/* ================= COMMENTAIRES ================= */
+const commentAlert = document.getElementById("commentAlert");
+const commentBtn = document.getElementById("commentBtn");
+
+function showCommentAlert(type, msg) {
+  commentAlert.className = "alert " + type;
+  commentAlert.textContent = msg;
+  commentAlert.style.display = "block";
+}
+
+async function canPostComment(userID) {
+  const oneWeekAgo = Timestamp.fromDate(
+    new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+  );
+
+  const q = query(
+    collection(db, "comments"),
+    where("userID", "==", userID),
+    where("timestamp", ">=", oneWeekAgo)
+  );
+
+  const snap = await getDocs(q);
+  return snap.empty;
+}
+
+if (commentBtn) {
+  commentBtn.addEventListener("click", async () => {
+    commentAlert.style.display = "none";
+
+    const user = auth.currentUser;
+    if (!user || !currentUserData) {
+      showCommentAlert("error", "Connexion requise.");
+      return;
+    }
+
+    const name = document.getElementById("commentName").value.trim();
+    const comment = document.getElementById("commentText").value.trim();
+
+    if (!name || !comment) {
+      showCommentAlert("error", "Nom et commentaire requis.");
+      return;
+    }
+
+    const allowed = await canPostComment(user.uid);
+    if (!allowed) {
+      showCommentAlert("error", "Vous avez déjà envoyé un commentaire cette semaine.");
+      return;
+    }
+
+    await addDoc(collection(db, "comments"), {
+      userID: user.uid,
+      name,
+      comment,
+      photoURL: currentUserData.photoURL || "",
+      status: "pending",
+      timestamp: serverTimestamp()
+    });
+
+    showCommentAlert("success", "Commentaire envoyé pour validation.");
+    document.getElementById("commentText").value = "";
+  });
+}
+</script>
+</body>
+</html>
+
+  

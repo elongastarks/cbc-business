@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Demande de vérification</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#f4f6f8;
+  margin:0;
+}
+
+/* ===== Header ===== */
+.header{
+  background:#0d6efd;
+  padding:14px 20px;
+}
+.header a{
+  color:#fff;
+  text-decoration:none;
+  font-size:18px;
+  font-weight:bold;
+}
+
+/* ===== Box ===== */
+.wrapper{
+  display:flex;
+  justify-content:center;
+  padding:40px 15px;
+}
+.box{
+  background:#fff;
+  width:100%;
+  max-width:420px;
+  padding:25px;
+  border-radius:14px;
+  box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+h1{
+  font-size:22px;
+  text-align:center;
+}
+.info{
+  text-align:center;
+  margin:15px 0;
+  font-size:14px;
+  color:#555;
+}
+.alert{
+  background:#eef3ff;
+  color:#0d6efd;
+  padding:12px;
+  border-radius:10px;
+  text-align:center;
+  margin-bottom:15px;
+}
+.alert.error{
+  background:#ffecec;
+  color:#c0392b;
+}
+.alert.success{
+  background:#e9fbe9;
+  color:#1e8449;
+}
+
+input, textarea{
+  width:95%;
+  padding:12px;
+  margin-bottom:12px;
+  border-radius:10px;
+  border:1px solid #ddd;
+}
+textarea{ resize:none; }
+
+button{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  background:#0d6efd;
+  color:#fff;
+  font-size:15px;
+  cursor:pointer;
+}
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== Header ===== -->
+<div class="header">
+  <a href="/dashboard.html">CBC Business</a>
+</div>
+
+<div class="wrapper">
+  <div class="box">
+    <h1>🔰 Demande de vérification</h1>
+
+    <div id="statusBox"></div>
+
+    <div id="formBox">
+      <p class="info">Remplissez ce formulaire pour demander la vérification.</p>
+
+      <input type="text" id="name" placeholder="Votre nom ou entreprise">
+      <input type="text" id="contact" placeholder="Contact (Facebook ou Gmail)">
+      <textarea id="message" rows="4" placeholder="Message court pour l’admin"></textarea>
+
+      <button id="sendBtn">Poster la demande</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import { 
+  getFirestore, 
+  collection, 
+  addDoc, 
+  query, 
+  where, 
+  getDocs, 
+  doc, 
+  getDoc, 
+  serverTimestamp 
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+/* ===== Firebase ===== */
+const firebaseConfig = {
+  apiKey: "AIzaSyBla3D7OS8-Hx82m8Tz6ZPIS7FSLury3ew",
+  authDomain: "cbc-business.firebaseapp.com",
+  projectId: "cbc-business",
+  storageBucket: "cbc-business.firebasestorage.app",
+  messagingSenderId: "295952883135",
+  appId: "1:295952883135:web:4624174a452c1f6aad950a"
+};
+
+initializeApp(firebaseConfig);
+const db = getFirestore();
+const auth = getAuth();
+
+let currentUser = null;
+const statusBox = document.getElementById("statusBox");
+const formBox = document.getElementById("formBox");
+
+/* ===== Auth ===== */
+onAuthStateChanged(auth, async (user)=>{
+  if(!user){
+    alert("Veuillez vous connecter");
+    location.href = "/login.html";
+    return;
+  }
+
+  currentUser = user;
+
+  /* ===== Vérifier user ===== */
+  const userSnap = await getDoc(doc(db,"users",user.uid));
+  if(userSnap.exists()){
+    const u = userSnap.data();
+
+    // ✅ Déjà vérifié
+    if(u.verified === true){
+      statusBox.innerHTML = `<div class="alert success">
+        Votre compte est déjà vérifié ✅
+      </div>`;
+      formBox.style.display = "none";
+      return;
+    }
+  }
+
+  /* ===== Vérifier demande existante ===== */
+  const q = query(
+    collection(db,"verification"),
+    where("userID","==",user.uid),
+    where("status","==","pending")
+  );
+  const snap = await getDocs(q);
+
+  if(!snap.empty){
+    statusBox.innerHTML = `<div class="alert">
+      Une demande de vérification est déjà en cours ⏳
+    </div>`;
+    formBox.style.display = "none";
+    return;
+  }
+});
+
+/* ===== Envoi ===== */
+document.getElementById("sendBtn").onclick = async () => {
+  const nom = document.getElementById("name").value.trim();
+  const contact = document.getElementById("contact").value.trim();
+  const message = document.getElementById("message").value.trim();
+
+  if(nom.length < 2 || contact.length < 3 || message.length < 5){
+    alert("Veuillez remplir correctement tous les champs.");
+    return;
+  }
+
+  document.getElementById("sendBtn").disabled = true;
+
+  await addDoc(collection(db,"verification"),{
+    userID: currentUser.uid,
+    nom,
+    contact,
+    message,
+    status: "pending",
+    timestamp: serverTimestamp()
+  });
+
+  alert("Demande envoyée avec succès !");
+  location.href = "/dashboard.html";
+};
+</script>
+
+</body>
+</html>
