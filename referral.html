@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Admin – Gestion Abonnements</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: #e5e7eb;
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+.card {
+  background: #020617;
+  border: 1px solid #1e293b;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+input, button {
+  width: 95%;
+  padding: 10px;
+  margin-top: 8px;
+  border-radius: 6px;
+  border: none;
+}
+
+input {
+  background: #020617;
+  border: 1px solid #1e293b;
+  color: #fff;
+}
+
+button {
+  background: #22c55e;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: #38bdf8;
+}
+
+.alert {
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  display: none;
+}
+
+.success { background: #166534; }
+.error { background: #7f1d1d; }
+</style>
+</head>
+
+<body>
+
+<h1>🔐 Admin – Abonnements utilisateurs</h1>
+
+<div id="alert" class="alert"></div>
+
+<div class="card">
+  <h3>🚀 Ajouter abonnement BOOST (30 jours)</h3>
+  <input id="userID" placeholder="User ID">
+  <button onclick="addBoost()">Ajouter abonnement</button>
+</div>
+
+<div class="card">
+  <h3>⏳ Vérifier un parrainage</h3>
+  <button class="secondary" onclick="checkReferrals()">Vérifier maintenant</button>
+</div>
+
+<div class="card">
+  <h3>⏳ Vérifier abonnements expirés</h3>
+  <button class="secondary" onclick="checkExpired()">Vérifier maintenant</button>
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  updateDoc,
+  collection,
+  getDocs,
+  addDoc,
+  Timestamp
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+/* ================= CONFIG ================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyBla3D7OS8-Hx82m8Tz6ZPIS7FSLury3ew",
+  authDomain: "cbc-business.firebaseapp.com",
+  projectId: "cbc-business",
+  storageBucket: "cbc-business.firebasestorage.app",
+  messagingSenderId: "295952883135",
+  appId: "1:295952883135:web:4624174a452c1f6aad950a"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const alertBox = document.getElementById("alert");
+
+function showAlert(type, msg) {
+  alertBox.className = "alert " + type;
+  alertBox.textContent = msg;
+  alertBox.style.display = "block";
+}
+
+/* ================= GUARD ADMIN ================= */
+onAuthStateChanged(auth, async user => {
+  if (!user) return location.href = "404.html";
+
+  const snap = await getDoc(doc(db, "users", user.uid));
+  if (!snap.exists()) return location.href = "404.html";
+
+  const u = snap.data();
+  if (u.role !== "admin" || u.verified !== true) {
+    location.href = "404.html";
+  }
+});
+
+/* ================= ADD BOOST ================= */
+window.addBoost = async () => {
+  const uid = document.getElementById("userID").value.trim();
+  if (!uid) {
+    showAlert("error", "UserID requis.");
+    return;
+  }
+
+  const userRef = doc(db, "users", uid);
+  const snap = await getDoc(userRef);
+
+  if (!snap.exists()) {
+    showAlert("error", "Utilisateur introuvable.");
+    return;
+  }
+
+  const user = snap.data();
+  const abonnements = user.abonnements || [];
+
+  const expires = Timestamp.fromDate(
+    new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+  );
+
+  const hasActiveBoost = abonnements.some(
+    a => a.type === "boost" && a.expires.toMillis() > Date.now()
+  );
+
+  if (!hasActiveBoost) {
+    abonnements.push({ type: "boost", expires });
+  }
+
+  await updateDoc(userRef, { abonnements, boost: true });
+
+  await addDoc(collection(db, "boosts"), {
+    userID: uid,
+    start_date: Timestamp.now(),
+    end_date: expires,
+    active: true
+  });
+
+  showAlert("success", "Abonnement BOOST ajouté (30 jours).");
+};
+
+/* ================= CHECK REFERRALS ================= */
+window.checkReferrals = async () => {
+  const referralsSnap = await getDocs(collection(db, "referrals"));
+  if (referralsSnap.empty) {
+    showAlert("error", "Aucun parrainage trouvé.");
+    return;
+  }
+
+  const counter = {};
+  referralsSnap.forEach(d => {
+    const { inviterID } = d.data();
+    if (!inviterID) return;
+    counter[inviterID] = (counter[inviterID] || 0) + 1;
+  });
+
+  let rewarded = 0;
+  const now = Timestamp.now();
+
+  for (const inviterID in counter) {
+    if (counter[inviterID] < 5) continue;
+
+    const userRef = doc(db, "users", inviterID);
+    const userSnap = await getDoc(userRef);
+    if (!userSnap.exists()) continue;
+
+    const user = userSnap.data();
+    if (user.boost === true) continue;
+
+    const expires = Timestamp.fromDate(
+      new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+    );
+
+    const abonnements = user.abonnements || [];
+    abonnements.push({ type: "boost", expires });
+
+    await updateDoc(userRef, {
+      abonnements,
+      boost: true
+    });
+
+    await addDoc(collection(db, "boosts"), {
+      userID: inviterID,
+      start_date: now,
+      end_date: expires,
+      active: true,
+      source: "referral"
+    });
+
+    // DERNIÈRE ANNONCE
+    const annoncesSnap = await getDocs(collection(db, "annonces"));
+    let lastAnnonce = null;
+
+    annoncesSnap.forEach(a => {
+      const d = a.data();
+      if (d.userID === inviterID) {
+        if (!lastAnnonce || (d.createdAt?.toMillis() || 0) > (lastAnnonce.createdAt?.toMillis() || 0)) {
+          lastAnnonce = { id: a.id, ...d };
+        }
+      }
+    });
+
+    if (lastAnnonce) {
+      await updateDoc(doc(db, "annonces", lastAnnonce.id), { boost: true });
+    }
+
+    rewarded++;
+  }
+
+  showAlert("success", rewarded + " utilisateur(s) récompensé(s) via parrainage.");
+};
+
+/* ================= CHECK EXPIRATION ================= */
+window.checkExpired = async () => {
+  const usersSnap = await getDocs(collection(db, "users"));
+  const boostsSnap = await getDocs(collection(db, "boosts"));
+  const now = Timestamp.now();
+
+  let cleanedUsers = 0;
+
+  for (const d of usersSnap.docs) {
+    const data = d.data();
+    if (!data.abonnements || data.abonnements.length === 0) continue;
+
+    const valid = data.abonnements.filter(
+      a => a.expires.toMillis() > now.toMillis()
+    );
+
+    const boostActive = valid.some(a => a.type === "boost");
+
+    await updateDoc(doc(db, "users", d.id), {
+      abonnements: valid,
+      boost: boostActive
+    });
+
+    if (boostActive !== (data.boost || false)) cleanedUsers++;
+
+    boostsSnap.forEach(async b => {
+      const boost = b.data();
+      if (
+        boost.userID === d.id &&
+        boost.active === true &&
+        boost.end_date.toMillis() <= now.toMillis()
+      ) {
+        await updateDoc(doc(db, "boosts", b.id), { active: false });
+      }
+    });
+  }
+
+  showAlert(
+    "success",
+    cleanedUsers + " utilisateur(s) mis à jour après vérification."
+  );
+};
+</script>
+</body>
+</html>
