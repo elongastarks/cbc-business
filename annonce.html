@@ -452,6 +452,7 @@ async function loadAnnonce(){
       date_commande: new Date(),
       contacts: currentUser.email || "",
       annonceID: annonceID,
+      userID : annonce.userID,
       gestID: currentUser.uid
     });
 
