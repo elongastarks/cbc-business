@@ -369,7 +369,7 @@ async function loadAnnonce(){
     const userAnnoncesQuery = query(collection(db,"annonces"), where("userID","==",annonce.userID));
     const userAnnonces = await getDocs(userAnnoncesQuery);
     document.getElementById("author-count").textContent = `Nombre d'annonces publiées : ${userAnnonces.size}`;
-    document.getElementById("author-link").href = `/explorer?user=${annonce.userID}`;
+    document.getElementById("author-link").href = `explorer?user=${annonce.userID}`;
 
     // Badge verified
     document.getElementById("badge-verified").style.display = user.verified ? "inline-block" : "none";
