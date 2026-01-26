@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commentaires & Feedback – CBC Business</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f6f7fb;
+  margin: 0;
+  padding: 0;
+}
+
+header, footer {
+  background: #0d6efd;
+  color: #fff;
+  padding: 15px;
+  text-align: center;
+}
+
+/* Conteneur logo + titre */
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* espace entre logo et texte */
+}
+
+/* Logo */
+.logo {
+  height: 50px; /* ajuste selon ton logo */
+  width: auto;
+}
+
+/* Titre */
+header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+/* Menu de navigation */
+nav {
+  margin-top: 8px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #fff;
+  margin: 0 8px;
+  font-weight: bold;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  max-width: 600px;
+  margin: 30px auto;
+  background: #fff;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.08);
+}
+
+h3 {
+  margin-top: 0;
+}
+
+textarea, input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+textarea { min-height: 100px; resize: none; }
+
+.counter {
+  text-align: right;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #0d6efd;
+  border: none;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.alert {
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.alert.error { color: #c00; }
+.alert.success { color: #0a0; }
+
+hr { border: 0; border-top: 1px solid #ddd; margin: 30px 0; }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-container">
+    <img src="logo.png" alt="CBC Business Logo" class="logo">
+    <h1>CBC Business</h1>
+  </div>
+  <nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="viewAnnonces.html">Annonces</a>
+    <a href="viewCommands.html">Commandes</a>
+    <a href="support.html">Support</a>
+  </nav>
+</header>
+
+<div class="container">
+
+  <!-- Section Commentaires ouverts -->
+  <h3>Laisser un témoignage</h3>
+  <p>Votre expérience avec CBC Business (ouvert à tous)</p>
+  <div id="commentAlert" class="alert"></div>
+  <textarea id="comment" maxlength="150" placeholder="Écrivez votre témoignage…"></textarea>
+  <div class="counter"><span id="commentCount">0</span> / 150</div>
+  <button id="sendCommentBtn">Envoyer</button>
+
+  <hr>
+
+  <!-- Section Feedback réservé aux utilisateurs -->
+  <h3>Feedback pour l’amélioration</h3>
+  <p>Réservé aux utilisateurs connectés</p>
+  <div id="feedbackAlert" class="alert"></div>
+  <input type="text" id="feedbackName" placeholder="Votre nom (facultatif)">
+  <textarea id="feedbackMessage" maxlength="150" placeholder="Votre message…"></textarea>
+  <div class="counter"><span id="feedbackCount">0</span> / 150</div>
+  <button id="sendFeedbackBtn">Envoyer le feedback</button>
+
+</div>
+
+<footer>© CBC Business</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+// Config Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyBla3D7OS8-Hx82m8Tz6ZPIS7FSLury3ew",
+  authDomain: "cbc-business.firebaseapp.com",
+  projectId: "cbc-business",
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// -------------------- Commentaire ouvert --------------------
+const commentArea = document.getElementById("comment");
+const commentCount = document.getElementById("commentCount");
+const commentAlert = document.getElementById("commentAlert");
+const sendCommentBtn = document.getElementById("sendCommentBtn");
+
+commentArea.addEventListener("input", () => {
+  commentCount.textContent = commentArea.value.length;
+});
+
+sendCommentBtn.onclick = async () => {
+  const text = commentArea.value.trim();
+  if(text.length < 10){
+    commentAlert.textContent = "Message trop court.";
+    commentAlert.className = "alert error";
+    return;
+  }
+
+  await addDoc(collection(db,"comments"),{
+    comment: text,
+    timestamp: serverTimestamp()
+  });
+
+  commentAlert.textContent = "Merci pour votre témoignage !";
+  commentAlert.className = "alert success";
+  commentArea.value = "";
+  commentCount.textContent = "0";
+};
+
+// -------------------- Feedback utilisateur --------------------
+let currentUser = null;
+let userData = null;
+
+const feedbackName = document.getElementById("feedbackName");
+const feedbackMessage = document.getElementById("feedbackMessage");
+const feedbackCount = document.getElementById("feedbackCount");
+const feedbackAlert = document.getElementById("feedbackAlert");
+const sendFeedbackBtn = document.getElementById("sendFeedbackBtn");
+
+feedbackMessage.addEventListener("input", () => {
+  feedbackCount.textContent = feedbackMessage.value.length;
+});
+
+onAuthStateChanged(auth, async user => {
+  currentUser = user;
+  if(!user){
+    sendFeedbackBtn.disabled = true;
+    feedbackAlert.textContent = "Connectez-vous pour envoyer un feedback.";
+    feedbackAlert.className = "alert error";
+    return;
+  }
+
+  // récupérer info utilisateur pour le nom
+  const snap = await getDocs(query(collection(db,"users"), where("uid","==",user.uid)));
+  userData = snap.docs[0]?.data() || null;
+  sendFeedbackBtn.disabled = false;
+  feedbackAlert.textContent = "";
+});
+
+sendFeedbackBtn.onclick = async () => {
+  if(!currentUser) return;
+
+  const text = feedbackMessage.value.trim();
+  const name = feedbackName.value.trim();
+  if(text.length < 10){
+    feedbackAlert.textContent = "Message trop court.";
+    feedbackAlert.className = "alert error";
+    return;
+  }
+
+  // Limite 1 feedback par semaine
+  const oneWeekAgo = new Date();
+  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+  const q = query(
+    collection(db,"feedbacks"),
+    where("userID","==",currentUser.uid)
+  );
+  const snap = await getDocs(q);
+  for(const d of snap.docs){
+    const fbDate = d.data().createdAt?.toDate();
+    if(fbDate && fbDate > oneWeekAgo){
+      feedbackAlert.textContent = "Vous avez déjà envoyé un feedback cette semaine.";
+      feedbackAlert.className = "alert error";
+      return;
+    }
+  }
+
+  await addDoc(collection(db,"feedbacks"),{
+    userID: currentUser.uid,
+    name: name || "Anonyme",
+    message: text,
+    createdAt: serverTimestamp(),
+    status: "new"
+  });
+
+  feedbackAlert.textContent = "Merci pour votre feedback 💙";
+  feedbackAlert.className = "alert success";
+  feedbackMessage.value = "";
+  feedbackName.value = "";
+  feedbackCount.textContent = "0";
+  sendFeedbackBtn.disabled = true;
+};
+</script>
+</body>
+</html>
