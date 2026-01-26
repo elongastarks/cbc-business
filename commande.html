@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commandes – CBC Business</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:#f5f7fa;
+  color:#2b2b2b;
+}
+
+.container{
+  max-width:1350px;
+  margin:auto;
+  padding:20px;
+}
+
+/* HEADER */
+header{
+  background:#fff;
+  padding:20px 25px;
+  border-radius:14px;
+  box-shadow:0 8px 25px rgba(0,0,0,.06);
+  margin-bottom:25px;
+}
+
+.header-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:15px;
+}
+
+nav{
+  display:flex;
+  gap:15px;
+  flex-wrap:wrap;
+}
+
+nav a{
+  text-decoration:none;
+  color:#4da6ff;
+  font-weight:600;
+  padding:6px 12px;
+  border-radius:8px;
+}
+
+nav a:hover{background:#eaf3ff}
+
+/* FILTERS */
+.filters{
+  display:flex;
+  gap:15px;
+  flex-wrap:wrap;
+  margin-bottom:20px;
+}
+
+.filters select{
+  padding:8px;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+
+/* SUMMARY */
+.summary{
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+  margin-bottom:25px;
+}
+
+.summary-box{
+  background:#fff;
+  padding:15px 20px;
+  border-radius:12px;
+  box-shadow:0 6px 20px rgba(0,0,0,.05);
+  min-width:200px;
+}
+
+/* TABLE */
+.table-wrapper{
+  background:#fff;
+  border-radius:14px;
+  padding:20px;
+  box-shadow:0 8px 25px rgba(0,0,0,.06);
+  margin-bottom:30px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th,td{
+  padding:12px;
+  border-bottom:1px solid #eee;
+  text-align:left;
+  font-size:14px;
+}
+
+th{
+  background:#f3f5f8;
+}
+
+.badge{
+  padding:4px 8px;
+  border-radius:8px;
+  font-size:12px;
+  font-weight:600;
+}
+
+.badge.new{background:#4da6ff;color:#fff}
+.badge.progress{background:#ffc107;color:#000}
+.badge.done{background:#28a745;color:#fff}
+.badge.cancel{background:#dc3545;color:#fff}
+
+button{
+  padding:6px 12px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.btn-view{background:#4da6ff;color:#fff}
+.btn-edit{background:#ffc107}
+.btn-delete{background:#dc3545;color:#fff}
+
+/* DETAILS */
+.command-details{
+  display:none;
+  background:#f9fafc;
+  padding:15px;
+  margin-top:10px;
+  border-radius:10px;
+}
+
+.command-details p{
+  margin:6px 0;
+}
+
+.copy-btn{
+  background:#00c853;
+  color:#fff;
+  margin-left:8px;
+}
+
+/* SECTION TITLE */
+.section-title{
+  margin:25px 0 10px;
+  font-size:1.2rem;
+  font-weight:700;
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:20px;
+  color:#777;
+  font-size:13px;
+}
+
+@media(max-width:768px){
+  th:nth-child(4),
+  td:nth-child(4),
+  th:nth-child(6),
+  td:nth-child(6){
+    display:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+  <div class="header-top">
+    <h2>📦 Commandes</h2>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="viewAnnonces.html">Annonces</a>
+      <a href="viewCommandes.html">Commandes</a>
+      <a href="support.html">Support</a>
+      <a href="logout.html">Déconnexion</a>
+    </nav>
+  </div>
+</header>
+
+<!-- FILTERS -->
+<div class="filters">
+  <select id="filterType">
+    <option value="all">Toutes</option>
+    <option value="received">Reçues</option>
+    <option value="sent">Envoyées</option>
+  </select>
+
+  <select id="filterAnnonce">
+    <option value="">Toutes les annonces</option>
+  </select>
+</div>
+
+<!-- SUMMARY -->
+<div class="summary">
+  <div class="summary-box">
+    <strong>Commandes reçues</strong>
+    <div id="receivedCount">0</div>
+  </div>
+  <div class="summary-box">
+    <strong>Commandes envoyées</strong>
+    <div id="sentCount">0</div>
+  </div>
+</div>
+
+<!-- RECEIVED -->
+<div class="table-wrapper">
+  <div class="section-title">📥 Commandes reçues</div>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Annonce</th>
+        <th>Client</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="receivedCommands">
+      <!-- injecté par JS -->
+    </tbody>
+  </table>
+</div>
+
+<!-- SENT -->
+<div class="table-wrapper">
+  <div class="section-title">📤 Commandes envoyées</div>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Annonce</th>
+        <th>Destinataire</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="sentCommands">
+      <!-- injecté par JS -->
+    </tbody>
+  </table>
+</div>
+
+<footer>© CBC Business</footer>
+
+</div>
+<script type="module">
+/* =========================
+   FIREBASE IMPORTS
+========================= */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+/* =========================
+   CONFIG
+========================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyBla3D7OS8-Hx82m8Tz6ZPIS7FSLury3ew",
+  authDomain: "cbc-business.firebaseapp.com",
+  projectId: "cbc-business"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+/* =========================
+   DOM
+========================= */
+const receivedTable = document.getElementById("receivedCommands");
+const sentTable = document.getElementById("sentCommands");
+
+const receivedCount = document.getElementById("receivedCount");
+const sentCount = document.getElementById("sentCount");
+
+const filterType = document.getElementById("filterType");
+const filterAnnonce = document.getElementById("filterAnnonce");
+
+/* =========================
+   STATE
+========================= */
+let currentUser;
+let allReceived = [];
+let allSent = [];
+let urlAnnonceID = new URLSearchParams(window.location.search).get("annonceID");
+
+/* =========================
+   AUTH
+========================= */
+onAuthStateChanged(auth, async user => {
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  currentUser = user;
+  await loadCommands();
+
+  // 👉 auto-filtre si annonceID dans l’URL
+  if (urlAnnonceID) {
+    filterAnnonce.value = urlAnnonceID;
+  }
+
+  applyFilters();
+});
+
+/* =========================
+   LOAD COMMANDS
+========================= */
+async function loadCommands() {
+
+  allReceived = [];
+  allSent = [];
+  receivedTable.innerHTML = "";
+  sentTable.innerHTML = "";
+
+  /* ----- COMMANDES REÇUES ----- */
+  const qReceived = query(
+    collection(db, "commands"),
+    where("userID", "==", currentUser.uid),
+    orderBy("date_commande", "desc")
+  );
+
+  const snapReceived = await getDocs(qReceived);
+  snapReceived.forEach(d => {
+    allReceived.push({ id: d.id, ...d.data() });
+  });
+
+  /* ----- COMMANDES ENVOYÉES ----- */
+  const qSent = query(
+    collection(db, "commands"),
+    where("gestID", "==", currentUser.uid),
+    orderBy("date_commande", "desc")
+  );
+
+  const snapSent = await getDocs(qSent);
+  snapSent.forEach(d => {
+    allSent.push({ id: d.id, ...d.data() });
+  });
+
+  receivedCount.textContent = allReceived.length;
+  sentCount.textContent = allSent.length;
+
+  populateAnnonceFilter();
+}
+
+/* =========================
+   RENDER
+========================= */
+function renderTable(data, table, isOwner) {
+  table.innerHTML = "";
+
+  if (data.length === 0) {
+    table.innerHTML = `<tr><td colspan="6" style="opacity:.6">Aucune commande</td></tr>`;
+    return;
+  }
+
+  data.forEach(cmd => {
+    const isNew48h = isNewCommand(cmd.date_commande);
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${cmd.id.slice(0,8)}</td>
+      <td>${cmd.annonceID || "-"}</td>
+      <td>${cmd.name || "-"}</td>
+      <td>${formatDate(cmd.date_commande)}</td>
+      <td>
+        <span class="badge ${statusClass(cmd.status)}">
+          ${cmd.status || "nouvelle"}
+        </span>
+        ${isNew48h ? `<span class="badge new48">Nouveau</span>` : ""}
+      </td>
+      <td>
+        <button class="btn-view">Voir</button>
+        ${isOwner ? `
+          <button class="btn-edit">Modifier</button>
+          <button class="btn-delete">Supprimer</button>` : ""}
+      </td>
+    `;
+
+    const details = document.createElement("tr");
+    details.innerHTML = `
+      <td colspan="6">
+        <div class="command-details">
+          <p><strong>Message :</strong> ${cmd.cv_message || "-"}</p>
+          <p>
+            <strong>Contact :</strong> ${cmd.contacts || "-"}
+            <button class="copy-btn">Copier</button>
+          </p>
+          ${cmd.cv_url ? `<p><a href="${cmd.cv_url}" target="_blank">📄 CV</a></p>` : ""}
+          ${!isOwner ? `
+            <button class="btn-view"
+              onclick="location.href='chat.html?uid=${cmd.gestID}'">
+              Contacter
+            </button>` : ""}
+        </div>
+      </td>
+    `;
+
+    tr.querySelector(".btn-view").onclick = () => {
+      const box = details.querySelector(".command-details");
+      box.style.display = box.style.display === "block" ? "none" : "block";
+    };
+
+    details.querySelector(".copy-btn")?.onclick = () => {
+      navigator.clipboard.writeText(cmd.contacts || "");
+    };
+
+    tr.querySelector(".btn-edit")?.onclick = async () => {
+      const newStatus = prompt("Nouveau statut ?", cmd.status);
+      if (!newStatus) return;
+      await updateDoc(doc(db,"commands",cmd.id), { status:newStatus });
+      loadCommands();
+    };
+
+    tr.querySelector(".btn-delete")?.onclick = async () => {
+      if (!confirm("Supprimer cette commande ?")) return;
+      await deleteDoc(doc(db,"commands",cmd.id));
+      loadCommands();
+    };
+
+    table.appendChild(tr);
+    table.appendChild(details);
+  });
+}
+
+/* =========================
+   FILTERS
+========================= */
+function applyFilters() {
+  const type = filterType.value;
+  const annonce = filterAnnonce.value;
+
+  let r = [...allReceived];
+  let s = [...allSent];
+
+  if (annonce) {
+    r = r.filter(c => c.annonceID === annonce);
+    s = s.filter(c => c.annonceID === annonce);
+  }
+
+  renderTable(r, receivedTable, true);
+  renderTable(s, sentTable, false);
+
+  receivedTable.closest(".table-wrapper").style.display =
+    type === "sent" ? "none" : "block";
+  sentTable.closest(".table-wrapper").style.display =
+    type === "received" ? "none" : "block";
+}
+
+filterType.onchange = applyFilters;
+filterAnnonce.onchange = applyFilters;
+
+/* =========================
+   ANNONCE FILTER
+========================= */
+function populateAnnonceFilter() {
+  const ids = new Set([...allReceived, ...allSent].map(c => c.annonceID).filter(Boolean));
+
+  filterAnnonce.innerHTML = `<option value="">Toutes les annonces</option>`;
+  ids.forEach(id => {
+    const opt = document.createElement("option");
+    opt.value = id;
+    opt.textContent = id;
+    filterAnnonce.appendChild(opt);
+  });
+}
+
+/* =========================
+   UTILS
+========================= */
+function formatDate(ts){
+  if (!ts?.seconds) return "-";
+  return new Date(ts.seconds*1000).toLocaleDateString();
+}
+
+function isNewCommand(ts){
+  if (!ts?.seconds) return false;
+  const now = Date.now();
+  return (now - ts.seconds*1000) < 48*60*60*1000;
+}
+
+function statusClass(status="") {
+  if (status.includes("cours")) return "progress";
+  if (status.includes("livr")) return "done";
+  if (status.includes("annul")) return "cancel";
+  return "new";
+}
+</script>
+</body>
+</html>
