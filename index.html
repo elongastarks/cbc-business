@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBC Business - Congo Business Connection</title>
+<meta name="description" content="CBC Business connecte freelances et entreprises en RDC. Publiez des annonces, trouvez des missions et collaborez efficacement au Congo.">
+<meta name="keywords" content="freelance RDC, missions freelance Congo, emplois RDC, CBC Business, entreprises Congo">
+<meta name="author" content="CBC Business">
+<meta name="robots" content="index, follow">
+
+<link rel="canonical" href="https://elongastarks.github.io/cbc-business/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CBC Business – Freelances & Entreprises en RDC">
+<meta property="og:description" content="Plateforme de mise en relation Freelances ↔ Entreprises en RDC.">
+<meta property="og:url" content="https://elongastarks.github.io/cbc-business/">
+<meta property="og:image" content="https://elongastarks.github.io/cbc-business/cbc.jpg">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CBC Business – Freelances & Entreprises en RDC">
+<meta name="twitter:description" content="Trouvez des missions et publiez des annonces en RDC.">
+<meta name="twitter:image" content="https://elongastarks.github.io/cbc-business/cbc.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "CBC Business",
+  "url": "https://elongastarks.github.io/cbc-business/",
+  "description": "Plateforme de mise en relation Freelances et Entreprises en République Démocratique du Congo",
+  "inLanguage": "fr",
+  "publisher": {
+    "@type": "Organization",
+    "name": "CBC Business",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://elongastarks.github.io/cbc-business/cbc.jpg"
+    }
+  }
+}
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const h1 = document.querySelector("h1");
+  if (h1) {
+    document.title = h1.textContent + " – CBC Business";
+    document.querySelector('meta[name="description"]')
+      ?.setAttribute("content", h1.textContent + " | CBC Business RDC");
+  }
+});
+</script>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+
+<style>
+/*   CBC BUSINESS — STYLE GLOBAL */
+:root{
+  --primary:#0B5FFF;
+  --accent:#FF3B30;
+  --bg:#ffffff;
+  --muted:#6b7280;
+  --dark:#111827;
+  --light:#F8FAFC;
+  font-family:"Inter", sans-serif;
+}
+
+body{ margin:0; background:#fff; }
+
+/* ===== HEADER ===== */
+.site-header {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 2000;
+  box-shadow: 0 1px 6px rgba(0,0,0,.05);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: auto;
+  padding: 12px 20px;
+  display: flex;
+  flex-direction: column; /* 🔑 permet nav en dessous */
+  gap: 12px;
+}
+
+/* ===== LIGNE HAUTE ===== */
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #000;
+}
+
+.logo .mark {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(11,95,255,.25);
+}
+
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Search */
+.search-box {
+  flex: 1;
+  display: flex;
+  gap: 10px;
+  background: #F8FAFC;
+  padding: 8px 12px;
+  border-radius: 12px;
+}
+
+.search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+/* nav-links */
+.nav-links {
+  display: flex; 
+  gap: 18px;
+}
+.nav-links a {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--primary); }
+
+/*  HAMBURGER  */
+.hamburger {
+  display: flex; /* toujours visible, même sur PC */
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+.hamburger span {
+  width: 26px;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+/*  MOBILE MENU ASIDE  */
+#mobile-menu {
+  position: fixed;
+  top: 60px; /* sous header */
+  right: -100%;
+  width: 250px;
+  height: calc(100% - 60px);
+  background: #fff;
+  box-shadow: -2px 0 12px rgba(0,0,0,0.1);
+  z-index: 3000;
+  transition: right 0.3s ease;
+  padding: 20px;
+}
+#mobile-menu.open { right: 0; }
+#mobile-menu .mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+#mobile-menu .mobile-nav a {
+  font-size: 16px;
+  color: var(--dark);
+  font-weight: 600;
+  transition: color 0.2s;
+}
+#mobile-menu .mobile-nav a:hover { color: var(--primary); }
+
+/*  MOBILE MENU OVERLAY  */
+#mobile-menu-overlay {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 60px);
+  background: rgba(0,0,0,0.3);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2990;
+  transition: opacity 0.3s;
+}
+#mobile-menu-overlay.active { opacity: 1; pointer-events: all; }
+/*  ALERT BAR  */
+.site-alert{
+  display:none;
+  justify-content:center;
+  padding:8px 15px;
+  font-weight:600;
+  font-size:15px;
+}
+.site-alert.info{ background:#FEF3C7; color:#92400E; }
+.site-alert.success{ background:#ECFDF5; color:#065F46; }
+.site-alert.error{ background:#FEE2E2; color:#991B1B; }
+
+.btn-primary {
+  background: linear-gradient(135deg, #2563EB, #3B82F6);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(37,99,235,0.25);
+  transition: all 0.25s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(37,99,235,0.35);
+}
+
+.btn-primary.soft {
+  background: #EFF6FF;
+  color: #2563EB;
+  box-shadow: none;
+}
+   HERO SECTION */
+.hero{
+  background:url('https://images.unsplash.com/photo-1521790797524-b2497295b8a0?auto=format&fit=crop&w=1200&q=60') center/cover no-repeat;
+  padding:80px 20px;
+  color:white;
+  text-align:center;
+}
+.hero h1{ font-size:34px; font-weight:700; margin-bottom:10px; }
+.hero p{ font-size:17px; margin-bottom:25px; }
+.hero .hero-btns{ display:flex; justify-content:center; gap:20px; flex-wrap:wrap; }
+.hero .hero-btns a{
+  background:rgba(255,255,255,0.12);
+  padding:12px 18px; border-radius:12px; color:white;
+  backdrop-filter:blur(6px); text-decoration:none; font-weight:600;
+}
+
+/*    SECTIONS TITRES */
+.section{
+  max-width:1200px; margin:60px auto; padding:0 20px;
+}
+.section h2{
+  font-size:26px; font-weight:700;
+  margin-bottom:25px; color:var(--dark);
+}
+
+/*  ANNONCES EN VEDETTE */
+.featured-list{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:20px;
+}
+.card{
+  background:white; border-radius:14px; padding:18px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.06);
+}
+.card h3{ margin:0; font-size:18px; font-weight:600; }
+.card small{ color:var(--muted); }
+.card .contact-btn{
+  display:inline-block; margin-top:12px; background:var(--primary);
+  padding:9px 14px; border-radius:10px; color:white;
+  text-decoration:none; font-weight:600;
+}
+
+/*    MISSIONS RENDUES */
+.rendus-list{ display:grid; gap:15px; }
+.rendu-item{
+  padding:14px 18px; border-left:4px solid var(--primary); background:#F9FAFB;
+  border-radius:10px;
+}
+
+/*    CATÉGORIES */
+/* Grid des catégories */
+.categories {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 catégories par ligne sur PC */
+  gap: 15px;
+}
+
+/* Cards individuelles */
+.cat-card {
+  background: #F3F4F6;
+  padding: 14px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 600;
+  color: #111;
+
+  /* Texte limité sur une ligne avec points de suspension si trop long */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/*   POURQUOI CBC */
+.values-list{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px;
+}
+.value-box{
+  background:#F9FAFB; padding:18px; border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.05);
+  font-size:15px;
+}
+
+/*    PLANS  */
+.plans{
+  display:flex; flex-wrap:wrap; gap:20px;
+}
+.plan{
+  flex:1; min-width:260px;
+  padding:20px; border-radius:14px; background:#fff;
+  box-shadow:0 4px 12px rgba(0,0,0,0.06);
+}
+.plan h3{ margin-top:0; }
+.plan ul{ padding-left:18px; }
+.plan button {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background-color: #0B5FFF; /* couleur primaire */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.plan button:hover {
+  background-color: #0066FF; /* couleur au survol */
+}
+
+
+/*  CTA FINAL */
+.final-cta{
+  text-align:center;
+  padding:60px 20px;
+  background:#E0ECFF;
+  border-radius:14px;
+}
+.final-cta a{
+  display:inline-block; margin:10px; padding:12px 20px;
+  background:var(--primary); color:white; font-weight:600;
+  border-radius:12px; text-decoration:none;
+}
+
+/*   FOOTER */
+footer{
+  margin-top:60px;
+  background:#111827; color:white; padding:40px 20px;
+}
+footer .f-container{
+  max-width:1200px; margin:auto; display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:30px;
+}
+footer a{ color:#cbd5e1; text-decoration:none; font-size:14px; }
+footer small{ display:block; margin-top:20px; opacity:0.7; }
+@media(max-width:900px) {
+  .nav-links { display: none; } /* cache nav-links sur mobile */
+}
+@media(max-width:768px) {
+  .grid-2, .cards, .team, .stats { grid-template-columns:1fr; }
+  footer .f-container { grid-template-columns:1fr; gap:20px; text-align:center; }
+  footer .f-container div { margin-bottom:10px; }
+}
+@media(max-width:600px) {
+  .filters { flex-direction:column; }
+}
+/* Responsive : moins de colonnes sur tablettes et mobiles */
+@media(max-width: 1024px) {
+  .categories {
+    grid-template-columns: repeat(3, 1fr); /* 3 par ligne sur tablette */
+  }
+}
+@media(max-width: 768px) {
+  .categories {
+    grid-template-columns: repeat(2, 1fr); /* 2 par ligne sur mobile */
+  }
+}
+@media(max-width: 480px) {
+  .categories {
+    grid-template-columns: 1fr; /* 1 par ligne sur petit mobile */
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div id="site-alert" class="site-alert"></div>
+<header class="site-header">
+  <div class="header-inner">
+
+    <!-- Ligne haute -->
+    <div class="header-top">
+      <!-- Logo -->
+      <a href="/" class="logo">
+        <div class="mark">
+          <img src="cbc.jpg" alt="CBC Business">
+        </div>
+        <span>CBC Business</span>
+      </a>
+
+      <!-- Search -->
+      <div class="search-box">
+        <input type="text" placeholder="Rechercher une mission, un freelance…">
+        <button>🔍</button>
+      </div>   
+      <nav class="nav-links">
+     <a href="index.html">Accueil</a>
+      <a href="explorer.html">Explorer</a>
+      <a href="poster.html">Publier</a>
+    </nav>
+      <!-- Hamburger -->
+      <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</header>
+<aside id="mobile-menu">
+  <nav class="mobile-nav">
+  <a href="index.html">Accueil</a>
+  <a href="explorer.html">Explorer</a>
+  <a href="poster.html">Publier</a>
+  <a href="rendus.html">Rendues</a>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="login.html">Connexion</a>
+  <a href="signup.html">Inscription</a>
+  <a href="Apropos.html">À propos</a>
+  <a href="help.html">Help</a>
+</nav>
+</aside>
+
+<section class="hero">
+  <h2 class="cbc">CONGO BUSINESS CONNECTION</h2>
+  <h3>Trouvez des freelances congolais qualifiés</h3>
+  <h3>Publiez votre mission ou proposez vos services en quelques clics.</h1>
+  <div class="hero-btns">
+    <a href="explorer.html">Je cherche un freelance</a>
+    <a href="poster.html">Je propose mes services</a>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Freelances & annonces en vedette</h2>
+  <div class="featured-list" id="featured-list"></div>
+  <br>
+  <a href="explorer.html?boost=true" class="btn-primary">Voir plus</a>
+</section>
+
+<section class="section">
+  <h2>Dernières missions rendues</h2>
+  <div class="rendus-list" id="rendus-list"></div>
+  <br>
+  <a href="rendus.html" class="btn-primary">Voir tous les services rendus</a>
+</section>
+
+<section class="section">
+  <h2>Catégories les plus populaires</h2>
+  <div class="categories" id="categories"></div>
+</section>
+
+<section class="section">
+  <h2>Pourquoi choisir CBC Business ?</h2>
+  <div class="values-list">
+    <div class="value-box">100% congolais</div>
+    <div class="value-box">Sans abonnement obligatoire</div>
+    <div class="value-box">Paiement sécurisé</div>
+    <div class="value-box">Mobile-friendly</div>
+    <div class="value-box">Service accessible partout</div>
+    <div class="value-box">Support local</div>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Nos offres & options premium</h2>
+  <div class="plans">
+
+    <div class="plan">
+      <h3>Gratuit</h3>
+      <ul>
+        <li>Création de compte</li>
+        <li>Accès aux annonces normales</li>
+        <li>Messagerie simple</li>
+        <li>5 réponses / publications par mois</li>
+      </ul>
+      <button onclick="window.location.href='poster.html'">Choisir ce plan</button>
+    </div>
+
+    <div class="plan">
+      <h3>Urgent – 4$</h3>
+      <ul>
+        <li>Badge urgent rouge</li>
+        <li>Priorité en haut de liste</li>
+      </ul>
+      <button onclick="window.location.href='plan.html?plan=urgent'">Choisir ce plan</button>
+    </div>
+
+    <div class="plan">
+      <h3>Boost – 5$</h3>
+      <ul>
+        <li>Apparition répétée</li>
+        <li>Mise en avant sur l’accueil</li>
+      </ul>
+      <button onclick="window.location.href='plan.html?plan=boost'">Choisir ce plan</button>
+    </div>
+
+    <div class="plan">
+      <h3>Ciblé – 10$/jour</h3>
+      <ul>
+        <li>Notifications ciblées</li>
+        <li>Email + SMS</li>
+      </ul>
+      <button onclick="window.location.href='plan.html?plan=cible'">Choisir ce plan</button>
+    </div>
+
+    <div class="plan">
+      <h3>Pack complet – 18$</h3>
+      <ul>
+        <li>Urgent + Boost</li>
+        <li>Ciblé 1 jour</li>
+      </ul>
+      <button onclick="window.location.href='plan.html?plan=pack'">Choisir ce plan</button>
+    </div>
+
+  </div>
+</section>
+
+<section class="section">
+  <h2>Témoignages</h2>
+  <div class="testimonials" id="testimonials"></div>
+</section>
+
+<section class="section final-cta">
+  <h2>Prêt à travailler ?</h2>
+  <p>Rejoignez CBC Business aujourd’hui.</p>
+  <a href="/signup">Créer un compte</a>
+  <a href="/poster">Publier une mission</a>
+</section>
+
+<footer>
+  <div class="f-container">
+    <div>
+      <strong style="font-size:18px;">CBC Business</strong>
+      <p>Plateforme de mise en relation Freelances ↔ Entreprises en RDC.</p>
+    </div>
+
+    <div>
+      <a href="/apropos">À propos</a><br>
+      <a href="/faq">FAQ</a><br>
+      <a href="/contact">Contact</a>
+    </div>
+
+    <div>
+      <a href="/privacy">Confidentialité</a><br>
+      <a href="/mentions">Mentions légales</a>
+    </div>
+  </div>
+  <small>🇨🇩 Disponible uniquement en RDC</small>
+</footer>
+<script>
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobile-menu');
+
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  mobileMenu.classList.toggle('open');
+});
+
+// fermer le menu quand on clique sur un lien
+document.querySelectorAll('#mobile-menu a').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+  });
+});
+
+// fermer le menu quand on clique sur l'overlay
+mobileMenu.addEventListener('click', e => {
+  if(e.target === mobileMenu){
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+  }
+});
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import { getFirestore, collection, query, where, getDocs, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+// --- 🔹 Config Firebase ---
+const firebaseConfig = {
+  apiKey: "AIzaSyBla3D7OS8-Hx82m8Tz6ZPIS7FSLury3ew",
+  authDomain: "cbc-business.firebaseapp.com",
+  projectId: "cbc-business",
+  storageBucket: "cbc-business.firebasestorage.app",
+  messagingSenderId: "295952883135",
+  appId: "1:295952883135:web:4624174a452c1f6aad950a",
+  measurementId: "G-580W4D6J7E"
+};
+
+let app;
+try { app = initializeApp(firebaseConfig); } catch(e){}
+const db = getFirestore();
+
+
+// ----ALERTES----
+
+async function loadAlert(){
+  const alertBox = document.getElementById('site-alert');
+  const qAlerts = query(
+    collection(db,"alerts"),
+    where("active","==",true),
+    orderBy("timestamp","desc"),
+    limit(1)
+  );
+  const snap = await getDocs(qAlerts);
+  if(snap.empty){ alertBox.style.display="none"; return; }
+  const a = snap.docs[0].data();
+  alertBox.classList.add(a.type || "info");
+  alertBox.textContent = a.message;
+  alertBox.style.display="flex";
+}
+loadAlert();
+
+// ----BOOSTED / FEATURED ANNOUNCES----
+
+async function loadFeatured(){
+  const list = document.getElementById("featured-list");
+
+  try {
+    // Requête pour récupérer les annonces boostées
+    const qB = query(
+      collection(db, "annonces"),
+      where("boost", "==", true),       // seulement les boostées
+      orderBy("date_creation", "desc"), // tri par date de création
+      limit(3)                          // max 3 annonces
+    );
+
+    const snap = await getDocs(qB);
+
+    list.innerHTML = "";
+    snap.forEach(doc=>{
+      const d = doc.data();
+      console.log(d); // pour vérifier les données
+
+      const titre = d.titre || "Annonce";
+      const categorie = d.categorie || "Sans catégorie";
+
+      list.innerHTML += `
+        <div class="card">
+          <h3>${titre}</h3>
+          <small>${categorie}</small><br>
+          <a class="contact-btn" href="/annonce?id=${doc.id}">Contacter</a>
+        </div>
+      `;
+    });
+
+    if(snap.empty){
+      list.innerHTML = "<p>Aucune annonce boostée pour le moment.</p>";
+      console.log("Aucun document boosté trouvé.");
+    }
+
+  } catch(err){
+    console.error("Erreur lors du chargement des annonces boostées :", err);
+    list.innerHTML = "<p>Impossible de charger les annonces en vedette.</p>";
+  }
+}
+
+loadFeatured();
+
+// ---- MISSIONS RENDUES ----
+
+async function loadRendus(){
+  const list = document.getElementById("rendus-list");
+  const qR = query(
+    collection(db,"rendus"),
+    orderBy("date_rendu","desc"),
+    limit(5)
+  );
+  const snap = await getDocs(qR);
+
+  list.innerHTML = "";
+  snap.forEach(doc=>{
+    const d = doc.data();
+    list.innerHTML += `
+      <div class="rendu-item">
+        <strong>${d.titre || "Mission rendue"}</strong><br>
+        <small>${d.categorie || ""}</small>
+      </div>
+    `;
+  });
+}
+loadRendus();
+
+// -----CATÉGORIES POPULAIRES (10)----
+
+async function loadCategories(){
+  const list = document.getElementById("categories");
+  list.innerHTML = ""; // on vide la liste avant d'ajouter
+
+  const snap = await getDocs(collection(db,"annonces"));
+
+  const counter = {};
+  snap.forEach(doc=>{
+    const d = doc.data();
+    if(!d.categorie) return;
+    counter[d.categorie] = (counter[d.categorie] || 0) + 1;
+  });
+
+  // On garde les 10 catégories les plus fréquentes
+  const sorted = Object.entries(counter)
+                .sort((a,b)=>b[1]-a[1])
+                .slice(0,10);
+
+  // Ajout dans le DOM
+  sorted.forEach(([cat])=>{
+    const div = document.createElement("div");
+    div.className = "cat-card";
+    div.textContent = cat;
+    list.appendChild(div);
+  });
+}
+
+loadCategories();
+
+// ----TÉMOIGNAGES----
+async function loadTestimonials() {
+  const list = document.getElementById("testimonials");
+
+  const qT = query(
+    collection(db, "comments"),
+    where("status", "==", "approved"),
+    orderBy("timestamp", "desc"),
+    limit(5)
+  );
+
+  const snap = await getDocs(qT);
+  list.innerHTML = "";
+
+  for (const docSnap of snap.docs) {
+    const d = docSnap.data();
+
+    let photoURL = null;
+    if (d.userID) {
+      try {
+        const userRef = doc(db, "users", d.userID);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+          const userData = userSnap.data();
+          if (userData.photoURL) photoURL = userData.photoURL;
+        }
+      } catch (err) {
+        console.error("Erreur photo userID:", d.userID, err);
+      }
+    }
+
+    // Si pas de photoURL, créer un avatar bleu avec initiale
+    if (!photoURL && d.name) {
+      const initial = d.name.charAt(0).toUpperCase();
+      photoURL = `https://via.placeholder.com/48/0B5FFF/FFFFFF?text=${initial}`;
+    }
+
+    list.innerHTML += `
+      <div class="t-item">
+        ${d.userID || photoURL ? `
+          <div class="t-item-header">
+            <img src="${photoURL}" alt="${d.name || 'Utilisateur'}">
+            <strong>${d.name || "Utilisateur"}</strong>
+          </div>
+        ` : `<strong>${d.name || "Utilisateur"}</strong>`}
+        <p>${d.comment || ""}</p>
+      </div>
+    `;
+  }
+}
+
+loadTestimonials();
+
+// ----ALERTES---- SEARCH
+
+document.getElementById("search-btn").onclick = ()=>{
+  const q = document.getElementById("search-input").value.trim();
+  if(q.length>0) window.location.href = `/explorer?q=${encodeURIComponent(q)}`;
+};
+</script>
+</body>
+</html>
