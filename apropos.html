@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <!-- ================= META SEO ESSENTIEL ================= -->
+  <meta charset="UTF-8">
+  <title>À propos de CBC Business | Plateforme Freelance & Recrutement en RDC</title>
+
+  <meta name="description" content="CBC Business (Congo Business Connection) est la plateforme qui connecte freelances, travailleurs et entreprises en République Démocratique du Congo. Missions, emploi, recrutement et collaboration professionnelle.">
+
+  <meta name="keywords" content="CBC Business, freelance RDC, emploi RDC, recrutement RDC, missions freelance Congo, plateforme business RDC">
+
+  <meta name="author" content="CBC Business">
+  <meta name="robots" content="index, follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Open Graph (Facebook / WhatsApp) -->
+  <meta property="og:title" content="À propos de CBC Business">
+  <meta property="og:description" content="La plateforme qui connecte freelances et entreprises en RDC.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="cbc.jpg">
+  <meta property="og:locale" content="fr_FR">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CBC Business – À propos">
+  <meta name="twitter:description" content="Freelance, emploi et recrutement en RDC.">
+  <meta name="twitter:image" content="cbc.jpg">
+
+  <!-- Données structurées (SEO avancé) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "CBC Business",
+    "alternateName": "Congo Business Connection",
+    "url": "https://cbc-business.com",
+    "logo": "https://cbc-business.com/cbc.jpg",
+    "sameAs": []
+  }
+  </script>
+
+  <!-- ================= CSS INTÉGRÉ ================= -->
+  <style>
+/* ================= VARIABLES ================= */
+:root {
+  --primary: #0B5FFF;
+  --dark: #0f172a;
+  --muted: #64748b;
+  --bg: #f8fafc;
+}
+
+/* ================= GLOBAL RESET ================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  line-height: 1.6;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s;
+}
+a:hover {
+  color: var(--primary);
+}
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ================= HEADER ================= */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 2000;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+.header-inner {
+  max-width: 1200px;
+  margin: auto;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: var(--dark);
+}
+.logo img {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+}
+
+/* ================= NAV LINKS DESKTOP ================= */
+.nav-links {
+  display: flex;
+  gap: 18px;
+}
+.nav-links a {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* ================= HAMBURGER ================= */
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+.hamburger span {
+  width: 26px;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* ================= MOBILE MENU ASIDE (DROITE) ================= */
+#mobile-menu {
+  position: fixed;
+  top: 60px; /* sous header */
+  right: -100%;
+  width: 250px;
+  height: calc(100% - 60px);
+  background: #fff;
+  box-shadow: -2px 0 12px rgba(0, 0, 0, 0.1);
+  z-index: 3000;
+  transition: right 0.3s ease;
+  padding: 20px;
+}
+#mobile-menu.open {
+  right: 0;
+}
+#mobile-menu .mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+#mobile-menu .mobile-nav a {
+  font-size: 16px;
+  color: var(--dark);
+  font-weight: 600;
+}
+#mobile-menu .mobile-nav a:hover {
+  color: var(--primary);
+}
+
+/* Overlay derrière le menu */
+#mobile-menu-overlay {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 60px);
+  background: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2990;
+  transition: opacity 0.3s;
+}
+#mobile-menu-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ================= MAIN SECTIONS ================= */
+main {
+  max-width: 1200px;
+  margin: auto;
+  padding: 40px 20px;
+}
+section {
+  margin-bottom: 70px;
+}
+h1 { font-size: 36px; margin-bottom: 10px; }
+h2 { font-size: 26px; margin-bottom: 15px; }
+h3 { font-size: 20px; margin-bottom: 10px; }
+
+/* ================= HERO ================= */
+.hero {
+  text-align: center;
+}
+.hero h2 {
+  color: var(--primary);
+  animation: blink 2s infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.hero p {
+  font-size: 16px;
+  color: var(--muted);
+  margin-bottom: 25px;
+}
+.hero-images {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+.hero-images img {
+  width: 260px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* ================= GRID LAYOUTS ================= */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+.card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  text-align: center;
+  font-weight: 600;
+}
+
+/* ================= TEAM ================= */
+.team {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 30px;
+  text-align: center;
+}
+.team img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin: auto;
+  margin-bottom: 10px;
+}
+
+/* ================= TIMELINE ================= */
+.timeline {
+  border-left: 3px solid var(--primary);
+  padding-left: 20px;
+}
+.timeline div {
+  margin-bottom: 20px;
+}
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #F9FAFB;
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+.timeline-item span {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.timeline-item div strong {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--primary);
+}
+.timeline-item div p {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+}
+
+/* ================= STATS ================= */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  text-align: center;
+}
+.stat {
+  background: #fff;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.06);
+}
+.stat strong {
+  font-size: 32px;
+  color: var(--primary);
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* ================= CTA ================= */
+.cta {
+  text-align: center;
+  background: linear-gradient(135deg, var(--primary), #2563eb);
+  color: #fff;
+  padding: 50px 20px;
+  border-radius: 20px;
+}
+.cta a {
+  display: inline-block;
+  margin: 10px;
+  padding: 12px 20px;
+  background: #fff;
+  color: #000;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.cta a:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* ================= FOOTER ================= */
+footer {
+  margin-top:60px;
+  background:#111827;
+  color:white;
+  padding:50px 20px;
+  font-family:Arial, sans-serif;
+  line-height:1.6;
+}
+
+footer .f-container {
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:30px;
+}
+
+footer .f-container div p {
+  color:#cbd5e1;
+  margin-top:8px;
+  font-size:14px;
+}
+footer a {
+  color:#cbd5e1;
+  text-decoration:none;
+  font-size:14px;
+  transition:0.3s;
+}
+footer a:hover {
+  color:#0d6efd; /* bleu type bouton pour feedback */
+  text-decoration:underline;
+}
+footer small {
+  display:block;
+  margin-top:25px;
+  opacity:0.7;
+  font-size:12px;
+  text-align:center;
+}
+
+/* ================= RESPONSIVE ================= */
+@media(max-width: 900px) {
+  /* cache desktop nav et montre hamburger */
+  .nav-links { display: none; }
+}
+@media(max-width:768px) {
+  .hero-images {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .grid-2,
+  .cards,
+  .team,
+  .stats {
+    grid-template-columns: 1fr;
+  }
+  footer .f-container {
+    grid-template-columns:1fr;
+    gap:20px;
+    text-align:center;
+  }
+  footer .f-container div {
+    margin-bottom:10px;
+  }
+}
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="header-inner">
+    <a href="/" class="logo">
+      <img src="cbc.jpg" alt="CBC Business">
+      <span>CBC Business</span>
+    </a>
+    
+    <nav class="nav-links">
+     <a href="index.html">Accueil</a>
+      <a href="explorer.html">Explorer</a>
+      <a href="poster.html">Publier</a>
+    </nav>
+
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</header>
+<aside id="mobile-menu">
+  <nav class="mobile-nav">
+  <a href="index.html">Accueil</a>
+  <a href="explorer.html">Explorer</a>
+  <a href="poster.html">Publier</a>
+  <a href="rendus.html">Rendues</a>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="login.html">Connexion</a>
+  <a href="signup.html">Inscription</a>
+  <a href="Apropos.html">À propos</a>
+  <a href="help.html">Help</a>
+</nav>
+</aside>
+<main>
+<section class="hero">
+  <h1>À propos de CBC Business</h1>
+  <h2>CONGO BUSINESS CONNECTION</h2>
+  <p>La plateforme qui connecte freelances et entreprises en RDC.</p>
+
+  <div class="hero-images">
+    <img src="cbc-braiding.jpg" alt="Collaboration CBC Business">
+    </br>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/Carte_des_territoires_de_la_RDC_par_province.jpg" alt="Carte de la République Démocratique du Congo">
+  </div>
+</section>
+
+<!-- 2️⃣ MISSION -->
+<section>
+  <h2>Notre mission</h2>
+  <ul>
+    <li>Connecter freelances et entreprises locales</li>
+    <li>Faciliter l’accès aux opportunités professionnelles</li>
+    <li>Digitaliser la collaboration en RDC</li>
+  </ul>
+</section>
+
+<!-- 3️⃣ VISION -->
+<section>
+  <h2>Notre vision</h2>
+  <ul>
+    <li>Plateforme de référence du travail indépendant en RDC</li>
+    <li>Plateforme de recrutement en RDC</li>
+    <li>Écosystème professionnel fiable et durable</li>
+    <li>Valorisation des talents locaux</li>
+  </ul>
+</section>
+
+<!-- 4️⃣ VALEURS -->
+<section>
+  <h2>Nos valeurs</h2>
+  <div class="cards">
+    <div class="card">Transparence</div>
+    <div class="card">Confiance</div>
+    <div class="card">Qualité</div>
+    <div class="card">Innovation</div>
+    <div class="card">Impact local</div>
+  </div>
+</section>
+
+<!-- 5️⃣ POURQUOI -->
+<section>
+  <h2>Pourquoi CBC Business existe</h2>
+  <p>Difficulté à trouver des missions fiables, manque de visibilité des talents : CBC Business est une réponse locale, adaptée et moderne.</p>
+</section>
+
+<!-- 6️⃣ CE QUE PERMET LA PLATEFORME -->
+<section>
+  <h2>Ce que vous pouvez faire sur CBC Business</h2>
+  <ul>
+    <li>Publier des missions</li>
+    <li>Trouver des freelances</li>
+    <li>Trouver un emploi</li>
+    <li>Trouver des travailleurs</li>
+    <li>Explorer des opportunités</li>
+    <li>Collaborer efficacement</li>
+    <li>Gagner en visibilité professionnelle</li>
+  </ul>
+</section>
+
+<!-- 7️⃣ POUR QUI -->
+<section>
+  <h2>Pour qui est CBC Business</h2>
+  <div class="grid-2">
+    <div>
+      <h3>Freelances</h3>
+      <p>Missions, visibilité, outils professionnels.</p>
+    </div>
+    <div>
+      <h3>Entreprises / Entrepreneurs</h3>
+      <p>Recrutement, talents locaux, collaboration.</p>
+    </div>
+  </div>
+  <p><a href="help.html">Voir les cas d’usage</a></p>
+</section>
+
+<!-- 8️⃣ ÉQUIPE -->
+<section>
+  <h2>L’équipe</h2>
+  <div class="team">
+    <div>
+      <img src="elonga.jpg" alt="Elonga Stark">
+      <strong>es.dev</strong>
+      <p>Fondateur – Tech / Produit/Structure</p>
+    </div>
+    <div>
+      <strong>ChatGPT</strong>
+      <p>Assistant IA – Conception & structure</p>
+    </div>
+  </div>
+</section>
+
+<!-- 9️⃣ HISTOIRE -->
+<section class="section" id="histoire">
+  <h2>Notre histoire</h2>
+  <div class="timeline">
+    <div class="timeline-item">
+      <span>💡</span>
+      <div>
+        <strong>Idée & Vision (2025)</strong>
+        <p>Création de CBC Business pour connecter freelances et entreprises en RDC et digitaliser la collaboration locale.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <span>🚀</span>
+      <div>
+        <strong>Lancement de la plateforme (Début 2026)</strong>
+        <p>Mise en ligne officielle avec fonctionnalités de publication d’annonces, recherche de missions et gestion de profils.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <span>⚙️</span>
+      <div>
+        <strong>Améliorations continues</strong>
+        <p>Optimisation de l’interface, ajout de notifications, amélioration du design, gestion plus fluide des utilisateurs et missions.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <span>🔮</span>
+      <div>
+        <strong>Vision future</strong>
+        <p>
+          - Implémenter les paiements des plans directement sur le site<br>
+          - Permettre l’upload de fichiers pour missions et portfolios<br>
+          - Ajouter protection des talents (employeurs)<br>
+          - Outils pour professionnels : création CV pro (drag & drop, export PNG/PDF)<br>
+          - Portfolio automatique des freelances<br>
+          - Deux autres outils possibles : gestion de contrats et suivi des performances
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 🔟 CONFIANCE -->
+<section>
+  <h2>Confiance & communauté</h2>
+  <div class="stats">
+    <div class="stat"><strong id="stat-users">0</strong><br>Utilisateurs</div>
+    <div class="stat"><strong id="stat-annonces">0</strong><br>Missions</div>
+    <div class="stat"><strong id="stat-rendus">0</strong><br>Collaborations</div>
+  </div>
+
+  <div id="testimonials"></div>
+</section>
+
+<!-- 1️⃣1️⃣ CTA -->
+<section class="cta">
+  <h2>Rejoignez CBC Business</h2>
+  <a href="signup.html">Créer un compte</a>
+  <a href="poster.html">Publier une mission</a>
+  <a href="explorer.html">Explorer</a>
+</section>
+
+</main>
+
+<!-- 1️⃣2️⃣ FOOTER -->
+<footer>
+  <div class="f-container">
+    <div class="f-brand">
+      <strong style="font-size:20px;">CBC Business</strong>
+      <p>Plateforme de mise en relation Freelances ↔ Entreprises en RDC.</p>
+    </div>
+    <div class="f-nav">
+    <a href="index.html">Accueil</a><br>
+      <a href="apropos.html">À propos</a><br>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="f-legal">
+      <a href="privacy.html">Confidentialité</a><br>
+      <a href="mentions.html">Mentions légales</a>
+    </div>
+  </div>
+  <small>🇨🇩 Disponible uniquement en RDC</small>
+</footer>
+
+<script>
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobile-menu');
+
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  mobileMenu.classList.toggle('open');
+});
+
+// fermer le menu quand on clique sur un lien
+document.querySelectorAll('#mobile-menu a').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+  });
+});
+
+// fermer le menu quand on clique sur l'overlay
+mobileMenu.addEventListener('click', e => {
+  if(e.target === mobileMenu){
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+  }
+});
+</script>
+<script type="module">
+/*    FIREBASE INIT  */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
+import { 
+  getAuth, 
+  onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+import { 
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  limit
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+/* ================= CONFIG ================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyBla3D7OS8-Hx82m8Tz6ZPIS7FSLury3ew",
+  authDomain: "cbc-business.firebaseapp.com",
+  projectId: "cbc-business",
+  storageBucket: "cbc-business.firebasestorage.app",
+  messagingSenderId: "295952883135",
+  appId: "1:295952883135:web:4624174a452c1f6aad950a",
+  measurementId: "G-580W4D6J7E"
+};
+
+const app = initializeApp(firebaseConfig);
+getAnalytics(app);
+
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+/* =========================================================
+   HAMBURGER MENU
+   ========================================================= */
+const hamburger = document.getElementById("hamburger");
+const navLinks  = document.querySelector(".nav-links");
+
+if (hamburger) {
+  hamburger.addEventListener("click", () => {
+    navLinks.classList.toggle("open");
+  });
+}
+
+/* AUTH STATE (OPTIONNEL MAIS PRÊT) */
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("Utilisateur connecté :", user.uid);
+  } else {
+    console.log("Visiteur non connecté");
+  }
+});
+
+/*  STATS DYNAMIQUES */
+async function loadStats() {
+  try {
+    const usersSnap     = await getDocs(collection(db, "users"));
+    const annoncesSnap  = await getDocs(collection(db, "annonces"));
+    const rendusSnap    = await getDocs(collection(db, "rendus"));
+
+    document.getElementById("stat-users").textContent =
+      usersSnap.size;
+
+    document.getElementById("stat-annonces").textContent =
+      annoncesSnap.size;
+
+    document.getElementById("stat-rendus").textContent =
+      rendusSnap.size;
+
+  } catch (err) {
+    console.error("Erreur stats :", err);
+  }
+}
+loadStats();
+
+/*    AVATAR FALLBACK (lettre + couleur) */
+function avatarFallback(name = "A") {
+  const letter = name.trim().charAt(0).toUpperCase() || "A";
+  return `https://ui-avatars.com/api/?name=${letter}&background=0B5FFF&color=fff&bold=true`;
+}
+
+/*   TÉMOIGNAGES AVEC PHOTO + FALLBACK */
+async function loadTestimonials() {
+  const container = document.getElementById("testimonials");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  try {
+    const qT = query(
+      collection(db, "comments"),
+      where("status", "==", "approved"),
+      orderBy("timestamp", "desc"),
+      limit(5)
+    );
+
+    const snap = await getDocs(qT);
+
+    for (const docSnap of snap.docs) {
+      const comment = docSnap.data();
+
+      let name  = comment.name || "Utilisateur";
+      let photo = avatarFallback(name);
+
+      /*  SI userID EXISTE  */
+      if (comment.userID) {
+        try {
+          const usersSnap = await getDocs(
+            query(
+              collection(db, "users"),
+              where("__name__", "==", comment.userID)
+            )
+          );
+
+          usersSnap.forEach(u => {
+            const uData = u.data();
+            if (uData.photoURL) photo = uData.photoURL;
+            if (uData.displayName) name = uData.displayName;
+          });
+
+        } catch (e) {
+          console.warn("User photo non trouvée");
+        }
+      }
+
+      container.innerHTML += `
+        <div class="t-item" style="display:flex;gap:12px;align-items:flex-start">
+          <img src="${photo}" alt="${name}" 
+               style="width:48px;height:48px;border-radius:50%">
+          <div>
+            <strong>${name}</strong>
+            <p>${comment.comment || ""}</p>
+          </div>
+        </div>
+      `;
+    }
+
+  } catch (err) {
+    console.error("Erreur témoignages :", err);
+  }
+}
+loadTestimonials();
+</script>
+</body>
+</html>
