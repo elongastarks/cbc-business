@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>CBC Business — Centre d’aide</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* ================= VARIABLES ================= */
+:root {
+  --primary: #0d6efd;
+  --dark: #111827;
+  --muted: #64748b;
+  --bg: #f7f7f7;
+  --light: #ffffff;
+}
+
+/* ================= RESET ================= */
+* {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+  background: var(--bg);
+  color: #333;
+  line-height: 1.7;
+}
+a { text-decoration: none; color: var(--primary); }
+h1,h2,h3 { color: var(--dark); }
+
+/* ================= HEADER (OFFICIEL CBC) ================= */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 2000;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.header-inner {
+  max-width: 1200px;
+  margin: auto;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: var(--dark);
+}
+.logo img {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+}
+
+/* ================= NAV LINKS DESKTOP ================= */
+.nav-links {
+  display: flex; /* reste visible sur PC */
+  gap: 18px;
+}
+.nav-links a {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--primary); }
+
+/* ================= HAMBURGER ================= */
+.hamburger {
+  display: flex; /* toujours visible, même sur PC */
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+.hamburger span {
+  width: 26px;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+/* ================= MOBILE MENU ASIDE ================= */
+#mobile-menu {
+  position: fixed;
+  top: 60px; /* sous header */
+  right: -100%;
+  width: 250px;
+  height: calc(100% - 60px);
+  background: #fff;
+  box-shadow: -2px 0 12px rgba(0,0,0,0.1);
+  z-index: 3000;
+  transition: right 0.3s ease;
+  padding: 20px;
+}
+#mobile-menu.open { right: 0; }
+#mobile-menu .mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+#mobile-menu .mobile-nav a {
+  font-size: 16px;
+  color: var(--dark);
+  font-weight: 600;
+  transition: color 0.2s;
+}
+#mobile-menu .mobile-nav a:hover { color: var(--primary); }
+
+/* ================= MOBILE MENU OVERLAY ================= */
+#mobile-menu-overlay {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 60px);
+  background: rgba(0,0,0,0.3);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2990;
+  transition: opacity 0.3s;
+}
+#mobile-menu-overlay.active { opacity: 1; pointer-events: all; }
+
+/* ================= MEDIA QUERIES ================= */
+@media(max-width:900px) {
+  .nav-links { display: none; } /* cache nav-links sur mobile */
+}
+@media(max-width:768px) {
+  .grid-2, .cards, .team, .stats { grid-template-columns:1fr; }
+  footer .f-container { grid-template-columns:1fr; gap:20px; text-align:center; }
+  footer .f-container div { margin-bottom:10px; }
+}
+@media(max-width:600px) {
+  .filters { flex-direction:column; }
+}
+/* ================= MAIN ================= */
+main {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+/* ================= SEARCH HELP ================= */
+.help-search {
+  background: var(--light);
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.05);
+  margin-bottom: 40px;
+}
+.help-search input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+}
+
+/* ================= SOMMAIRE ================= */
+.summary {
+  background: #fff;
+  padding: 25px;
+  border-radius: 14px;
+  margin-bottom: 50px;
+}
+.summary ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
+  gap: 10px;
+  list-style: none;
+}
+.summary a {
+  color: var(--dark);
+  font-weight: 600;
+}
+
+/* ================= SECTIONS ================= */
+.section {
+  margin-bottom: 70px;
+}
+.section h2 {
+  font-size: 26px;
+  margin-bottom: 15px;
+}
+.section p {
+  margin-bottom: 10px;
+  color: #444;
+}
+
+/* ================= PAGE BLOCK ================= */
+.page-block {
+  background: #fff;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.05);
+  margin-bottom: 30px;
+}
+.page-block h3 {
+  margin-bottom: 10px;
+}
+.page-block ul {
+  padding-left: 18px;
+}
+
+/* ===== Bouton toggle explication ===== */
+.toggle-explication {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  /*background-color: var(--primary);*/
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.toggle-explication:hover {
+  background-color: #0b5ed7; /* un peu plus foncé au survol */
+}
+
+/* ===== Div explication ===== */
+.explication {
+  margin-top: 10px;
+  padding: 10px 15px;
+  background: #f0f4ff;
+  border-left: 4px solid var(--primary);
+  border-radius: 6px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ================= VIDEO ================= */
+.video {
+  margin-top: 10px;
+  font-style: italic;
+  color: var(--muted);
+}
+
+/* ===== FAQ ===== */
+.faq-item {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.faq-question {
+  font-weight: 600;
+  position: relative;
+  margin: 0;
+  padding-right: 20px;
+}
+
+.faq-question::after {
+  content: '+';
+  position: absolute;
+  right: 0;
+  font-weight: bold;
+  transition: transform 0.3s;
+}
+
+.faq-item.active .faq-question::after {
+  transform: rotate(45deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 5px 0 10px 0; /* ajoute un petit espace en bas */
+  box-sizing: border-box; /* inclut padding dans max-height */
+}
+
+/* ================= FOOTER HELP ================= */
+footer {
+  margin-top:60px;
+  background:#111827;
+  color:white;
+  padding:50px 20px;
+  font-family:Arial, sans-serif;
+  line-height:1.6;
+}
+
+footer .f-container {
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:30px;
+}
+
+footer .f-container div p {
+  color:#cbd5e1;
+  margin-top:8px;
+  font-size:14px;
+}
+footer a {
+  color:#cbd5e1;
+  text-decoration:none;
+  font-size:14px;
+  transition:0.3s;
+}
+footer a:hover {
+  color:#0d6efd; /* bleu type bouton pour feedback */
+  text-decoration:underline;
+}
+footer small {
+  display:block;
+  margin-top:25px;
+  opacity:0.7;
+  font-size:12px;
+  text-align:center;
+
+/* ================= RESPONSIVE ================= */
+@media(max-width:900px){
+  .nav-links { display:none; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <div class="header-inner">
+    <a href="/" class="logo">
+      <img src="cbc.jpg" alt="CBC Business">
+      <span>CBC Business</span>
+    </a>
+    
+    <nav class="nav-links">
+     <a href="index.html">Accueil</a>
+      <a href="explorer.html">Explorer</a>
+      <a href="poster.html">Publier</a>
+    </nav>
+
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</header>
+<aside id="mobile-menu">
+  <nav class="mobile-nav">
+  <a href="index.html">Accueil</a>
+  <a href="explorer.html">Explorer</a>
+  <a href="poster.html">Publier</a>
+  <a href="rendus.html">Rendues</a>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="login.html">Connexion</a>
+  <a href="signup.html">Inscription</a>
+  <a href="Apropos.html">À propos</a>
+  <a href="support.html">Support</a>
+  <a href="help.html">Help</a>
+</nav>
+</aside>
+<main>
+
+<!-- ===== INTRO ===== -->
+<section class="section">
+  <h1>Centre d’aide CBC Business</h1>
+  <p>
+    Bienvenue dans le centre d’aide CBC Business.  
+    Cette page vous explique <strong>comment utiliser chaque fonctionnalité</strong>, même si vous débutez.
+  </p>
+</section>
+
+<!-- ===== SEARCH ===== -->
+<div class="help-search">
+  <input type="text" placeholder="🔍 Rechercher une aide (ex : PDF, dashboard, photo, parrainage…)">
+</div>
+
+<!-- ===== SOMMAIRE ===== -->
+<nav class="summary">
+  <ul>
+    <li><a href="#general">Fonctionnement général</a></li>
+    <li><a href="#pages">Pages de la plateforme</a></li>
+    <li><a href="#parrainage">Parrainage</a></li>
+    <li><a href="#modifier">Pourquoi copier mon User ID</a></li>
+    <li><a href="#conseils">Bonnes pratiques</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#support">Support</a></li>
+  </ul>
+</nav>
+
+<!-- ===== GUIDE GENERAL ===== -->
+<section id="general" class="section">
+  <h2>Comment fonctionne CBC Business</h2>
+  <ul>
+    <li>Créer un compte</li>
+    <li>Compléter son profil</li>
+    <li>Publier une annonce</li>
+    <li>Explorer les opportunités</li>
+    <li>Recevoir des rendus</li>
+    <li>Gérer son dashboard</li>
+    <li>Gagner avec le parrainage</li>
+  </ul>
+</section>
+
+<!-- ===== PAGES ===== -->
+<section id="pages" class="section">
+  <h2>Explication page par page</h2>
+
+<div class="page-block" id="sign">
+  <h3>signup.html</h3>
+  <p>Créer un compte utilisateur CBC Business.</p>
+  <ul>
+    <li>Champs obligatoires : nom complet, email, mot de passe, type de compte</li>
+    <li>Erreurs courantes : email déjà utilisé, mot de passe trop court, champs vides</li>
+  </ul>
+  
+  <!-- Bouton pour afficher/masquer l'explication -->
+  <button class="toggle-explication">^</button>
+
+  <!-- Div contenant l'explication pas à pas, cachée par défaut -->
+  <div class="explication" style="display:none; padding:10px; background:#f9f9f9; border-left:3px solid #0d6efd; margin-top:10px; border-radius:5px;">
+    <h4>Explication étape par étape :</h4>
+    <ol>
+      <li><strong>Accéder au formulaire :</strong> Ouvrez la page <code>signup.html</code> depuis votre navigateur.</li>
+      <li><strong>Remplir les informations personnelles :</strong> Saisissez votre nom complet, email, mot de passe sécurisé et sélectionnez le type de compte : <em>Personnel</em> ou <em>Entreprise</em>.</li>
+      <li><strong>Vérification email :</strong> Après soumission, vous recevrez un email de confirmation pour valider votre compte.</li>
+      <li><strong>Génération automatique du code de parrainage :</strong> Lors de la création du compte, CBC Business génère automatiquement un <em>code de parrainage unique</em> pour chaque utilisateur.</li>
+      <li><strong>Fonctionnement du parrainage :</strong> Ce code peut être partagé avec d’autres utilisateurs. Chaque inscription via votre code vous permet de gagner des avantages (bonus, visibilité, crédits).</li>
+      <li><strong>Activation du compte :</strong> Après vérification email et validation des informations, votre compte devient actif et prêt à publier ou explorer des annonces.</li>
+      <li><strong>Conseil professionnel :</strong> Utilisez une photo de profil claire et un mot de passe complexe pour sécuriser votre compte.</li>
+    </ol>
+    <p>Une fois ces étapes complétées, vous pourrez accéder à votre dashboard et commencer à publier ou explorer des opportunités.</p>
+  </div>
+
+  <div class="video">🎥 Vidéo : Comment créer un compte sur une plateforme</div>
+</div>
+
+<div class="page-block" id="poster">
+  <h3>poster.html (IMPORTANT)</h3>
+  <ul>
+    <li>Uploader un PDF ailleurs</li>
+    <li>Récupérer le lien public</li>
+    <li>Coller le lien dans <code>pdf_url</code></li>
+  </ul>
+  
+  <!-- Bouton pour afficher/masquer l'explication -->
+  <button class="toggle-explication">^</button>
+
+  <!-- Div contenant l'explication pas à pas, cachée par défaut -->
+  <div class="explication" style="display:none; padding:10px; background:#f9f9f9; border-left:3px solid #0d6efd; margin-top:10px; border-radius:5px;">
+    <h4>Explication étape par étape :</h4>
+    <ol>
+      <li><strong>Préparer votre PDF :</strong> Assurez-vous que le fichier est complet, lisible et correctement nommé.</li>
+      <li><strong>Uploader le PDF :</strong> Utilisez un service d’hébergement public (Google Drive, Dropbox, OneDrive, etc.). Vérifiez que le lien est <em>public et accessible sans authentification</em>.</li>
+      <li><strong>Récupérer le lien direct :</strong> Obtenez le lien de partage public. Pour Google Drive, utilisez la fonction “Obtenir le lien partageable” puis transformez-le en lien direct si nécessaire.</li>
+      <li><strong>Coller le lien dans CBC Business :</strong> Dans le champ <code>pdf_url</code> de la page <code>poster.html</code>, collez le lien exact obtenu.</li>
+      <li><strong>Vérification :</strong> Testez que le PDF s’affiche correctement sur la plateforme après soumission.</li>
+      <li><strong>Conseils :</strong> Utilisez des fichiers PDF de taille raisonnable (<10 Mo) et des noms explicites pour faciliter la recherche et la lecture par les utilisateurs.</li>
+    </ol>
+    <p>Une fois ces étapes réalisées, votre PDF sera accessible à tous les utilisateurs de CBC Business et pourra être utilisé pour vos annonces ou missions.</p>
+  </div>
+
+  <div class="video">🎥 Vidéo : Comment uploader un PDF et utiliser un lien</div>
+</div>
+
+<div class="page-block" id="explorer">
+  <h3>explorer.html</h3>
+  <ul>
+    <li>Rechercher et filtrer les annonces par mot-clé, catégorie, province ou niveau de formation</li>
+    <li>Voir les détails des annonces et accéder aux profils des utilisateurs</li>
+    <li>Identifier facilement les annonces urgentes, boostées ou vérifiées</li>
+  </ul>
+
+  <!-- Bouton pour afficher/masquer l'explication -->
+  <button class="toggle-explication">^</button>
+
+  <div class="explication" style="display:none;">
+    <p>La page <strong>Explorer</strong> vous permet de parcourir toutes les annonces disponibles sur CBC Business en RDC.</p>
+
+    <ol>
+      <li><strong>Filtres de recherche :</strong>
+        <ul>
+          <li>Le champ de recherche permet de trouver des annonces par mots-clés (titre, description, tags).</li>
+          <li>Les menus déroulants filtrent par catégorie, province et niveau de formation requis.</li>
+          <li>Vous pouvez combiner plusieurs filtres pour affiner vos résultats.</li>
+        </ul>
+      </li>
+
+      <li><strong>Affichage des annonces :</strong>
+        <ul>
+          <li>Chaque annonce est présentée sous forme de carte avec : titre, description, catégorie, localisation et salaire.</li>
+          <li>Les statistiques (vues, clics, commandes) sont visibles directement sur la carte.</li>
+          <li>Les badges 🔴 Urgent, ⭐ Boost et 🔰 Vérifié permettent de repérer rapidement les annonces prioritaires ou de confiance.</li>
+        </ul>
+      </li>
+
+      <li><strong>Actions :</strong>
+        <ul>
+          <li>Le bouton <em>Voir l’annonce</em> redirige vers la page détaillée de l’annonce.</li>
+          <li>Vous pouvez également filtrer dynamiquement depuis l’URL (ex: <code>explorer.html?user=USERID</code>) pour ne voir que les annonces d’un utilisateur spécifique.</li>
+        </ul>
+      </li>
+
+      <li><strong>SEO dynamique :</strong>
+        <ul>
+          <li>Le titre et la description de la page s’adaptent automatiquement selon vos filtres pour améliorer la visibilité sur les moteurs de recherche.</li>
+          <li>Exemple : filtrer par catégorie et province mettra à jour le titre pour indiquer “Développement Web à Kinshasa | CBC Business”.</li>
+        </ul>
+      </li>
+
+      <li><strong>Astuce :</strong>
+        <ul>
+          <li>Pour une recherche rapide, combinez mots-clés et filtres.</li>
+          <li>Les annonces boostées et vérifiées sont mises en avant, facilitant la sélection des missions fiables.</li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+
+  <div class="video">🎥 Vidéo : Explorer et filtrer efficacement les annonces sur CBC Business</div>
+</div>
+
+<div class="page-block" id="annonce">
+  <h3>annonce.html</h3>
+  <ul>
+    <li>Affichage détaillé d’une annonce sélectionnée depuis <strong>explorer.html</strong></li>
+    <li>Affichage en temps réel des statistiques : vues, clics, candidatures et républiées</li>
+    <li>Gestion des badges : Urgent, Boost, Vérifié</li>
+    <li>Actions dynamiques selon l’utilisateur : propriétaire, candidat ou non connecté</li>
+    <li>Formulaire de candidature sécurisé avec vérification des doublons</li>
+    <li>Connexion requise pour postuler ou contacter l’auteur</li>
+  </ul>
+
+  <button class="toggle-explication">^</button>
+  <div class="explication" style="display:none;">
+    <p>
+      La page <strong>annonce.html</strong> est conçue pour offrir une vue complète et professionnelle d’une annonce individuelle.
+      Elle fonctionne de la manière suivante :
+    </p>
+    <ol>
+      <li><strong>Chargement dynamique :</strong> L’annonce est récupérée depuis Firebase Firestore en utilisant l’ID passé en paramètre URL.</li>
+      <li><strong>Badges :</strong> Les badges Urgent, Boost et Vérifié sont affichés en fonction des données de l’annonce et du statut de l’utilisateur.</li>
+      <li><strong>Résumé et description :</strong> Toutes les informations essentielles de l’annonce sont affichées (type, niveau, salaire/budget, état, description détaillée).</li>
+      <li><strong>Statistiques en temps réel :</strong> Le nombre de vues, clics, candidatures et républiées est mis à jour dynamiquement et la vue est incrémentée à chaque chargement.</li>
+      <li><strong>Auteur de l’annonce :</strong> Les informations de l’auteur (nom, type de compte, statut, nombre d’annonces) sont récupérées depuis Firestore et affichées de manière professionnelle. Un lien vers ses autres annonces est fourni.</li>
+      <li><strong>Actions utilisateur :</strong>
+        <ul>
+          <li>Non connecté : bouton "Se connecter pour postuler".</li>
+          <li>Utilisateur propriétaire : seuls les boutons de gestion (marquer comme rendue) sont visibles.</li>
+          <li>Autres utilisateurs : boutons "Postuler" et "Contacter" affichés.</li>
+        </ul>
+      </li>
+      <li><strong>Sécurité candidature :</strong> La page vérifie que :
+        <ul>
+          <li>L’utilisateur ne peut pas postuler à sa propre annonce.</li>
+          <li>Une annonce marquée comme rendue ne peut plus recevoir de candidatures.</li>
+          <li>Les doublons sont évités (un utilisateur ne peut postuler deux fois à la même annonce).</li>
+        </ul>
+      </li>
+      <li><strong>Fichiers joints :</strong> Les PDF ou documents associés à l’annonce sont accessibles si fournis.</li>
+      <li><strong>Expérience professionnelle :</strong> Les actions, boutons et formulaires sont conditionnels et dynamiques pour offrir une navigation claire et intuitive.</li>
+    </ol>
+    <p>
+      ⚠️ Cette page est destinée à un usage professionnel et met en avant la fiabilité, la sécurité et la lisibilité de chaque annonce pour les candidats et les entreprises.
+    </p>
+  </div>
+  <div class="video">🎥 Vidéo : Visualisation et candidature à une annonce</div>
+</div>
+
+<div class="page-block" id="dashboard">
+  <h3>dashboard.html</h3>
+  <ul>
+    <li>Changer la photo via une URL externe</li>
+    <li>Supprimer et remplacer correctement l’URL</li>
+    <li>Copier son User ID et code de parrainage</li>
+  </ul>
+
+  <!-- Bouton pour afficher/masquer l'explication -->
+  <button class="toggle-explication">^</button>
+
+  <!-- Div contenant l'explication pas à pas -->
+  <div class="explication" style="display:none;">
+    <p>Le <strong>Dashboard</strong> CBC Business est votre centre de gestion personnel. Voici comment l’utiliser efficacement :</p>
+    <ol>
+      <li><strong>Photo de profil :</strong>
+        <ul>
+          <li>Dans la section "Photo", saisissez l'URL de votre nouvelle image hébergée publiquement (ex : <code>https://exemple.com/photo.jpg</code>).</li>
+          <li>Cliquez sur <strong>OK</strong> pour mettre à jour la photo. L’ancienne image sera remplacée.</li>
+          <li>Assurez-vous que l’URL est accessible publiquement pour que tous puissent voir votre profil correctement.</li>
+        </ul>
+      </li>
+      <li><strong>User ID :</strong>
+        <ul>
+          <li>Votre identifiant unique est affiché dans le champ "User ID".</li>
+          <li>Cliquez sur <strong>Copier ID</strong> pour le copier facilement dans le presse-papier.</li>
+          <li>Ce User ID est nécessaire pour que d’autres utilisateurs vous mentionnent dans leurs rendus ou missions.</li>
+        </ul>
+      </li>
+      <li><strong>Parrainage :</strong>
+        <ul>
+          <li>Un code de parrainage unique vous est attribué automatiquement.</li>
+          <li>Copiez ce code pour inviter d’autres utilisateurs. Chaque nouveau membre qui s’inscrit avec votre code vous rapporte des avantages et bonus.</li>
+          <li>La section parrainage vous permet de suivre vos gains et referrals directement depuis le Dashboard.</li>
+        </ul>
+      </li>
+      <li><strong>Statistiques :</strong>
+        <ul>
+          <li>Vous pouvez consulter vos annonces, vues, clics et commandes.</li>
+          <li>Les cartes récapitulatives affichent rapidement vos performances.</li>
+          <li>Des boutons "Voir" permettent d’accéder aux détails complets pour chaque section.</li>
+        </ul>
+      </li>
+      <li><strong>Messages privés :</strong>
+        <ul>
+          <li>La section chat vous montre toutes vos conversations avec d’autres utilisateurs.</li>
+          <li>Vous pouvez cliquer sur chaque discussion pour lire ou répondre directement.</li>
+        </ul>
+      </li>
+    </ol>
+    <p>💡 Astuce : Gardez votre profil complet et votre photo à jour pour améliorer votre visibilité et la confiance auprès des autres utilisateurs.</p>
+  </div>
+
+  <div class="video">🎥 Vidéo : Gérer son profil utilisateur</div>
+</div>
+
+<div class="page-block" id="modifier">
+  <h3>modifier.html</h3>
+  <ul>
+    <li>Modifier les informations de l’annonce</li>
+    <li>Consulter les statistiques</li>
+    <li>Effectuer des actions rapides (activer, mettre en pause, voir commandes)</li>
+    <li>Marquer comme rendu ou supprimer l’annonce</li>
+  </ul>
+
+  <!-- Bouton pour afficher/masquer l'explication -->
+  <button class="toggle-explication">^</button>
+
+  <!-- Div contenant l'explication pas à pas -->
+  <div class="explication" style="display:none;">
+    <p>La page <strong>Modifier l’annonce</strong> permet de gérer et mettre à jour toutes vos annonces publiées.</p>
+    
+    <ol>
+      <li><strong>Formulaire de l’annonce :</strong>
+        <ul>
+          <li>Modifiez le <em>titre</em> et la <em>description</em> pour mieux présenter votre annonce.</li>
+          <li>Choisissez la <em>catégorie</em>, et indiquez le <em>salaire ou budget</em> proposé.</li>
+          <li>Renseignez la <em>ville, province et lieu</em> pour localiser correctement votre offre.</li>
+          <li>Définissez le <em>statut</em> : actif pour visible ou pending pour temporairement fermé.</li>
+          <li>Cliquez sur <strong>Enregistrer les modifications</strong> pour sauvegarder vos changements.</li>
+        </ul>
+      </li>
+
+      <li><strong>Statistiques :</strong>
+        <ul>
+          <li>Consultez le nombre de <em>vues</em>, <em>clics</em> et <em>commandes</em> pour cette annonce.</li>
+          <li>Ces données vous aident à analyser la performance de vos publications.</li>
+        </ul>
+      </li>
+
+      <li><strong>Actions rapides :</strong>
+        <ul>
+          <li><strong>Activer :</strong> rendre votre annonce visible immédiatement.</li>
+          <li><strong>Mettre en pause :</strong> masquer temporairement l’annonce.</li>
+          <li><strong>Voir les commandes :</strong> accéder aux candidatures et commandes reçues pour cette annonce.</li>
+        </ul>
+      </li>
+
+      <li><strong>Marquer comme rendu :</strong>
+        <ul>
+          <li>Permet de confirmer qu’une mission ou service a été réalisé.</li>
+          <li>Indiquez la note/évaluation pour le client.</li>
+          <li>Entrez le <em>UserID</em> du client (forID) pour associer correctement la livraison.</li>
+          <li>Cliquez sur <strong>Marquer comme rendu</strong> pour finaliser l’action.</li>
+        </ul>
+      </li>
+
+      <li><strong>Supprimer l’annonce :</strong>
+        <ul>
+          <li>⚠️ Cette action est irréversible et supprime définitivement l’annonce.</li>
+          <li>Utilisez ce bouton uniquement si vous êtes certain de vouloir supprimer l’offre.</li>
+        </ul>
+      </li>
+    </ol>
+
+    <p>💡 Astuce : Avant de modifier ou supprimer, vérifiez les statistiques et commandes pour ne pas perdre de clients ou informations importantes.</p>
+  </div>
+
+  <div class="video">🎥 Vidéo : Comment modifier et gérer une annonce sur CBC Business</div>
+</div>
+
+<div class="page-block" id="commande">
+  <h3>commande.html</h3>
+  <ul>
+    <li>Filtrer les commandes reçues ou envoyées</li>
+    <li>Consulter les détails de chaque commande</li>
+    <li>Effectuer des actions rapides sur chaque commande</li>
+  </ul>
+
+  <!-- Bouton pour afficher/masquer l'explication -->
+  <button class="toggle-explication">^</button>
+
+  <!-- Div contenant l'explication pas à pas -->
+  <div class="explication" style="display:none;">
+    <p>La page <strong>Commandes</strong> permet de gérer toutes vos transactions, qu’elles soient reçues ou envoyées.</p>
+
+    <ol>
+      <li><strong>Filtres :</strong>
+        <ul>
+          <li>Le menu <em>Toutes / Reçues / Envoyées</em> vous permet de filtrer rapidement le type de commandes.</li>
+          <li>Le menu <em>Toutes les annonces</em> vous permet de ne voir que les commandes liées à une annonce spécifique.</li>
+        </ul>
+      </li>
+
+      <li><strong>Résumé :</strong>
+        <ul>
+          <li>La section <em>Commandes reçues</em> affiche le nombre total de commandes reçues pour vos annonces.</li>
+          <li>La section <em>Commandes envoyées</em> affiche le nombre de commandes que vous avez envoyées à d’autres annonces.</li>
+          <li>Ces chiffres vous donnent un aperçu rapide de votre activité.</li>
+        </ul>
+      </li>
+
+      <li><strong>Commandes reçues :</strong>
+        <ul>
+          <li>Chaque ligne du tableau correspond à une commande reçue pour vos annonces.</li>
+          <li>Vous pouvez consulter : l’ID de la commande, l’annonce concernée, le client, la date et le statut.</li>
+          <li>Le bouton <em>Action</em> permet de voir les détails, répondre au client ou marquer comme traité.</li>
+        </ul>
+      </li>
+
+      <li><strong>Commandes envoyées :</strong>
+        <ul>
+          <li>Chaque ligne du tableau correspond à une commande que vous avez envoyée à un autre utilisateur ou annonce.</li>
+          <li>Vous pouvez consulter : l’ID, l’annonce cible, le destinataire, la date et le statut.</li>
+          <li>Le bouton <em>Action</em> permet de suivre l’état de votre demande ou d’annuler si nécessaire.</li>
+        </ul>
+      </li>
+
+      <li><strong>Astuce :</strong>
+        <ul>
+          <li>Vérifiez régulièrement vos commandes reçues pour répondre rapidement et améliorer votre réputation.</li>
+          <li>Filtrer par annonce ou type vous aidera à gérer efficacement un grand nombre de commandes.</li>
+        </ul>
+      </li>
+    </ol>
+
+    <p>💡 Astuce pro : Combinez les filtres et le résumé pour avoir une vision claire de vos transactions et prioriser vos actions.</p>
+  </div>
+
+  <div class="video">🎥 Vidéo : Comment gérer ses commandes sur CBC Business</div>
+</div>
+
+<div class="page-block" id="chat">
+  <h3>chat.html</h3>
+  <ul>
+    <li>Messagerie privée sécurisée entre utilisateurs</li>
+    <li>Limite de 5 conversations actives par utilisateur pour éviter la surcharge</li>
+    <li>Chaque conversation peut contenir jusqu’à 70 messages par défaut</li>
+    <li>Affichage en temps réel des messages grâce à Firebase Firestore</li>
+    <li>Visualisation du profil du destinataire avec photo, nom et badge vérifié</li>
+  </ul>
+
+  <button class="toggle-explication">^</button>
+  <div class="explication" style="display:none;">
+    <p>
+      La page <strong>chat.html</strong> est conçue pour permettre des échanges privés et structurés entre utilisateurs de la plateforme. 
+      Lorsqu’un utilisateur ouvre un chat, le système procède comme suit :
+    </p>
+    <ol>
+      <li>Vérification de l’existence d’un chat entre les deux utilisateurs. Si un chat existe, il est ouvert avec toutes les conversations précédentes.</li>
+      <li>Si aucun chat n’existe et que la limite de 5 conversations actives n’est pas atteinte, un nouveau chat est créé automatiquement dans la base Firestore.</li>
+      <li>Les messages sont synchronisés en temps réel. Les messages entrants sont marqués comme "lus" automatiquement pour garantir le suivi des échanges.</li>
+      <li>Le système respecte la limite de messages (par défaut 70) par chat pour assurer la performance et la lisibilité de la conversation.</li>
+      <li>Le profil du destinataire est affiché de manière professionnelle avec sa photo, son nom et un badge vérifié si applicable.</li>
+    </ol>
+    <p>
+      ⚠️ Cette page est destinée à un usage professionnel : chaque conversation est conservée dans Firestore, et l’utilisateur doit respecter les limites pour assurer la fluidité et la sécurité du service.
+    </p>
+  </div>
+  <div class="video">🎥 Vidéo : Messagerie privée professionnelle</div>
+</div>
+
+<div class="page-block" id="rendus">
+  <h3>rendus.html</h3>
+  <ul>
+    <li>Voir toutes les missions ou services déjà finalisés</li>
+    <li>Consulter les notes et évaluations laissées par les clients</li>
+    <li>Suivre rapidement l’historique des rendus</li>
+  </ul>
+
+  <button class="toggle-explication">^</button>
+  <div class="explication" style="display:none;">
+    <p>La page <strong>Rendus</strong> affiche toutes vos missions terminées. Vous pouvez vérifier les détails de chaque mission, la note laissée par le client, et la date de livraison. C’est un outil pratique pour suivre vos performances et historiques.</p>
+  </div>
+</div>
+
+<div class="page-block" id="parrainage">
+  <h3>Systeme de Parrainage</h3>
+  <p>Système de parrainage CBC Business.</p>
+
+  <ul>
+    <li>Chaque utilisateur dispose d’un code de parrainage unique</li>
+    <li>Le code permet de lier une inscription à un parrain</li>
+    <li>Le parrainage offre des avantages progressifs</li>
+  </ul>
+
+  <button class="toggle-explication">^</button>
+
+  <div class="explication" style="display:none; padding:10px; background:#f9f9f9; border-left:3px solid #0d6efd; margin-top:10px; border-radius:5px;">
+    <h4>Fonctionnement du parrainage</h4>
+
+    <p>
+      Le système de parrainage CBC Business permet aux utilisateurs
+      de recommander la plateforme à de nouveaux membres tout en bénéficiant
+      d’avantages concrets.
+    </p>
+
+    <ol>
+      <li>
+        <strong>Attribution du code :</strong>
+        Chaque compte dispose d’un code de parrainage unique, généré automatiquement
+        et accessible depuis le tableau de bord.
+      </li>
+
+      <li>
+        <strong>Partage du code :</strong>
+        L’utilisateur peut partager son code librement (lien, texte, invitation).
+        Ce code est sa clé d’identification en tant que parrain.
+      </li>
+
+      <li>
+        <strong>Inscription via le code :</strong>
+        Lorsqu’un nouvel utilisateur s’inscrit en utilisant ce code,
+        le système associe automatiquement le compte au parrain correspondant.
+      </li>
+
+      <li>
+        <strong>Validation :</strong>
+        Le parrainage devient actif uniquement après la validation complète
+        du compte du filleul (email confirmé, compte actif).
+      </li>
+
+      <li>
+        <strong>Avantages :</strong>
+        Chaque parrainage validé peut donner accès à des bonus :
+        visibilité accrue, crédits, priorités ou fonctionnalités supplémentaires.
+      </li>
+    </ol>
+
+    <p>
+      Le parrainage est entièrement automatique et ne nécessite
+      aucune action technique de la part des utilisateurs.
+    </p>
+  </div>
+
+  <div class="video">🎥 Vidéo : Comprendre le système de parrainage</div>
+</div>
+
+<!-- ===== CONSEILS ===== -->
+<section id="conseils" class="section">
+  <h2>Conseils pour réussir sur CBC Business</h2>
+  <ul>
+    <li>Profil bien rempli</li>
+    <li>PDF clair</li>
+    <li>Descriptions propres</li>
+    <li>Être actif</li>
+  </ul>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section id="faq" class="section">
+  <h2>FAQ — Questions fréquentes</h2>
+
+  <div class="faq-item">
+    <h4 class="faq-question">Pourquoi mon PDF ne s’affiche pas ?</h4>
+    <p class="faq-answer">Assurez-vous que votre PDF est hébergé ailleurs (serveur public, Dropbox, Google Drive public). CBC ne permet pas d’héberger les fichiers directement.</p>
+  </div>
+
+  <div class="faq-item">
+    <h4 class="faq-question">Pourquoi mon lien ne fonctionne pas ?</h4>
+    <p class="faq-answer">Vérifiez que le lien est complet et public. Évitez les liens temporaires ou privés.</p>
+  </div>
+
+  <div class="faq-item">
+    <h4 class="faq-question">Pourquoi copier mon User ID ?</h4>
+    <p class="faq-answer">Il faut le donner à celui avec qui vous avez conclu une mission pour qu’il vous mentionne correctement dans ses rendus.</p>
+  </div>
+
+  <div class="faq-item">
+    <h4 class="faq-question">Comment modifier mon profil ?</h4>
+    <p class="faq-answer">Sur votre dashboard, supprimez l’URL existante de votre photo (toujours hébergée ailleurs), ajoutez la nouvelle URL, et mettez à jour vos informations personnelles.</p>
+  </div>
+
+  <div class="faq-item">
+    <h4 class="faq-question">Où trouver mon code de parrainage ?</h4>
+    <p class="faq-answer">Sur le dashboard, dans la section “Parrainage”. Copiez le code et partagez-le pour obtenir des gains et bonus.</p>
+  </div>
+
+  <div class="faq-item">
+    <h4 class="faq-question">Qui contacter en cas de problème ?</h4>
+    <p class="faq-answer">Envoyez un email à <a href="mailto:cbcbusiness59@gmail.com">cbcbusiness59@gmail.com</a>. Nous répondons sous 24h.</p>
+  </div>
+</section>
+
+<!-- ===== SUPPORT ===== -->
+<section id="support" class="section help-footer">
+  <p>
+    Besoin d’aide supplémentaire ?  
+    Contactez-nous : <strong>cbcbusiness59@gmail.com</strong><br>
+    ⏱️ Réponse sous 24h
+  </p>
+</section>
+
+</main>
+<footer>
+  <div class="f-container">
+    <div class="f-brand">
+      <strong style="font-size:20px;">CBC Business</strong>
+      <p>Plateforme de mise en relation Freelances ↔ Entreprises en RDC.</p>
+    </div>
+    <div class="f-nav">
+    <a href="index.html">Accueil</a><br>
+      <a href="apropos.html">À propos</a><br>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="f-legal">
+      <a href="privacy.html">Confidentialité</a><br>
+      <a href="mentions.html">Mentions légales</a>
+    </div>
+  </div>
+  <small>🇨🇩 Disponible uniquement en RDC</small>
+</footer>
+
+<script>
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobile-menu');
+
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  mobileMenu.classList.toggle('open');
+});
+
+// fermer le menu quand on clique sur un lien
+document.querySelectorAll('#mobile-menu a').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+  });
+});
+
+// fermer le menu quand on clique sur l'overlay
+mobileMenu.addEventListener('click', e => {
+  if(e.target === mobileMenu){
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+  }
+});
+</script>
+<script>
+document.querySelectorAll('.toggle-explication').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const explication = btn.nextElementSibling;
+    if(!explication) return;
+
+    const allExplications = document.querySelectorAll('.explication');
+    const allButtons = document.querySelectorAll('.toggle-explication');
+
+    // Fermer tous les autres blocs
+    allExplications.forEach((el, idx) => {
+      if(el !== explication){
+        el.style.display = 'none';
+        allButtons[idx].textContent = '^';
+      }
+    });
+
+    // Ouvrir ou fermer le bloc actuel
+    if(explication.style.display === 'none' || explication.style.display === ''){
+      explication.style.display = 'block';
+      btn.textContent = '↓';
+      explication.scrollIntoView({behavior:'smooth', block:'start'});
+    } else {
+      explication.style.display = 'none';
+      btn.textContent = '^';
+    }
+  });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const faqs = document.querySelectorAll('.faq-item');
+
+  faqs.forEach(faq => {
+    const question = faq.querySelector('.faq-question');
+    const answer = faq.querySelector('.faq-answer');
+
+    question.addEventListener('click', () => {
+      faqs.forEach(otherFaq => {
+        if (otherFaq !== faq) {
+          otherFaq.classList.remove('active');
+          otherFaq.querySelector('.faq-answer').style.maxHeight = "0";
+          otherFaq.querySelector('.faq-answer').style.padding = "0 10px";
+        }
+      });
+
+      if (faq.classList.contains('active')) {
+        faq.classList.remove('active');
+        answer.style.maxHeight = "0";
+        answer.style.padding = "0 10px";
+      } else {
+        faq.classList.add('active');
+        answer.style.maxHeight = answer.scrollHeight + "px";
+        answer.style.padding = "10px";
+      }
+    });
+  });
+});
+</script>
+<script>
+/* ===============================
+   JS RECHERCHE INTELLIGENTE HELP
+   CBC BUSINESS
+================================ */
+
+/* ---- dictionnaire intelligent ---- */
+const helpIndex = [
+  { keywords: ["signup","inscription","compte","sign"], target:"sign" },
+  { keywords: ["poster","publier","pdf","document","upload"], target:"poster" },
+  { keywords: ["explorer","recherche","catégorie","filtrer"], target:"explorer" },
+  { keywords: ["annonce","détail","postuler"], target:"annonce" },
+  { keywords: ["dashboard","profil","photo","url","image"], target:"dashboard" },
+  { keywords: ["modifier","édition","mettre à jour"], target:"modifier" },
+  { keywords: ["commande","commandes","historique"], target:"commande" },
+  { keywords: ["chat","message","discussion"], target:"chat" },
+  { keywords: ["rendu","rendus","livraison"], target:"rendus" },
+  { keywords: ["help","aide","guide"], target:"help" },
+  { keywords: ["conseil","astuce","bonnes pratiques"], target:"conseils" },
+  { keywords: ["support","contact","assistance"], target:"support" },
+  { keywords: ["faq","question","problème"], target:"faq" }
+];
+
+/* ---- distance de Levenshtein ---- */
+function levenshtein(a, b) {
+  const m = a.length, n = b.length;
+  const dp = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      dp[i][j] = a[i - 1] === b[j - 1]
+        ? dp[i - 1][j - 1]
+        : Math.min(dp[i - 1][j - 1] + 1, dp[i][j - 1] + 1, dp[i - 1][j] + 1);
+    }
+  }
+  return dp[m][n];
+}
+
+/* ---- AUTOCOMPLETE ---- */
+const input = document.querySelector('.help-search input');
+let suggestionBox = null;
+
+if (input) {
+  input.addEventListener('input', () => {
+    const query = input.value.toLowerCase().trim();
+    if (!query) { removeSuggestions(); return; }
+
+    const matches = [];
+    helpIndex.forEach(item => {
+      item.keywords.forEach(word => {
+        if (word.startsWith(query) && !matches.includes(word)) {
+          matches.push(word);
+        }
+      });
+    });
+    showSuggestions(matches);
+  });
+
+  input.addEventListener('keyup', e => {
+    if (e.key === 'Enter') {
+      const query = input.value.toLowerCase().trim();
+      if (query) searchHelp(query);
+    }
+  });
+}
+
+function showSuggestions(matches) {
+  removeSuggestions();
+  if (!matches.length) return;
+
+  suggestionBox = document.createElement('div');
+  suggestionBox.className = 'help-suggestions';
+
+  Object.assign(suggestionBox.style, {
+    position: 'absolute',
+    background: '#fff',
+    border: '1px solid #ddd',
+    borderRadius: '8px',
+    top: (input.offsetTop + input.offsetHeight) + 'px',
+    left: input.offsetLeft + 'px',
+    width: input.offsetWidth + 'px',
+    maxHeight: '200px',
+    overflowY: 'auto',
+    zIndex: 5000,
+    boxShadow: '0 4px 12px rgba(0,0,0,.1)'
+  });
+
+  matches.forEach(word => {
+    const div = document.createElement('div');
+    div.textContent = word;
+    div.style.padding = '8px 12px';
+    div.style.cursor = 'pointer';
+
+    div.onclick = () => {
+      input.value = word;
+      removeSuggestions();
+      searchHelp(word);
+    };
+
+    div.onmouseenter = () => div.style.background = '#f0f0f0';
+    div.onmouseleave = () => div.style.background = 'transparent';
+
+    suggestionBox.appendChild(div);
+  });
+
+  input.parentNode.appendChild(suggestionBox);
+}
+
+function removeSuggestions() {
+  if (suggestionBox) {
+    suggestionBox.remove();
+    suggestionBox = null;
+  }
+}
+
+/* ---- NETTOYAGE DES HIGHLIGHTS ---- */
+function clearHighlights() {
+  document.querySelectorAll('mark').forEach(mark => {
+    mark.replaceWith(mark.textContent);
+  });
+}
+
+/* ---- RECHERCHE + SCROLL ---- */
+function searchHelp(query) {
+  clearHighlights();
+
+  let bestMatch = null;
+  let bestScore = Infinity;
+
+  helpIndex.forEach(item => {
+    item.keywords.forEach(word => {
+      const score = levenshtein(query, word);
+      if (score < bestScore) {
+        bestScore = score;
+        bestMatch = item.target;
+      }
+    });
+  });
+
+  if (bestMatch && bestScore <= 4) {
+    const section = document.getElementById(bestMatch);
+    if (!section) return;
+
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    highlightQuerySafe(section, query);
+
+    section.style.transition = "background 0.3s";
+    section.style.background = "#E8F0FF";
+    setTimeout(() => section.style.background = "transparent", 1200);
+
+    addCopyButtons(section);
+  } else {
+    alert("Aucune aide trouvée. Essayez : poster, explorer, commande…");
+  }
+}
+
+/* ---- HIGHLIGHT SAFE ---- */
+function highlightQuerySafe(section, query) {
+  const regex = new RegExp(`(${query})`, 'gi');
+
+  section.querySelectorAll('*').forEach(node => {
+    if (node.children.length === 0 && node.textContent.trim()) {
+      node.innerHTML = node.textContent.replace(
+        regex,
+        `<mark style="background:yellow;">$1</mark>`
+      );
+    }
+  });
+}
+
+/* ---- BOUTONS COPIER ---- */
+function addCopyButtons(section) {
+  section.querySelectorAll('.copy-btn').forEach(b => b.remove());
+
+  if (section.id === 'rendus' || section.id === 'annonce') return;
+
+  if (section.id === 'help' || section.id === 'dashboard') {
+    const btn = document.createElement('button');
+    btn.textContent = "Copier mon User ID";
+    btn.className = "copy-btn";
+    btn.onclick = () => {
+      navigator.clipboard.writeText("USER_ID_EXEMPLE");
+      alert("User ID copié !");
+    };
+    section.appendChild(btn);
+  }
+}
+</script>
+</body>
+</html>
