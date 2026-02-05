@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Support | CBC Business</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f5f6fa;
+      color: #333;
+    }
+
+    /* ================= HEADER ================= */
+    header {
+      background: #0d1b2a;
+      color: #fff;
+      padding: 15px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header h1 {
+      font-size: 20px;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 14px;
+    }
+
+    .header-desc {
+      background: #1b263b;
+      color: #ddd;
+      padding: 10px 30px;
+      font-size: 14px;
+    }
+
+    /* ================= CONTAINER ================= */
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 15px;
+    }
+
+    section {
+      background: #fff;
+      border-radius: 6px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    section h2 {
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+
+    /* ================= FORM ================= */
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .input-group input,
+    .input-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .btn {
+      background: #1d3557;
+      color: #fff;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .btn:hover {
+      background: #457b9d;
+    }
+
+    /* ================= TICKETS ================= */
+    .ticket {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+
+    .ticket-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .ticket-status {
+      font-weight: bold;
+    }
+
+    .status-open { color: #e63946; }
+    .status-in_progress { color: #f4a261; }
+    .status-closed { color: #2a9d8f; }
+
+    .ticket-viewed {
+      font-size: 12px;
+      color: #777;
+    }
+
+    /* ================= REPONSES ================= */
+    .ticket-reponse {
+      background: #f1f1f1;
+      padding: 10px;
+      border-radius: 4px;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .ticket-reponse .meta {
+      font-size: 12px;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    /* ================= FOOTER ================= */
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 13px;
+      color: #777;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ================= HEADER ================= -->
+  <header>
+    <h1>CBC Business – Support</h1>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="explorer.html">Explorer</a>
+      <a href="logout.html">Déconnexion</a>
+    </nav>
+  </header>
+
+  <div class="header-desc">
+    Signaler un problème ou envoyer un ticket à l'administration
+  </div>
+
+  <!-- ================= MAIN ================= -->
+  <div class="container">
+
+    <!-- ===== Nouveau ticket ===== -->
+    <section id="nouveau-ticket">
+      <h2>Nouveau ticket</h2>
+
+      <div class="input-group">
+        <label>Objet du ticket *</label>
+        <input type="text" id="ticketObjet" placeholder="Ex : Problème de paiement">
+      </div>
+
+      <div class="input-group">
+        <label>Message détaillé *</label>
+        <textarea id="ticketMessage" placeholder="Décrivez votre problème..."></textarea>
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" id="abuseReports">
+        <label for="abuseReports">Signaler un abus</label>
+      </div>
+
+      <button class="btn" id="sendTicketBtn">Envoyer le ticket</button>
+    </section>
+
+    <!-- ===== Liste des tickets ===== -->
+    <section id="tickets-list">
+      <h2>Mes tickets</h2>
+
+      <div id="tickets-container">
+        <!-- Ticket exemple -->
+        <div class="ticket">
+          <div class="ticket-header">
+            <span><strong>Objet :</strong> Problème de compte</span>
+            <span class="ticket-status status-open">open</span>
+          </div>
+
+          <div class="ticket-viewed">
+            Réponse non lue
+          </div>
+
+          <div class="ticket-reponse">
+            Merci pour votre message, nous analysons votre demande.
+            <div class="meta">
+              Status : open • 02/02/2026 – 14:30
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!-- ================= FOOTER ================= -->
+  <footer>
+    © 2026 CBC Business — Support utilisateur
+  </footer>
+  <!-- ================= ANTI SCREENSHOT ================= -->
+  <script>
+    document.addEventListener("keydown", function(e) {
+      if (
+        e.key === "PrintScreen" ||
+        (e.ctrlKey && e.key.toLowerCase() === "s") ||
+        (e.ctrlKey && e.key.toLowerCase() === "p") ||
+        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "i")
+      ) {
+        e.preventDefault();
+        alert("⚠️ Capture d'écran interdite sur cette page.");
+      }
+    });
+
+    document.addEventListener("keyup", function(e) {
+      if (e.key === "PrintScreen") {
+        alert("⚠️ Capture d'écran interdite sur cette page.");
+      }
+    });
+  </script>
+<script type="module">
+/* ================= FIREBASE IMPORTS ================= */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  doc,
+  updateDoc,
+  query,
+  where,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import {
+  getAuth,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+/* ================= CONFIG ================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyBla3D7OS8-Hx82m8Tz6ZPIS7FSLury3ew",
+  authDomain: "cbc-business.firebaseapp.com",
+  projectId: "cbc-business",
+  storageBucket: "cbc-business.firebasestorage.app",
+  messagingSenderId: "295952883135",
+  appId: "1:295952883135:web:4624174a452c1f6aad950a"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+let currentUser = null;
+
+/* ================= AUTH ================= */
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    alert("Veuillez vous connecter pour accéder au support.");
+    window.location.href = "login.html";
+    return;
+  }
+
+  currentUser = user;
+
+  // 🔥 RÈGLE IMPORTANTE : viewed = true À L’ENTRÉE SUR LA PAGE
+  await markAllResponsesAsViewed();
+
+  loadTickets();
+});
+
+/* ================= MARQUER RESPONSES COMME VUES ================= */
+async function markAllResponsesAsViewed() {
+  const ticketsQuery = query(
+    collection(db, "support"),
+    where("userID", "==", currentUser.uid)
+  );
+
+  const ticketsSnap = await getDocs(ticketsQuery);
+
+  for (const ticketDoc of ticketsSnap.docs) {
+    const reponsesRef = collection(db, "support", ticketDoc.id, "reponses");
+    const reponsesSnap = await getDocs(reponsesRef);
+
+    for (const rep of reponsesSnap.docs) {
+      const repData = rep.data();
+      if (repData.viewed === false) {
+        await updateDoc(rep.ref, { viewed: true });
+      }
+    }
+  }
+}
+
+/* ================= ENVOI NOUVEAU TICKET ================= */
+document.getElementById("sendTicketBtn").addEventListener("click", async () => {
+  const objet = document.getElementById("ticketObjet").value.trim();
+  const message = document.getElementById("ticketMessage").value.trim();
+  const abuse = document.getElementById("abuseReports").checked;
+
+  if (!objet || !message) {
+    alert("Veuillez remplir tous les champs obligatoires.");
+    return;
+  }
+
+  await addDoc(collection(db, "support"), {
+    userID: currentUser.uid,
+    subject: objet,
+    message: message,
+    abuseReports: abuse,
+    status: "open",
+    viewed: false,
+    timestamp: serverTimestamp()
+  });
+
+  alert("Ticket envoyé avec succès.");
+
+  document.getElementById("ticketObjet").value = "";
+  document.getElementById("ticketMessage").value = "";
+  document.getElementById("abuseReports").checked = false;
+
+  loadTickets();
+});
+
+/* ================= CHARGER TICKETS ================= */
+async function loadTickets() {
+  const container = document.getElementById("tickets-container");
+  container.innerHTML = "";
+
+  const q = query(
+    collection(db, "support"),
+    where("userID", "==", currentUser.uid)
+  );
+
+  const snap = await getDocs(q);
+
+  if (snap.empty) {
+    container.innerHTML = "<p>Aucun ticket pour le moment.</p>";
+    return;
+  }
+
+  for (const docSnap of snap.docs) {
+    const ticket = docSnap.data();
+    const ticketId = docSnap.id;
+
+    const ticketDiv = document.createElement("div");
+    ticketDiv.className = "ticket";
+
+    ticketDiv.innerHTML = `
+      <div class="ticket-header">
+        <span><strong>Objet :</strong> ${ticket.subject}</span>
+        <span class="ticket-status status-${ticket.status}">
+          ${ticket.status}
+        </span>
+      </div>
+      <div class="ticket-viewed">
+        ${ticket.viewed ? "Déjà consulté" : "Nouvelle réponse"}
+      </div>
+    `;
+
+    /* ===== REPONSES ===== */
+    const reponsesRef = collection(db, "support", ticketId, "reponses");
+    const reponsesSnap = await getDocs(reponsesRef);
+
+    reponsesSnap.forEach((rep) => {
+      const r = rep.data();
+
+      const repDiv = document.createElement("div");
+      repDiv.className = "ticket-reponse";
+      
+      repDiv.innerHTML = `
+        <div>${r.reponse}</div>
+        <div class="meta">
+          ${r.status} • ${         r.timestamp?.toDate().toLocaleString() || ""
+          }
+        </div>
+      `;
+      ticketDiv.appendChild(repDiv);
+    });
+    container.appendChild(ticketDiv);
+  }
+}
+</script>
+</body>
+</html>
