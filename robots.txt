@@ -1,0 +1,34 @@
+User-agent: *
+Allow: /
+
+# Bloquer pages sensibles
+Disallow: /admin
+Disallow: /dashboard.html
+Disallow: /set_user.html
+Disallow: /login.html
+Disallow: /getVerified.html
+Disallow: /logout.html
+Disallow: /modifier.html
+Disallow: /chat.html
+Disallow: /commande.html
+Disallow: /avis.html
+Disallow: /plan.html
+Disallow: /annonce.html
+
+# Autoriser pages publiques
+Allow: /index.html
+Allow: /explorer.html
+Allow: /poster.html
+Allow: /signup.html
+Allow: /rendus.html
+Allow: /help.html
+Allow: /Apropos.html
+
+# Autoriser pages légales
+Allow: /privacy.html
+Allow: /mentions.html
+Allow: /support.html
+
+
+# Sitemap
+Sitemap: https://cbcstation.com/sitemap.xml
