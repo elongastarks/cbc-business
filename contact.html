@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact | CBC</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f7fa;
+    color: #1e1e1e;
+}
+
+header {
+    background: #0B5FFF;
+    color: white;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 36px;
+}
+
+header p {
+    margin-top: 10px;
+    font-size: 18px;
+    opacity: 0.9;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+}
+
+.contact-info h2,
+.contact-form h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.contact-info p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.info-box {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.contact-form form {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.contact-form textarea {
+    resize: none;
+    height: 120px;
+}
+
+.contact-form button {
+    background: #0B5FFF;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.contact-form button:hover {
+    background: #0847c9;
+}
+
+footer {
+    background: #111;
+    color: #ccc;
+    text-align: center;
+    padding: 20px;
+    margin-top: 50px;
+    font-size: 14px;
+}
+
+@media (max-width: 900px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Contactez CBC</h1>
+    <p>Notre équipe est à votre disposition pour toute demande d'information ou collaboration.</p>
+</header>
+
+<div class="container">
+
+    <!-- Informations -->
+    <div class="contact-info">
+        <h2>Informations de contact</h2>
+
+        <div class="info-box">
+            <strong>Email :</strong>
+            <p>contact.cbc.staion@gmail.com</p>
+        </div>
+
+        <div class="info-box">
+            <strong>Téléphone :</strong>
+            <p>----</p>
+            <small>(Numéro en cours d’activation – sera ajouté prochainement)</small>
+        </div>
+
+        <div class="info-box">
+            <strong>Horaires :</strong>
+            <p>Lundi – Vendredi : 9h00 – 18h00</p>
+        </div>
+
+        <div class="info-box">
+            <strong>Support :</strong>
+            <p>Pour toute assistance technique ou demande professionnelle, veuillez utiliser le formulaire de contact ci-contre.<br>
+            ou cliquer <a href="support">ICI</a> pour le support client.
+            </p>
+        </div>
+    </div>
+
+    <!-- Formulaire -->
+    <div class="contact-form">
+        <h2>Envoyer un message</h2>
+
+        <form id="contactForm">
+
+    <input 
+        type="text" 
+        id="name" 
+        name="name"
+        placeholder="Votre nom" 
+        required
+    >
+
+    <input 
+        type="email" 
+        id="email" 
+        name="email"
+        placeholder="Votre email" 
+        required
+    >
+
+    <input 
+        type="text" 
+        id="subject" 
+        name="subject"
+        placeholder="Sujet"
+    >
+
+    <textarea 
+        id="message" 
+        name="message"
+        placeholder="Votre message" 
+        required
+    ></textarea>
+
+    <button type="submit">
+        Envoyer le message
+    </button>
+
+</form>
+    </div>
+
+</div>
+
+<footer>
+    © 2026 CBC – Tous droits réservés.
+</footer>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
+  import { 
+    getFirestore, 
+    collection, 
+    addDoc, 
+    serverTimestamp 
+  } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBla3D7OS8-Hx82m8Tz6ZPIS7FSLury3ew",
+    authDomain: "cbc-business.firebaseapp.com",
+    projectId: "cbc-business",
+    storageBucket: "cbc-business.firebasestorage.app",
+    messagingSenderId: "295952883135",
+    appId: "1:295952883135:web:4624174a452c1f6aad950a",
+    measurementId: "G-580W4D6J7E"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db = getFirestore(app);
+
+  // 🔥 IMPORTANT : attendre que le DOM soit chargé
+  document.addEventListener("DOMContentLoaded", () => {
+
+    const form = document.getElementById("contactForm");
+    if (!form) return;
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault(); // 🚫 bloque le refresh
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const subject = document.getElementById("subject").value.trim();
+      const message = document.getElementById("message").value.trim();
+
+      if (!name || !email || !message) {
+        alert("Veuillez remplir tous les champs obligatoires.");
+        return;
+      }
+
+      try {
+        await addDoc(collection(db, "contacts"), {
+          name,
+          email,
+          subject,
+          message,
+          status: "new",
+          source: "contact_page",
+          createdAt: serverTimestamp()
+        });
+
+        // ✅ Reset uniquement le formulaire
+        form.reset();
+
+        alert("✅ Message envoyé avec succès !");
+
+      } catch (error) {
+        console.error("Erreur envoi :", error);
+        alert("❌ Une erreur est survenue.");
+      }
+    });
+
+  });
+</script>
+</body>
+</html>
