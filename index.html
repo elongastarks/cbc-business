@@ -781,58 +781,115 @@ async function loadCategories(){
 
 loadCategories();
 
-// ----TÉMOIGNAGES----
+// ---- TÉMOIGNAGES INDEX ----
 async function loadTestimonials() {
   const list = document.getElementById("testimonials");
+  if (!list) return;
 
-  const qT = query(
-    collection(db, "comments"),
-    where("status", "==", "approved"),
-    orderBy("timestamp", "desc"),
-    limit(5)
-  );
-
-  const snap = await getDocs(qT);
   list.innerHTML = "";
 
-  for (const docSnap of snap.docs) {
-    const d = docSnap.data();
+  try {
+    const qT = query(
+      collection(db, "comments"),
+      where("status", "==", "approved"),
+      orderBy("timestamp", "desc"),
+      limit(5)
+    );
 
-    let photoURL = null;
-    if (d.userID) {
-      try {
-        const userRef = doc(db, "users", d.userID);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-          const userData = userSnap.data();
-          if (userData.photoURL) photoURL = userData.photoURL;
+    const snap = await getDocs(qT);
+
+    for (const docSnap of snap.docs) {
+      const d = docSnap.data();
+
+      let name = d.name || "Utilisateur"; // fallback depuis comments
+      let photoURL = null;
+
+      // 🔎 On va chercher user SEULEMENT pour photo + priorité name
+      if (d.userID && d.userID !== "anonymous") {
+        try {
+          const userRef = doc(db, "users", d.userID);
+          const userSnap = await getDoc(userRef);
+
+          if (userSnap.exists()) {
+            const userData = userSnap.data();
+
+            // ✅ PRIORITÉ au name du users
+            if (userData.name) {
+              name = userData.name;
+            }
+
+            // ✅ Photo uniquement depuis users
+            if (userData.photoURL) {
+              photoURL = userData.photoURL;
+            }
+          }
+
+        } catch (err) {
+          console.warn("Erreur récupération user :", err);
         }
-      } catch (err) {
-        console.error("Erreur photo userID:", d.userID, err);
       }
-    }
 
-    // Si pas de photoURL, créer un avatar bleu avec initiale
-    if (!photoURL && d.name) {
-      const initial = d.name.charAt(0).toUpperCase();
-      photoURL = `https://via.placeholder.com/48/0B5FFF/FFFFFF?text=${initial}`;
-    }
+      // 🎨 Si pas de photoURL → avatar avec initiale
+      if (!photoURL) {
+        photoURL = generateAvatar(name);
+      }
 
-    list.innerHTML += `
-      <div class="t-item">
-        ${d.userID || photoURL ? `
-          <div class="t-item-header">
-            <img src="${photoURL}" alt="${d.name || 'Utilisateur'}">
-            <strong>${d.name || "Utilisateur"}</strong>
+      // ⭐ Toujours 5 étoiles
+      const rating = d.rating || 0;
+      let starsHTML = "";
+
+      for (let i = 1; i <= 5; i++) {
+        starsHTML += `
+          <span style="color:${i <= rating ? "#f5b301" : "#ccc"}; font-size:16px;">
+            ★
+          </span>
+        `;
+      }
+
+      list.innerHTML += `
+        <div class="t-item" style="margin-bottom:20px">
+          <div class="t-item-header" style="display:flex;align-items:center;gap:12px">
+            <img src="${photoURL}" 
+                 style="width:48px;height:48px;border-radius:50%;object-fit:cover;" 
+                 alt="${name}">
+            <div>
+              <strong>${name}</strong>
+              <div>${starsHTML}</div>
+            </div>
           </div>
-        ` : `<strong>${d.name || "Utilisateur"}</strong>`}
-        <p>${d.comment || ""}</p>
-      </div>
-    `;
+          <p style="margin-top:8px">${d.comment || ""}</p>
+        </div>
+      `;
+    }
+
+  } catch (err) {
+    console.error("Erreur témoignages :", err);
   }
 }
 
 loadTestimonials();
+
+
+// ✅ Avatar local avec initiale (pas d’API externe)
+function generateAvatar(name) {
+  const initial = (name && name.charAt(0).toUpperCase()) || "U";
+
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48">
+      <rect width="100%" height="100%" fill="#0B5FFF"/>
+      <text x="50%" y="50%" dy=".35em"
+            text-anchor="middle"
+            fill="#FFFFFF"
+            font-size="20"
+            font-family="Arial"
+            font-weight="bold">
+        ${initial}
+      </text>
+    </svg>
+  `;
+
+  return "data:image/svg+xml;base64," + btoa(svg);
+  }
 
 // ----ALERTES---- SEARCH
 
