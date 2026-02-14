@@ -15,6 +15,10 @@ Disallow: /avis.html
 Disallow: /plan.html
 Disallow: /annonce.html
 
+Disallow: /privacy.html
+Disallow: /mentions.html
+Disallow: /support.html
+
 # Autoriser pages publiques
 Allow: /index.html
 Allow: /explorer.html
@@ -24,10 +28,6 @@ Allow: /rendus.html
 Allow: /help.html
 Allow: /Apropos.html
 
-# Autoriser pages légales
-Allow: /privacy.html
-Allow: /mentions.html
-Allow: /support.html
 
 
 # Sitemap
