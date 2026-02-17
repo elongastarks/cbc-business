@@ -469,6 +469,7 @@ mobileMenu.addEventListener('click', e => {
   }
 });
 </script>
+/* -------------------- Firestore -------------------- */
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
 import {
@@ -638,7 +639,7 @@ function renderAnnonces(annonces) {
       const btn = document.createElement("button");
       btn.textContent = "Voir l’annonce";
       btn.onclick = () => {
-        window.location.href = `https://elongastarks.github.io/cbc-business/annonce.html?id=${a.id}`;
+        window.location.href = `https://www.cbcstation.com/annonce.html?id=${a.id}`;
       };
 
       card.appendChild(btn);
@@ -646,7 +647,6 @@ function renderAnnonces(annonces) {
     }
   });
 
-  /* --- MISE À JOUR SEO DYNAMIQUE --- */
   applySEODynamic(annonces);
 }
 
@@ -656,18 +656,18 @@ function applySEODynamic(annonces) {
   const cat = categorieSelect.value;
   const province = provinceSelect.value;
 
-  let title = `Explorer les annonces | CBC Business`;
+  let title = `Explorer les annonces | CBC Station`;
   let description = `Découvrez ${count} annonce(s) disponibles sur CBC Business.`;
 
   if (cat && province) {
-    title = `${cat} à ${province} | CBC Business`;
+    title = `${cat} à ${province} | CBC Station`;
     description = `Découvrez ${count} annonce(s) dans la catégorie ${cat} et province ${province}.`;
   } else if (cat) {
-    title = `${cat} – Explorer | CBC Business`;
+    title = `${cat} – Explorer | CBC Station`;
     description = `Découvrez ${count} annonce(s) dans la catégorie ${cat} sur CBC Business.`;
   } else if (province) {
-    title = `Annonces à ${province} | CBC Business`;
-    description = `Découvrez ${count} annonce(s) dans la province ${province} sur CBC Business.`;
+    title = `Annonces à ${province} | CBC Station`;
+    description = `Découvrez ${count} annonce(s) dans la province ${province} sur CBC Station.`;
   }
 
   document.title = title;
@@ -694,12 +694,35 @@ async function loadExplorer() {
 }
 
 /* -------------------- EVENTS -------------------- */
-applyFiltersBtn.addEventListener("click", () => {
-  loadExplorer();
+// 1. Clique bouton "Filtrer"
+if(applyFiltersBtn) {
+  applyFiltersBtn.addEventListener("click", () => {
+    loadExplorer();
+  });
+}
+
+// 2. Enter dans search
+searchInput.addEventListener("keyup", (e) => {
+  if (e.key === "Enter") {
+    loadExplorer();
+  }
 });
 
-/* -------------------- INIT -------------------- */
+// 3. Pré-remplir search et selects depuis URL
+const urlParams = getURLParams();
+const qParam = urlParams.get("q") || "";
+const catParam = urlParams.get("categorie") || "";
+const provParam = urlParams.get("province") || "";
+const licParam = urlParams.get("licence") || "";
+
+if(qParam) searchInput.value = qParam;
+if(catParam) categorieSelect.value = catParam;
+if(provParam) provinceSelect.value = provParam;
+if(licParam) licenceSelect.value = licParam;
+
+// 4. Charger les annonces
 loadExplorer();
-</script>
+</script>  
+
 </body>
 </html>
