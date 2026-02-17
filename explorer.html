@@ -321,6 +321,7 @@ footer small { display:block; margin-top:25px; opacity:0.7; font-size:12px; text
 
   <div class="filters">
     <input type="text" id="search" placeholder="Rechercher par mot-clé">
+    <button id="searcBtn">🔍</button>
     <select id="categorie">
       <option value="">Toutes les catégories</option>
       <option value="Agriculture">Agriculture</option>
@@ -468,7 +469,7 @@ mobileMenu.addEventListener('click', e => {
     mobileMenu.classList.remove('open');
   }
 });
-</script>
+    </script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
 import {
@@ -497,6 +498,7 @@ const cardsContainer = document.getElementById("cardsContainer");
 const noResults = document.getElementById("noResults");
 
 const searchInput = document.getElementById("search");
+const searchBtn = document.getElementById("searchBtn"); // 🔍 bouton pour search
 const categorieSelect = document.getElementById("categorie");
 const provinceSelect = document.getElementById("province");
 const licenceSelect = document.getElementById("licence");
@@ -513,34 +515,24 @@ let verifiedMap = {}; // userID => true/false
 
 /* -------------------- Firestore -------------------- */
 async function fetchAnnonces() {
-  const q = query(
-    collection(db, "annonces"),
-    where("etat", "==", "actif")
-  );
-
+  const q = query(collection(db, "annonces"), where("etat", "==", "actif"));
   const snap = await getDocs(q);
   const annonces = [];
-
   snap.forEach(doc => {
-    const d = doc.data();
-    annonces.push({ ...d, id: doc.id });
+    annonces.push({ ...doc.data(), id: doc.id });
   });
-
   return annonces;
 }
 
 async function fetchUsersVerified(userIDs) {
   verifiedMap = {};
-  if (userIDs.length === 0) return;
+  if (!userIDs.length) return;
 
   const chunks = [];
   while (userIDs.length) chunks.push(userIDs.splice(0, 10));
 
   for (const chunk of chunks) {
-    const q = query(
-      collection(db, "users"),
-      where("userID", "in", chunk)
-    );
+    const q = query(collection(db, "users"), where("userID", "in", chunk));
     const snap = await getDocs(q);
     snap.forEach(doc => {
       const u = doc.data();
@@ -552,7 +544,7 @@ async function fetchUsersVerified(userIDs) {
 /* -------------------- FILTERS -------------------- */
 function applyFilters(annonces) {
   const params = getURLParams();
-  const userParam = params.get("user"); // ✅ FILTRE URL
+  const userParam = params.get("user"); // filtre URL indépendant du search
 
   const search = searchInput.value.trim().toLowerCase();
   const categorie = categorieSelect.value;
@@ -560,16 +552,15 @@ function applyFilters(annonces) {
   const licence = licenceSelect.value;
 
   return annonces.filter(a => {
-
-    /* --- FILTRE PAR PROPRIÉTAIRE (explorer?user=) --- */
+    /* --- FILTRE PAR PARAM URL --- */
     if (userParam && a.userID !== userParam) return false;
 
-    /* --- FILTRES EXISTANTS --- */
+    /* --- FILTRES SELECTS --- */
     if (categorie && a.categorie !== categorie) return false;
     if (province && a.province !== province) return false;
     if (licence && a.licence !== licence) return false;
 
-    /* --- RECHERCHE MULTI-CHAMPS --- */
+    /* --- SEARCH MULTI-CHAMPS --- */
     if (search) {
       const txt = (
         (a.titre || "") +
@@ -580,7 +571,6 @@ function applyFilters(annonces) {
         " " +
         (a.tags || []).join(" ")
       ).toLowerCase();
-
       if (!txt.includes(search)) return false;
     }
 
@@ -595,7 +585,6 @@ function sortAnnonces(annonces) {
       (x.urgence ? 1000 : 0) +
       (x.boost ? 500 : 0) +
       (verifiedMap[x.userID] ? 100 : 0);
-
     return score(b) - score(a);
   });
 }
@@ -612,11 +601,9 @@ function renderAnnonces(annonces) {
 
   annonces.forEach(a => {
     const repeat = a.boost ? 5 : 1;
-
     for (let i = 0; i < repeat; i++) {
       const card = document.createElement("div");
       card.className = "card";
-
       card.innerHTML = `
         <h3>${a.titre || "Sans titre"}</h3>
         <p>${a.description || ""}</p>
@@ -628,11 +615,9 @@ function renderAnnonces(annonces) {
 
       const badges = document.createElement("div");
       badges.className = "badges";
-
       if (a.urgence) badges.innerHTML += `<span class="badge urgent">🔴 Urgent</span>`;
       if (a.boost) badges.innerHTML += `<span class="badge boost">⭐ Boost</span>`;
       if (verifiedMap[a.userID]) badges.innerHTML += `<span class="badge verified">🔰 Vérifié</span>`;
-
       card.appendChild(badges);
 
       const btn = document.createElement("button");
@@ -640,7 +625,6 @@ function renderAnnonces(annonces) {
       btn.onclick = () => {
         window.location.href = `https://www.cbcstation.com/annonce.html?id=${a.id}`;
       };
-
       card.appendChild(btn);
       cardsContainer.appendChild(card);
     }
@@ -649,28 +633,27 @@ function renderAnnonces(annonces) {
   applySEODynamic(annonces);
 }
 
-/* -------------------- SEO DYNAMIQUE -------------------- */
+/* -------------------- SEO -------------------- */
 function applySEODynamic(annonces) {
   const count = annonces.length;
   const cat = categorieSelect.value;
   const province = provinceSelect.value;
 
   let title = `Explorer les annonces | CBC Station`;
-  let description = `Découvrez ${count} annonce(s) disponibles sur CBC Business.`;
+  let description = `Découvrez ${count} annonce(s) disponibles sur CBC Station.`;
 
   if (cat && province) {
     title = `${cat} à ${province} | CBC Station`;
     description = `Découvrez ${count} annonce(s) dans la catégorie ${cat} et province ${province}.`;
   } else if (cat) {
     title = `${cat} – Explorer | CBC Station`;
-    description = `Découvrez ${count} annonce(s) dans la catégorie ${cat} sur CBC Business.`;
+    description = `Découvrez ${count} annonce(s) dans la catégorie ${cat} sur CBC Station.`;
   } else if (province) {
     title = `Annonces à ${province} | CBC Station`;
     description = `Découvrez ${count} annonce(s) dans la province ${province} sur CBC Station.`;
   }
 
   document.title = title;
-
   let meta = document.querySelector("meta[name='description']");
   if (!meta) {
     meta = document.createElement("meta");
@@ -683,7 +666,6 @@ function applySEODynamic(annonces) {
 /* -------------------- MAIN -------------------- */
 async function loadExplorer() {
   allAnnonces = await fetchAnnonces();
-
   const userIDs = [...new Set(allAnnonces.map(a => a.userID))];
   await fetchUsersVerified([...userIDs]);
 
@@ -693,35 +675,32 @@ async function loadExplorer() {
 }
 
 /* -------------------- EVENTS -------------------- */
-// 1. Clique bouton "Filtrer"
-if(applyFiltersBtn) {
-  applyFiltersBtn.addEventListener("click", () => {
-    loadExplorer();
-  });
-}
+// 1️⃣ Bouton "Filtrer" uniquement pour selects
+if (applyFiltersBtn) applyFiltersBtn.addEventListener("click", loadExplorer);
 
-// 2. Enter dans search
-searchInput.addEventListener("keyup", (e) => {
-  if (e.key === "Enter") {
-    loadExplorer();
-  }
+// 2️⃣ Search : bouton ou Enter
+function triggerSearch() {
+  loadExplorer(); // filtrage basé sur searchInput.value
+}
+if (searchBtn) searchBtn.addEventListener("click", triggerSearch);
+searchInput.addEventListener("keyup", e => {
+  if (e.key === "Enter") triggerSearch();
 });
 
-// 3. Pré-remplir search et selects depuis URL
+// 3️⃣ Pré-remplir search et selects depuis URL
 const urlParams = getURLParams();
 const qParam = urlParams.get("q") || "";
 const catParam = urlParams.get("categorie") || "";
 const provParam = urlParams.get("province") || "";
 const licParam = urlParams.get("licence") || "";
 
-if(qParam) searchInput.value = qParam;
-if(catParam) categorieSelect.value = catParam;
-if(provParam) provinceSelect.value = provParam;
-if(licParam) licenceSelect.value = licParam;
+if (qParam) searchInput.value = qParam;
+if (catParam) categorieSelect.value = catParam;
+if (provParam) provinceSelect.value = provParam;
+if (licParam) licenceSelect.value = licParam;
 
-// 4. Charger les annonces
+// 4️⃣ Charger les annonces
 loadExplorer();
-</script>  
-
+</script> 
 </body>
 </html>
