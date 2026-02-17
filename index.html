@@ -32,7 +32,7 @@
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "CBC Station",
-  "url": "https://elongastarks.github.io/cbc-business/",
+  "url": "https://www.cbcstation.com/",
   "description": "Plateforme de mise en relation Freelances et Entreprises en République Démocratique du Congo",
   "inLanguage": "fr",
   "publisher": {
@@ -98,8 +98,11 @@ body{ margin:0; background:#fff; }
 .header-top {
   display: flex;
   align-items: center;
-  gap: 20px;
-}
+  display: flex;
+  align-items: center;
+  gap: 12px; /* réduit le gap si besoin sur mobile */
+  flex-wrap: wrap; /* permet aux éléments de passer à la ligne si trop petit */
+  }
 
 /* Logo */
 .logo {
@@ -126,19 +129,38 @@ body{ margin:0; background:#fff; }
 
 /* Search */
 .search-box {
-  flex: 1;
+  flex: 1 1 0;     
+  min-width: 0;  
   display: flex;
-  gap: 10px;
+  gap: 8px;          /* espace interne */
   background: #F8FAFC;
-  padding: 8px 12px;
+  padding: 6px 8px;
   border-radius: 12px;
+  overflow: hidden;  /* coupe le débordement éventuel */
 }
 
 .search-box input {
-  flex: 1;
+  flex: 1 1 0;       /* prend tout l’espace restant */
+  min-width: 0;      /* très important pour éviter overflow */
   border: none;
   outline: none;
   background: transparent;
+  font-size: 14px;
+}
+
+.search-box button {
+  flex: 0 0 auto;    /* garde sa taille naturelle */
+  padding: 6px 10px;
+  border: none;
+  border-radius: 8px;  
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.search-box button:hover {
+  background: #0066FF;
 }
 
 /* nav-links */
@@ -456,7 +478,7 @@ footer small{ display:block; margin-top:20px; opacity:0.7; }
       <!-- Search -->
       <div class="search-box">
         <input type="text" placeholder="Rechercher une mission, un freelance…">
-        <button>🔍</button>
+        <button id="search-btn">🔍</button>
       </div>   
       <nav class="nav-links">
      <a href="index.html">Accueil</a>
@@ -484,7 +506,7 @@ footer small{ display:block; margin-top:20px; opacity:0.7; }
 </aside>
 
 <section class="hero">
-  <h2>CONGO BUSINESS CONNECTION</h2>
+  <h2>CBC STATION</h2>
   <h3>Trouvez des freelances congolais qualifiés</h3>
   <h3>Publiez votre mission ou proposez vos services en quelques clics.</h1>
   <div class="hero-btns">
@@ -493,6 +515,7 @@ footer small{ display:block; margin-top:20px; opacity:0.7; }
   </div>
 </section>
 <section class="pitch">
+ <h1>CONGO BUSINESS CONNECTION</h1>
 <h2>CBC Station est une plateforme professionnelle qui met en relation des entreprises vérifiées et des freelances à travers toute la République Démocratique du Congo.</h2>
 <h3>CBC Station ezali plateforme ya mosala ya professionel oyo ekangisaka ba entreprise oyo e verifier na ba freelances na ekolo République Démocratique du Congo mobimba.</h3>
 <h2>CBC Station is a professional platform connecting verified companies and freelancers across the Democratic Republic of Congo.</h2>
