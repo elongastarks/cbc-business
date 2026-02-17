@@ -477,7 +477,7 @@ footer small{ display:block; margin-top:20px; opacity:0.7; }
 
       <!-- Search -->
       <div class="search-box">
-        <input type="text" placeholder="Rechercher une mission, un freelance…">
+        <input type="text" id="search-input" placeholder="Rechercher une mission, un freelance…">
         <button id="search-btn">🔍</button>
       </div>   
       <nav class="nav-links">
@@ -913,11 +913,24 @@ function generateAvatar(name) {
   }
 
 // ----ALERTES---- SEARCH
+const searchInput = document.getElementById("search-input");
+const searchBtn = document.getElementById("search-btn");
 
-document.getElementById("search-btn").onclick = ()=>{
-  const q = document.getElementById("search-input").value.trim();
-  if(q.length>0) window.location.href = `/explorer?q=${encodeURIComponent(q)}`;
-};
+// Fonction de recherche
+function doSearch() {
+  const q = searchInput.value.trim();
+  if (q.length > 0) {
+    window.location.href = `/explorer?q=${encodeURIComponent(q)}`;
+  }
+}
+
+// Clic sur le bouton
+searchBtn.addEventListener("click", doSearch);
+
+// Touche Enter dans l'input
+searchInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") doSearch();
+});
 </script>
 </body>
 </html>
