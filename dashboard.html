@@ -620,24 +620,46 @@ async function loadDashboard(uid) {
 ========================= */
 async function loadMessages(uid) {
   chatList.innerHTML = "";
-  const snap = await getDocs(query(collection(db, "chats"), where("active", "==", true)));
+
+  const snap = await getDocs(
+    query(collection(db, "chats"), where("active", "==", true))
+  );
 
   let has = false;
-  snap.forEach(d => {
+
+  for (const d of snap.docs) {
     const c = d.data();
-    if (c.userID1 !== uid && c.userID2 !== uid) return;
+
+    if (c.userID1 !== uid && c.userID2 !== uid) continue;
+
     has = true;
+
     const other = c.userID1 === uid ? c.userID2 : c.userID1;
+
+    // 🔹 Récupérer le nom dans users
+    const userSnap = await getDoc(doc(db, "users", other));
+    const otherName = userSnap.exists() ? userSnap.data().name : "Utilisateur";
+
+    // 🔹 Nettoyer et limiter message
+    let preview = c.lastMessage || "";
+    preview = preview.split("\n")[0]; // première ligne seulement
+
+    if (preview.length > 50) {
+      preview = preview.substring(0, 50) + "...";
+    }
+
     chatList.innerHTML += `
       <div class="chat-item" onclick="location.href='chat.html?uid=${other}'">
-        <strong>${other}</strong><br>
-        <small>${c.lastMessage || ""}</small>
+        <strong>${otherName}</strong><br>
+        <small>${preview}</small>
       </div>
     `;
-  });
+  }
 
-  if (!has) chatList.innerHTML = `<p style="opacity:.6">Aucun message</p>`;
-}
+  if (!has) {
+    chatList.innerHTML = `<p style="opacity:.6">Aucun message</p>`;
+  }
+ }
 </script>
 </body>
 </html>
