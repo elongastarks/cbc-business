@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Paramètres du profil | CBC Business</title>
+<title>Paramètres du profil | CBC Station</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -86,7 +86,7 @@ button:hover {
 <body>
 
 <header>
-  <h1>CBC Business — Paramètres utilisateur</h1>
+  <h1>CBC Station — Paramètres utilisateur</h1>
 </header>
 
 <div class="container">
@@ -127,17 +127,26 @@ button:hover {
 
 <!-- ================= FIREBASE ================= -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
+  apiKey: "AIzaSyBla3D7OS8-Hx82m8Tz6ZPIS7FSLury3ew",
+  authDomain: "cbc-business.firebaseapp.com",
+  projectId: "cbc-business",
+  storageBucket: "cbc-business.firebasestorage.app",
+  messagingSenderId: "295952883135",
+  appId: "1:295952883135:web:4624174a452c1f6aad950a",
+  measurementId: "G-580W4D6J7E"
 };
 
+// ✅ Initialiser l'app correctement
 const app = initializeApp(firebaseConfig);
+
+// ✅ Initialiser les services
+const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
