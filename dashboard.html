@@ -10,6 +10,13 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6273674196322358"
      crossorigin="anonymous"></script>
 <style>
+/* ================= GLOBAL ================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(180deg,#f5f7fa,#eef1f5);
@@ -23,7 +30,7 @@ body {
   padding: 20px;
 }
 
-/* HEADER */
+/* ================= HEADER ================= */
 header {
   background:#ffffff;
   border-radius:14px;
@@ -33,14 +40,15 @@ header {
   display:flex;
   align-items:center;
   gap:20px;
+  flex-wrap: wrap;
 }
 
 .header-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
   gap: 15px;
+  flex-wrap: wrap;
 }
 
 header h1 {
@@ -48,7 +56,7 @@ header h1 {
   margin: 0;
 }
 
-/* NAV */
+/* ================= NAV ================= */
 nav {
   display: flex;
   gap: 15px;
@@ -67,12 +75,13 @@ nav a:hover {
   background: #eaf3ff;
 }
 
-/* PROFILE */
+/* ================= PROFILE ================= */
 .profile-section {
   display: flex;
   gap: 20px;
   align-items: center;
   margin-top: 20px;
+  flex-wrap: wrap;
 }
 
 .profile-img-container img {
@@ -102,6 +111,7 @@ nav a:hover {
   display: flex;
   gap: 8px;
   margin-top: 10px;
+  flex-wrap: wrap;
 }
 
 .photo-url-section input {
@@ -109,19 +119,21 @@ nav a:hover {
   border-radius: 8px;
   border: 1px solid #ccc;
   width: 180px;
+  max-width: 100%;
 }
 
-/* ALERT */
+/* ================= ALERT ================= */
 .alert {
   display: none;
   padding: 12px 15px;
   border-radius: 8px;
   margin-bottom: 20px;
 }
+
 .alert.success { background:#d4edda; color:#155724; }
 .alert.error { background:#f8d7da; color:#721c24; }
 
-/* DASHBOARD CARDS */
+/* ================= DASHBOARD CARDS ================= */
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
@@ -135,6 +147,7 @@ nav a:hover {
   padding: 20px;
   box-shadow: 0 8px 25px rgba(0,0,0,.06);
   position: relative;
+  word-break: break-word;
 }
 
 .card h3 {
@@ -152,9 +165,10 @@ nav a:hover {
 
 .card p {
   margin: 5px 0;
+  word-wrap: break-word;
 }
 
-/* BUTTONS */
+/* ================= BUTTONS ================= */
 button {
   border: none;
   padding: 8px 15px;
@@ -177,19 +191,25 @@ button.secondary {
   color: #fff;
 }
 
-/* TABLES */
+/* ================= TABLES ================= */
 .section {
   background: #fff;
   border-radius: 14px;
   padding: 20px;
   margin-bottom: 30px;
   box-shadow: 0 8px 25px rgba(0,0,0,.06);
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 15px;
+  table-layout: fixed;
+  display: block;
+  overflow-x: auto;
 }
 
 thead {
@@ -201,13 +221,20 @@ th, td {
   padding: 5px;
   text-align: left;
   font-size: .9rem;
+  word-wrap: break-word;
 }
 
 tbody tr:hover {
   background: #f9fbfd;
 }
 
-/* SUPPORT & MESSAGES */
+/* ================= SUPPORT & MESSAGES ================= */
+.chat-list {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 .chat-item, .support-item {
   background: #f3f5f8;
   padding: 12px;
@@ -216,18 +243,21 @@ tbody tr:hover {
   align-items: center;
   gap: 12px;
   cursor: pointer;
-   width: 100%;
-     }
+  width: 100%;
+  max-width: 100%;
+  word-break: break-word;
+}
 
 .chat-item-content {
   flex: 1;
   min-width: 0;
-     }
+}
 
-/* REFERRAL */
+/* ================= REFERRAL ================= */
 .referral-section {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .referral-section input {
@@ -235,14 +265,29 @@ tbody tr:hover {
   padding: 8px;
   border-radius: 8px;
   border: 1px solid #ccc;
+  min-width: 0;
 }
 
+/* ================= MEDIA QUERIES ================= */
 @media(max-width:768px){
   .profile-section {
     flex-direction: column;
     align-items: flex-start;
   }
-}
+
+  table {
+    font-size: 0.8rem;
+  }
+
+  .container, .section {
+    padding: 15px;
+  }
+
+  .chat-item, .support-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+     }  
 </style>
 </head>
 
