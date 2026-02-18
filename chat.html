@@ -54,10 +54,10 @@
 
   <!-- Formulaire envoi -->
   <div class="chat-form">
-    <textarea id="msg-input" maxlength="600" rows="2" placeholder="Écrire un message..."></textarea>
+    <textarea id="msg-input" maxlength="500" rows="2" placeholder="Écrire un message..."></textarea>
     <button id="send-btn">Envoyer</button>
   </div>
-  <div id="counter">0 / 800</div>
+  <div id="counter">0 / 500</div>
   <div class="chat-info" id="chat-info">0 / 70 messages</div>
 
 </div>
@@ -214,7 +214,7 @@ const counter = document.getElementById("counter");
 // ✅ Compteur (une seule fois)
 if (input && counter) {
   input.addEventListener("input", () => {
-    counter.textContent = `${input.value.length} / 800`;
+    counter.textContent = `${input.value.length} / 500`;
   });
 }
 
@@ -244,7 +244,7 @@ document.getElementById("send-btn").onclick = async () => {
   });
 
   input.value = "";
-  counter.textContent = "0 / 800"; // reset compteur
+  counter.textContent = "0 / 500"; // reset compteur
 };
 
   /* ================= INFO DEST ================= */
