@@ -54,9 +54,10 @@
 
   <!-- Formulaire envoi -->
   <div class="chat-form">
-    <textarea id="msg-input" rows="2" placeholder="Écrire un message..."></textarea>
+    <textarea id="msg-input" maxlength="600" rows="2" placeholder="Écrire un message..."></textarea>
     <button id="send-btn">Envoyer</button>
   </div>
+  <div id="counter">0 / 800</div>
   <div class="chat-info" id="chat-info">0 / 70 messages</div>
 
 </div>
@@ -207,33 +208,44 @@ onSnapshot(messagesCol, (snap) => {
     `${msgs.length} / ${MSG_LIMIT} messages`;
 });
 
-  /* ================= ENVOI MESSAGE ================= */
-  document.getElementById("send-btn").onclick = async () => {
-    const input = document.getElementById("msg-input");
-    const text = input.value.trim();
-    if (!text) return;
+const input = document.getElementById("msg-input");
+const counter = document.getElementById("counter");
 
-    const snap = await getDocs(messagesCol);
-    if (snap.size >= MSG_LIMIT) {
-      alert("Limite de messages atteinte");
-      return;
-    }
+// ✅ Compteur (une seule fois)
+if (input && counter) {
+  input.addEventListener("input", () => {
+    counter.textContent = `${input.value.length} / 800`;
+  });
+}
 
-    await addDoc(messagesCol, {
-      from: currentUser.uid,
-      to: toID,
-      message: text,
-      timestamp: serverTimestamp(),
-      status: "sent"
-    });
+/* ================= ENVOI MESSAGE ================= */
+document.getElementById("send-btn").onclick = async () => {
 
-    await updateDoc(chatRef, {
-      lastMessage: text,
-      lastTimestamp: serverTimestamp()
-    });
+  const text = input.value.trim();
+  if (!text) return;
 
-    input.value = "";
-  };
+  const snap = await getDocs(messagesCol);
+  if (snap.size >= MSG_LIMIT) {
+    alert("Limite de messages atteinte");
+    return;
+  }
+
+  await addDoc(messagesCol, {
+    from: currentUser.uid,
+    to: toID,
+    message: text,
+    timestamp: serverTimestamp(),
+    status: "sent"
+  });
+
+  await updateDoc(chatRef, {
+    lastMessage: text,
+    lastTimestamp: serverTimestamp()
+  });
+
+  input.value = "";
+  counter.textContent = "0 / 800"; // reset compteur
+};
 
   /* ================= INFO DEST ================= */
   const userSnap = await getDoc(doc(db, "users", toID));
