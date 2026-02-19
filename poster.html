@@ -77,7 +77,8 @@
   <!-- DESCRIPTION -->
   <div class="input-group">
     <label>Description complète *</label>
-    <textarea id="description" placeholder="Décrivez la mission, tâches, attentes..." required></textarea>
+    <textarea id="description" maxlength="500" placeholder="Décrivez la mission, tâches, attentes..." required></textarea> 
+    <small id="desc-counter">0 / 500</small>
   </div>
   
   <!-- CATÉGORIE -->
@@ -147,9 +148,9 @@
 
   <!-- TAGS -->
   <div class="input-group">
-    <label>Tags (optionnel)</label>
-    <input type="text" id="tags" placeholder="Ex : logo, freelance, react, cv"><br>
+    <label>Tags (optionnel)</label><br>
     <small>Sépare les tags par des virgules</small>
+    <input type="text" id="tags" placeholder="Ex : logo, freelance, react, cv">
   </div>
 
   <!-- PROVINCE -->
@@ -378,16 +379,29 @@ document.getElementById("postBtn").addEventListener("click", async () => {
   if (!user || !currentUserData) return;
 
   const titre = document.getElementById("titre").value.trim();
-  const description = document.getElementById("description").value.trim();
-  const categorie = document.getElementById("categorie").value;
-  const ville = document.getElementById("ville").value;
-  const province = document.getElementById("province").value;
+const descriptionEl = document.getElementById("description");
+const description = descriptionEl.value.trim();
+const categorie = document.getElementById("categorie").value;
+const ville = document.getElementById("ville").value;
+const province = document.getElementById("province").value;
 
-  if (!titre || !description || !categorie || !ville || !province) {
-    showAlert("error", "Veuillez remplir tous les champs obligatoires.");
-    return;
-  }
+const counter = document.getElementById("desc-counter");
 
+/* ===== Compteur dynamique ===== */
+if (descriptionEl && counter) {
+  descriptionEl.maxLength = 500;
+
+  descriptionEl.addEventListener("input", () => {
+    counter.textContent = `${descriptionEl.value.length} / 500`;
+  });
+}
+
+/* ===== Vérification champs ===== */
+if (!titre || !description || !categorie || !ville || !province) {
+  showAlert("error", "Veuillez remplir tous les champs obligatoires.");
+  return;
+  }  
+  
   const tagsRaw = document.getElementById("tags")?.value || "";
   const tags = tagsRaw.split(",").map(t => t.trim()).filter(Boolean);
 
