@@ -73,11 +73,17 @@
     <label>Titre de la mission *</label>
     <input type="text" id="titre" placeholder="Ex : Développeur web React" required>
   </div>
+
+   <!-- Résumé -->
+  <div class="input-group">
+    <label>Résumé (pitch) *</label>
+    <textarea id="pitch" maxlength="125" placeholder="Résumé (accroche) de la mission, tâches, attentes...   en 120 caractères max" required></textarea>
+  </div>
   
   <!-- DESCRIPTION -->
   <div class="input-group">
     <label>Description complète *</label>
-    <textarea id="description" maxlength="200" placeholder="Décrivez la mission, tâches, attentes...   en 200 caractères" required></textarea>
+    <textarea id="description" maxlength="800" placeholder="Décrivez la mission, tâches, attentes...   en 800 caractères max" required></textarea>
   </div>
   
   <!-- CATÉGORIE -->
@@ -380,11 +386,12 @@ document.getElementById("postBtn").addEventListener("click", async () => {
 
   const titre = document.getElementById("titre").value.trim();
   const description = document.getElementById("description").value.trim();
+  const pitch = document.getElementById("pitch").value.trim();
   const categorie = document.getElementById("categorie").value;
   const ville = document.getElementById("ville").value;
   const province = document.getElementById("province").value;
 
-  if (!titre || !description || !categorie || !ville || !province) {
+  if (!titre || !pitch || !description || !categorie || !ville || !province) {
     showAlert("error", "Veuillez remplir tous les champs obligatoires.");
     return;
   }
@@ -421,6 +428,7 @@ document.getElementById("postBtn").addEventListener("click", async () => {
     userID: user.uid,
     titre,
     description,
+    pitch,
     categorie,
     tags,
     ville,
