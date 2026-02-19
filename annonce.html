@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Annonce - CBC Business</title>
+  <title>Annonce - CBC Station</title>
 <style>
   body { 
     font-family: Arial, sans-serif; 
@@ -189,7 +189,7 @@
 
   <!-- Header -->
   <div class="header">
-    <a href="/" class="logo">CBC Business</a>
+    <a href="/" class="logo">CBC Station</a>
   </div>
 
   <div class="container">
@@ -211,6 +211,12 @@
       <div id="niveau">Niveau : Autodidacte / Licence</div>
       <div id="salaire">Salaire / Budget : 0$</div>
       <div id="etat">État : Actif</div>
+    </div>
+
+    <!-- Description Courte  -->
+    <div class="description">
+      <h2>Résumé</h2>
+      <p id="pitch">Contenu court de l'annonce ici...</p>
     </div>
 
     <!-- Description détaillée -->
@@ -341,6 +347,7 @@ async function loadAnnonce(){
 
   // Description
   document.getElementById("description").textContent = annonce.description;
+  document.getElementById("pitch").textContent = annonce.pitch;
 
   // Statistiques
   document.getElementById("views").textContent = annonce.views || 0;
