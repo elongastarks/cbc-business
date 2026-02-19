@@ -608,7 +608,7 @@ function renderAnnonces(annonces) {
       card.className = "card";
       card.innerHTML = `
         <h3>${a.titre || "Sans titre"}</h3>
-        <p>${a.description || ""}</p>
+        <p>${a.pitch || ""}</p>
         <p>${a.categorie || "-"} • ${a.province || "-"}, ${a.ville || "-"}</p>
         <p>Niveau : ${a.licence || "-"}</p>
         ${a.salaire ? `<p>Salaire : ${a.salaire}</p>` : ""}
