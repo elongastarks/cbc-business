@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Modifier l’annonce | CBC Business</title>
+  <title>Modifier l’annonce | CBC Station</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
@@ -199,7 +199,7 @@
 <body>
 
 <header>
-  <img src="cbc.jpg" alt="CBC Business">
+  <img src="cbc.jpg" alt="CBC Station">
   <div class="actions">
     <button class="secondary" onclick="location.href='dashboard.html'">⬅ Dashboard</button>
     <button onclick="location.href='commande.html?annonceID=XXX'">Voir les commandes</button>
@@ -216,6 +216,11 @@
     <div class="form-group">
       <label>Titre</label>
       <input type="text" placeholder="Titre de l’annonce">
+    </div>
+
+    <div class="form-group">
+      <label>Résumé/Accroche</label>
+      <textarea placeholder="résumé accrocheuse"></textarea>
     </div>
 
     <div class="form-group">
@@ -358,6 +363,7 @@ const annonceID = params.get("annonceID");
 
 const titreInput = document.querySelector("input[placeholder='Titre de l’annonce']");
 const descInput = document.querySelector("textarea[placeholder='Description détaillée']");
+const pitchInput = document.querySelector("textarea[placeholder='résumé accrocheuse']");
 const catInput = document.querySelector("input[placeholder='Catégorie']");
 const salaireInput = document.querySelector("input[placeholder='Salaire / Budget']");
 const villeInput = document.querySelector("input[placeholder='Ville']");
@@ -428,6 +434,7 @@ async function loadAnnonce() {
   // Pré-remplir le formulaire
   titreInput.value = annonceData.titre || "";
   descInput.value = annonceData.description || "";
+  pitchInput.value = annonceData.pitch || "";
   catInput.value = annonceData.categorie || "";
   salaireInput.value = annonceData.salaire || "";
   villeInput.value = annonceData.ville || "";
@@ -453,6 +460,7 @@ saveBtn.onclick = async () => {
   const updatedData = {
     titre: titreInput.value.trim(),
     description: descInput.value.trim(),
+    pitch: pitchInput.value.trim(),
     categorie: catInput.value.trim(),
     salaire: Number(salaireInput.value),
     ville: villeInput.value.trim(),
