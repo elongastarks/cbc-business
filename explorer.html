@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explorer - CBC Station</title>
+<meta name="description" content="Explorez toutes les annonces disponibles sur CBC Business. Trouvez, publiez et découvrez les dernières rendues.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.cbcstation.com/explorer">
+<!-- OpenGraph & Twitter Card -->
+<meta property="og:title" content="Explorer - CBC Station">
+<meta property="og:description" content="Explorez toutes les annonces disponibles sur CBC Business. Publiez et découvrez les dernières rendues et projets.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.cbcstation.com/explorer">
+<meta property="og:image" content="https://www.cbcstation.com/cbc.jpg">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Explorer - CBC Station">
+<meta name="twitter:description" content="Explorez toutes les annonces disponibles sur CBC Station. Publiez et découvrez les dernières rendues et projets.">
+<meta name="twitter:image" content="https://www.cbcstation.com/cbc.jpg">
+
+  <!-- Favicon principal -->
+<link rel="icon" type="image/png" sizes="48x48" href="https://www.cbcstation.com/favicon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://www.cbcstation.com/favicon.png">
+<link rel="apple-touch-icon" href="https://www.cbcstation.com/favicon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Explorer - CBC Station",
+  "url": "https://www.cbcstation.com/explorer",
+  "description": "Explorez toutes les annonces disponibles sur CBC Business. Publiez et découvrez les dernières rendues et projets.",
+  "inLanguage": "fr",
+  "publisher": {
+    "@type": "Organization",
+    "name": "CBC Station",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.cbcstation.com/cbc.jpg"
+    }
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Accueil",
+        "item": "https://www.cbcstation.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Explorer",
+        "item": "https://www.cbcstation.com/explorer"
+      }
+    ]
+  }
+}
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6273674196322358"
+     crossorigin="anonymous"></script>
+<script src="categorie.js" defer></script>
+<style>
+/* ================= VARIABLES ================= */
+:root {
+  --primary: #0d6efd;
+  --dark: #111827;
+  --muted: #64748b;
+  --bg: #f7f7f7;
+}
+
+/* ================= RESET GLOBAL ================= */
+* {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+  background: var(--bg);
+  color: #333;
+  line-height: 1.6;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+
+/* ================= HEADER ================= */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 2000;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.header-inner {
+  max-width: 1200px;
+  margin: auto;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: var(--dark);
+}
+.logo img { width:42px; height:42px; border-radius:10px; }
+
+/* ================= NAV LINKS DESKTOP ================= */
+.nav-links {
+  display: flex; /* toujours visible sur PC */
+  gap: 18px;
+}
+.nav-links a {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--primary); }
+
+/* ================= HAMBURGER ================= */
+.hamburger {
+  display: flex; /* toujours visible */
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+.hamburger span {
+  width: 26px;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+/* ================= MOBILE MENU ASIDE ================= */
+#mobile-menu {
+  position: fixed;
+  top: 60px;
+  right: -100%;
+  width: 250px;
+  height: calc(100% - 60px);
+  background: #fff;
+  box-shadow: -2px 0 12px rgba(0,0,0,0.1);
+  z-index: 3000;
+  transition: right 0.3s ease;
+  padding: 20px;
+}
+#mobile-menu.open { right: 0; }
+#mobile-menu .mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+#mobile-menu .mobile-nav a {
+  font-size: 16px;
+  color: var(--dark);
+  font-weight: 600;
+  transition: color 0.2s;
+}
+#mobile-menu .mobile-nav a:hover { color: var(--primary); }
+
+/* ================= MOBILE MENU OVERLAY ================= */
+#mobile-menu-overlay {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 60px);
+  background: rgba(0,0,0,0.3);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2990;
+  transition: opacity 0.3s;
+}
+#mobile-menu-overlay.active { opacity: 1; pointer-events: all; }
+
+/* ================= FILTERS ================= */
+.filters {
+  display:flex;
+  flex-wrap: wrap;
+  gap:15px;
+  margin:20px 0;
+}
+.filters input, .filters select {
+  padding:8px 12px;
+  border-radius:6px;
+  border:1px solid #ccc;
+  flex:1;
+  min-width:150px;
+}
+.filters button {
+  padding:8px 16px;
+  border-radius:6px;
+  border:none;
+  background: var(--primary);
+  color:#fff;
+  cursor:pointer;
+  font-weight:500;
+}
+.filters button:hover { background:#0956c5; }
+
+/* ================= CARDS ================= */
+.cards {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+  gap:20px;
+}
+.card {
+  background:#fff;
+  padding:15px 20px;
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  transition: transform 0.2s;
+}
+.card:hover { transform: translateY(-5px); }
+.card h3 { margin:0 0 10px 0; font-size:18px; color: var(--primary); }
+.card p { margin:5px 0; font-size:14px; color:#555; }
+.card .badges { display:flex; gap:8px; margin-top:10px; }
+.badge { padding:2px 6px; border-radius:4px; font-size:12px; font-weight:600; color:#fff; }
+.badge.urgent { background:#dc3545; }
+.badge.boost { background:#ffc107; color:#000; }
+.badge.verified { background: var(--primary); }
+.card button {
+  margin-top:15px;
+  padding:6px 12px;
+  border:none;
+  border-radius:6px;
+  background:#198754;
+  color:#fff;
+  cursor:pointer;
+  font-weight:500;
+}
+/* ================= FILTERS ================= */
+
+.filters {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin: 25px 0;
+  align-items: center;
+}
+
+/* Search wrapper */
+.search-bar {
+  position: relative;
+  flex: 2;
+  min-width: 220px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 12px 45px 12px 15px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  transition: 0.2s ease;
+  background: #f9fafb;
+}
+
+.search-bar input:focus {
+  border-color: var(--primary);
+  background: #fff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(13,110,253,0.1);
+}
+
+/* Bouton loupe */
+.search-bar button {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: var(--primary);
+  color: white;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.search-bar button:hover {
+  background: #0b5ed7;
+  transform: translateY(-50%) scale(1.05);
+}
+
+/* Select inputs */
+.filters select {
+  flex: 1;
+  min-width: 160px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.filters select:focus {
+  border-color: var(--primary);
+  background: #fff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(13,110,253,0.1);
+}
+
+/* Bouton filtre principal */
+.filters .btn-filter {
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, var(--primary), #084298);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+  min-width: 120px;
+}
+
+.filters .btn-filter:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(13,110,253,0.25);
+}
+
+.filters .btn-filter:active {
+  transform: scale(0.97);
+}
+
+/* Option disabled */
+.filters select:disabled {
+  background: #f1f5f9;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* ================= RESPONSIVE FILTERS ================= */
+
+@media(max-width:900px) {
+  .filters {
+    padding: 18px;
+  }
+
+  .search-bar {
+    flex: 1 1 100%;
+  }
+}
+
+@media(max-width:600px) {
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-bar,
+  .filters select,
+  .filters .btn-filter {
+    width: 100%;
+  }
+
+  .search-bar button {
+    right: 10px;
+  }
+}
+.card button:hover { background:#145c3c; }
+
+/* ================= NO RESULTS ================= */
+.no-results {
+  text-align:center;
+  font-size:16px;
+  color:#777;
+  margin-top:50px;
+  display:none;
+}
+
+/* ================= FOOTER ================= */
+footer {
+  margin-top:60px;
+  background: var(--dark);
+  color:white;
+  padding:50px 20px;
+  line-height:1.6;
+}
+footer .f-container {
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:30px;
+}
+footer .f-container div p { color:#cbd5e1; margin-top:8px; font-size:14px; }
+footer a { color:#cbd5e1; text-decoration:none; font-size:14px; transition:0.3s; }
+footer a:hover { color: var(--primary); text-decoration:underline; }
+footer small { display:block; margin-top:25px; opacity:0.7; font-size:12px; text-align:center; }
+
+/* ================= RESPONSIVE ================= */
+@media(max-width:900px) {
+  .nav-links { display:none; } /* mobile nav hidden, hamburger active */
+}
+@media(max-width:768px) {
+  .grid-2, .cards, .team, .stats { grid-template-columns:1fr; }
+  footer .f-container { grid-template-columns:1fr; gap:20px; text-align:center; }
+  footer .f-container div { margin-bottom:10px; }
+}
+@media(max-width:600px) {
+  .filters { flex-direction:column; }
+}
+</style>
+</head>
+  <div class="header-inner">
+    <a href="/" class="logo">
+      <img src="cbc.jpg" alt="CBC Business">
+      <span>CBC Station</span>
+    </a>
+    
+    <nav class="nav-links">
+     <a href="index.html">Accueil</a>
+      <a href="explorer.html">Explorer</a>
+      <a href="poster.html">Publier</a>
+    </nav>
+
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</header>
+<aside id="mobile-menu">
+  <nav class="mobile-nav">
+  <a href="index.html">Accueil</a>
+  <a href="poster.html">Publier</a>
+  <a href="rendus.html">Rendues</a>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="login.html">Connexion</a>
+  <a href="signup.html">Inscription</a>
+  <a href="support.html">Support client</a>
+  <a href="Apropos.html">À propos</a>
+  <a href="help.html">Help</a>
+</nav>
+</aside>
+
+<div class="container">
+  <h2>Explorer les annonces</h2>
+
+  <div class="filters">
+    <input type="text" id="search" placeholder="Rechercher par mot-clé">
+    <button id="searchBtn">🔍</button>
+    <select id="niche" required>
+  <option value="">-- Choisir une niche --</option>
+</select>
+    <select id="categorie">
+      <option value="">Toutes les catégories</option>
+    </select>
+    <select id="province">
+      <option value="">Toutes les provinces</option>
+      <option value="Kinshasa">Kinshasa</option>
+<option value="Kongo-Central">Kongo-Central</option>
+<option value="Kwango">Kwango</option>
+<option value="Kwilu">Kwilu</option>
+<option value="Mai-Ndombe">Mai-Ndombe</option>
+<option value="Tshuapa">Tshuapa</option>
+<option value="Mongala">Mongala</option>
+<option value="Nord-Ubangi">Nord-Ubangi</option>
+<option value="Sud-Ubangi">Sud-Ubangi</option>
+<option value="Équateur">Équateur</option>
+<option value="Tshopo">Tshopo</option>
+<option value="Bas-Uele">Bas-Uele</option>
+<option value="Haut-Uele">Haut-Uele</option>
+<option value="Ituri">Ituri</option>
+<option value="Haut-Lomami">Haut-Lomami</option>
+<option value="Lomami">Lomami</option>
+<option value="Kasaï">Kasaï</option>
+<option value="Kasaï-Central">Kasaï-Central</option>
+<option value="Kasaï-Oriental">Kasaï-Oriental</option>
+<option value="Sankuru">Sankuru</option>
+<option value="Maniema">Maniema</option>
+<option value="Sud-Kivu">Sud-Kivu</option>
+<option value="Nord-Kivu">Nord-Kivu</option>
+<option value="Tanganyika">Tanganyika</option>
+<option value="Haut-Katanga">Haut-Katanga</option>
+<option value="Lualaba">Lualaba</option>
+    </select>
+    <select id="licence">
+      <option value="">Tous les niveaux</option>
+      <option value="Autodidacte">Autodidacte</option>
+      <option value="Bac">Bac</option>
+      <option value="Licence">Licence</option>
+      <option value="Master">Master</option>
+      <option value="Doctorat">Doctorat</option>
+      <option value="Certification">Certification</option>
+    </select>
+    <button id="applyFilters">Filtrer</button>
+  </div>
+
+  <div class="cards" id="cardsContainer"></div>
+  <div class="no-results" id="noResults">Aucune annonce trouvée.</div>
+</div>
+
+<footer>
+  <div class="f-container">
+    <div class="f-brand">
+      <strong style="font-size:20px;">CBC Station</strong>
+      <p>Plateforme de mise en relation Freelances ↔ Entreprises en RDC.</p>
+    </div>
+    <div class="f-nav">
+    <a href="index.html">Accueil</a><br>
+      <a href="Apropos.html">À propos</a><br>
+      <a href="support.html">Support client</a><br>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="f-legal">
+      <a href="privacy.html">Confidentialité</a><br>
+      <a href="mentions.html">Mentions légales</a>
+    </div>
+  </div>
+  <small>🇨🇩 Disponible uniquement en RDC</small>
+</footer>
+<script src="categorie.js"></script>
+<script>
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobile-menu');
+
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  mobileMenu.classList.toggle('open');
+});
+
+// fermer le menu quand on clique sur un lien
+document.querySelectorAll('#mobile-menu a').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+  });
+});
+
+// fermer le menu quand on clique sur l'overlay
+mobileMenu.addEventListener('click', e => {
+  if(e.target === mobileMenu){
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+  }
+});
+    </script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  where
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+/* -------------------- Firebase -------------------- */
+const firebaseConfig = {
+  apiKey: "AIzaSyBla3D7OS8-Hx82m8Tz6ZPIS7FSLury3ew",
+  authDomain: "cbc-business.firebaseapp.com",
+  projectId: "cbc-business",
+  storageBucket: "cbc-business.firebasestorage.app",
+  messagingSenderId: "295952883135",
+  appId: "1:295952883135:web:4624174a452c1f6aad950a"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* -------------------- DOM -------------------- */
+const cardsContainer = document.getElementById("cardsContainer");
+const noResults = document.getElementById("noResults");
+
+const searchInput = document.getElementById("search");
+const searchBtn = document.getElementById("searchBtn"); // 🔍 bouton pour search
+const categorieSelect = document.getElementById("categorie");
+const provinceSelect = document.getElementById("province");
+const licenceSelect = document.getElementById("licence");
+const applyFiltersBtn = document.getElementById("applyFilters");
+
+/* -------------------- Utils -------------------- */
+function getURLParams() {
+  return new URLSearchParams(window.location.search);
+}
+
+/* -------------------- DATA -------------------- */
+let allAnnonces = [];
+let verifiedMap = {}; // userID => true/false
+
+/* -------------------- Firestore -------------------- */
+async function fetchAnnonces() {
+  const q = query(collection(db, "annonces"), where("etat", "==", "actif"));
+  const snap = await getDocs(q);
+  const annonces = [];
+  snap.forEach(doc => {
+    annonces.push({ ...doc.data(), id: doc.id });
+  });
+  return annonces;
+}
+
+async function fetchUsersVerified(userIDs) {
+  verifiedMap = {};
+  if (!userIDs.length) return;
+
+  const chunks = [];
+  while (userIDs.length) chunks.push(userIDs.splice(0, 10));
+
+  for (const chunk of chunks) {
+    const q = query(collection(db, "users"), where("userID", "in", chunk));
+    const snap = await getDocs(q);
+    snap.forEach(doc => {
+      const u = doc.data();
+      verifiedMap[u.userID] = u.verified === true;
+    });
+  }
+}
+
+/* -------------------- FILTERS -------------------- */
+function applyFilters(annonces) {
+  const params = getURLParams();
+  const userParam = params.get("user"); // filtre URL indépendant du search
+
+  const search = searchInput.value.trim().toLowerCase();
+  const categorie = categorieSelect.value;
+  const province = provinceSelect.value;
+  const licence = licenceSelect.value;
+
+  return annonces.filter(a => {
+    /* --- FILTRE PAR PARAM URL --- */
+    if (userParam && a.userID !== userParam) return false;
+
+    /* --- FILTRES SELECTS --- */
+    if (categorie && a.categorie !== categorie) return false;
+    if (province && a.province !== province) return false;
+    if (licence && a.licence !== licence) return false;
+
+    /* --- SEARCH MULTI-CHAMPS --- */
+    if (search) {
+      const txt = (
+        (a.titre || "") +
+        " " +
+        (a.description || "") +
+        " " +
+        (a.categorie || "") +
+        " " +
+        (a.tags || []).join(" ")
+      ).toLowerCase();
+      if (!txt.includes(search)) return false;
+    }
+
+    return true;
+  });
+}
+
+/* -------------------- SORT -------------------- */
+function sortAnnonces(annonces) {
+  return annonces.sort((a, b) => {
+    const score = x =>
+      (x.urgence ? 1000 : 0) +
+      (x.boost ? 500 : 0) +
+      (verifiedMap[x.userID] ? 100 : 0);
+    return score(b) - score(a);
+  });
+}
+
+/* -------------------- RENDER -------------------- */
+function renderAnnonces(annonces) {
+  cardsContainer.innerHTML = "";
+
+  if (!annonces.length) {
+    noResults.style.display = "block";
+    return;
+  }
+  noResults.style.display = "none";
+
+  annonces.forEach(a => {
+    const repeat = a.boost ? 5 : 1;
+    for (let i = 0; i < repeat; i++) {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <h3>${a.titre || "Sans titre"}</h3>
+        <p>${a.pitch || ""}</p>
+        <p>${a.categorie || "-"} • ${a.province || "-"}, ${a.ville || "-"}</p>
+        <p>Niveau : ${a.licence || "-"}</p>
+        ${a.salaire ? `<p>Salaire : ${a.salaire}</p>` : ""}
+        <p>👁 ${a.views || 0} | 🖱 ${a.clicks || 0} | 📦 ${a.commands || 0}</p>
+      `;
+
+      const badges = document.createElement("div");
+      badges.className = "badges";
+      if (a.urgence) badges.innerHTML += `<span class="badge urgent">🔴 Urgent</span>`;
+      if (a.boost) badges.innerHTML += `<span class="badge boost">⭐ Boost</span>`;
+      if (verifiedMap[a.userID]) badges.innerHTML += `<span class="badge verified">🔰 Vérifié</span>`;
+      card.appendChild(badges);
+
+      const btn = document.createElement("button");
+      btn.textContent = "Voir l’annonce";
+      btn.onclick = () => {
+        window.location.href = `https://www.cbcstation.com/annonce.html?id=${a.id}`;
+      };
+      card.appendChild(btn);
+      cardsContainer.appendChild(card);
+    }
+  });
+
+  applySEODynamic(annonces);
+}
+
+/* -------------------- SEO -------------------- */
+function applySEODynamic(annonces) {
+  const count = annonces.length;
+  const cat = categorieSelect.value;
+  const province = provinceSelect.value;
+
+  let title = `Explorer les annonces | CBC Station`;
+  let description = `Découvrez ${count} annonce(s) disponibles sur CBC Station.`;
+
+  if (cat && province) {
+    title = `${cat} à ${province} | CBC Station`;
+    description = `Découvrez ${count} annonce(s) dans la catégorie ${cat} et province ${province}.`;
+  } else if (cat) {
+    title = `${cat} – Explorer | CBC Station`;
+    description = `Découvrez ${count} annonce(s) dans la catégorie ${cat} sur CBC Station.`;
+  } else if (province) {
+    title = `Annonces à ${province} | CBC Station`;
+    description = `Découvrez ${count} annonce(s) dans la province ${province} sur CBC Station.`;
+  }
+
+  document.title = title;
+  let meta = document.querySelector("meta[name='description']");
+  if (!meta) {
+    meta = document.createElement("meta");
+    meta.name = "description";
+    document.head.appendChild(meta);
+  }
+  meta.content = description;
+}
+
+/* -------------------- MAIN -------------------- */
+async function loadExplorer() {
+  allAnnonces = await fetchAnnonces();
+  const userIDs = [...new Set(allAnnonces.map(a => a.userID))];
+  await fetchUsersVerified([...userIDs]);
+
+  const filtered = applyFilters(allAnnonces);
+  const sorted = sortAnnonces(filtered);
+  renderAnnonces(sorted);
+}
+
+/* -------------------- EVENTS -------------------- */
+// 1️⃣ Bouton "Filtrer" uniquement pour selects
+if (applyFiltersBtn) applyFiltersBtn.addEventListener("click", loadExplorer);
+
+// 2️⃣ Search : bouton ou Enter
+function triggerSearch() {
+  loadExplorer(); // filtrage basé sur searchInput.value
+}
+if (searchBtn) searchBtn.addEventListener("click", triggerSearch);
+searchInput.addEventListener("keyup", e => {
+  if (e.key === "Enter") triggerSearch();
+});
+
+// 3️⃣ Pré-remplir search et selects depuis URL
+const urlParams = getURLParams();
+const qParam = urlParams.get("q") || "";
+const catParam = urlParams.get("categorie") || "";
+const provParam = urlParams.get("province") || "";
+const licParam = urlParams.get("licence") || "";
+
+if (qParam) searchInput.value = qParam;
+if (catParam) categorieSelect.value = catParam;
+if (provParam) provinceSelect.value = provParam;
+if (licParam) licenceSelect.value = licParam;
+
+// 4️⃣ Charger les annonces
+loadExplorer();
+</script> 
+</body>
+</html>
