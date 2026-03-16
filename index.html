@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBC Station - Congo Business Connection</title>
+<meta name="description" content="CBC Station connecte freelances et entreprises en RDC. Publiez des annonces, trouvez des missions et collaborez efficacement au Congo.">
+<meta name="keywords" content="freelance RDC, missions freelance Congo, emplois RDC, CBC Station, entreprises Congo">
+<meta name="author" content="CBC Station">
+<meta name="robots" content="index, follow">
+<meta name="google-adsense-account" content="ca-pub-6273674196322358">
+
+<!-- Favicon principal -->
+<link rel="icon" type="image/png" sizes="48x48" href="https://www.cbcstation.com/favicon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://www.cbcstation.com/favicon.png">
+<link rel="apple-touch-icon" href="https://www.cbcstation.com/favicon.png">
+
+<link rel="canonical" href="https://www.cbcstation.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CBC Station – Freelances & Entreprises en RDC">
+<meta property="og:description" content="Plateforme de mise en relation Freelances ↔ Entreprises en RDC.">
+<meta property="og:url" content="https://www.cbcstation.com">
+<meta property="og:image" content="https://www.cbcstation.com/cbc.jpg">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CBC Station – Freelances & Entreprises en RDC">
+<meta name="twitter:description" content="Trouvez des missions et publiez des annonces en RDC.">
+<meta name="twitter:image" content="https://www.cbcstation.com/cbc.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "CBC Station",
+  "url": "https://www.cbcstation.com/",
+  "description": "Plateforme de mise en relation Freelances et Entreprises en République Démocratique du Congo",
+  "inLanguage": "fr",
+  "publisher": {
+    "@type": "Organization",
+    "name": "CBC Station",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.cbcstation.com/cbc.jpg"
+    }
+  }
+}
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const h1 = document.querySelector("h1");
+  if (h1) {
+    document.title = h1.textContent + " – CBC Station";
+    document.querySelector('meta[name="description"]')
+      ?.setAttribute("content", h1.textContent + " | CBC Station RDC");
+  }
+});
+</script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6273674196322358"
+     crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+
+<link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+
+<div id="site-alert" class="site-alert"></div>
+
+<header class="site-header">
+  <div class="header-inner">
+
+    <div class="header-top">
+
+      <a href="index.html" class="logo">
+        <div class="mark">
+          <img src="cbc.jpg" alt="Logo CBC Station">
+        </div>
+        <span>CBC Station</span>
+      </a>
+
+      <div class="search-box">
+        <input type="text" id="search-input" placeholder="Rechercher une mission ou un freelance">
+        <button id="search-btn">🔍</button>
+      </div>
+
+      <nav class="nav-links">
+        <a href="index.html">Accueil</a>
+        <a href="explorer.html">Explorer</a>
+        <a href="poster.html">Publier</a>
+      </nav>
+
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+    </div>
+
+  </div>
+</header>
+
+
+<aside id="mobile-menu">
+  <nav class="mobile-nav">
+    <a href="explorer.html">Explorer</a>
+    <a href="poster.html">Publier</a>
+    <a href="rendus.html">Rendus</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="login.html">Connexion</a>
+    <a href="signup.html">Inscription</a>
+    <a href="support.html">Support client</a>
+    <a href="Apropos.html">À propos</a>
+    <a href="help.html">Help</a>
+  </nav>
+</aside>
+
+
+<main>
+
+
+<section class="hero">
+  <h1>CBC Station</h1>
+  <h2>Trouvez des freelances congolais qualifiés</h2>
+  <p>Publiez votre mission ou proposez vos services en quelques clics.</p>
+
+  <div class="hero-btns">
+    <a href="explorer.html">Je cherche un freelance</a>
+    <a href="poster.html">Je propose mes services</a>
+  </div>
+</section>
+
+<section class="stats">
+
+  <div class="stat">
+    <h3 id="stat-users">0</h3>
+    <p>Utilisateurs inscrits</p>
+  </div>
+
+  <div class="stat">
+    <h3 id="stat-jobs">0</h3>
+    <p>Missions publiées</p>
+  </div>
+
+  <div class="stat">
+    <h3 id="stat-completed">0</h3>
+    <p>Services rendus</p>
+  </div>
+
+  <div class="stat">
+    <h3 id="stat-cities">0</h3>
+    <p>Villes couvertes</p>
+  </div>
+
+</section>
+
+<section class="proof">
+
+<h2>Ils utilisent CBC Station</h2>
+
+<div class="proof-logos">
+
+<div class="proof-item">Entreprise locale</div>
+<div class="proof-item">Startup RDC</div>
+<div class="proof-item">PME Congo</div>
+<div class="proof-item">Freelances certifiés</div>
+
+</div>
+
+</section>
+
+
+<section class="how-it-works">
+
+<h2>Comment fonctionne CBC Station</h2>
+
+<div class="steps">
+
+<div class="step">
+<h3>1</h3>
+<p>Publiez une mission ou proposez vos services.</p>
+</div>
+
+<div class="step">
+<h3>2</h3>
+<p>Discutez avec les prestataires ou Entreprises  via la messagerie interne.</p>
+</div>
+
+<div class="step">
+<h3>3</h3>
+<p>Choisissez le meilleur prestataire.</p>
+</div>
+
+<div class="step">
+<h3>4</h3>
+<p>Recevez le travail et laissez un avis.</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="pitch">
+  <h2>CONGO BUSINESS CONNECTION</h2>
+  
+  <!-- Texte animé -->
+  <p class="animated-text"></p>
+  
+  <a href="explorer.html" class="btn-cta">Explorer les annonces</a>
+</section>
+
+<section class="section">
+
+<h2>Exemples de services disponibles</h2>
+
+<div class="examples">
+
+  <div class="example">Développement web & mobile</div>
+  <div class="example">Création de contenu</div>
+  <div class="example">Marketing digital</div>
+  <div class="example">Design graphique</div>
+  <div class="example">Assistant en ligne / Admin</div>
+  <div class="example">SEO & Référencement</div>
+  <div class="example">Community Management</div>
+  <div class="example">Branding & identité visuelle</div>
+  <div class="example">Support client / Hotline</div>
+  <div class="example">Audio & montage vidéo</div>
+  <div class="example">Gestion de projets</div>
+  <div class="example">Consultant IT / Tech freelance</div>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<h2> Annonces en vedette</h2>
+
+<div class="featured-list" id="featured-list"></div>
+
+<a href="explorer.html?boost=true" class="btn-primary">
+Voir plus
+</a>
+
+</section>
+
+
+<section class="section">
+
+<h2>Dernières missions rendues</h2>
+
+<div class="rendus-list" id="rendus-list"></div>
+
+<a href="rendus.html" class="btn-primary">
+Voir tous les services rendus
+</a>
+
+</section>
+
+
+<section class="section">
+
+<h2>Catégories les plus populaires</h2>
+
+<div class="categories" id="categories"></div>
+
+</section>
+
+
+<section class="section">
+
+<h2>Pourquoi choisir CBC Station ?</h2>
+
+<div class="values-list">
+
+<div class="value-box">100% congolais</div>
+<div class="value-box">Sans abonnement obligatoire</div>
+<div class="value-box">Paiement sécurisé</div>
+<div class="value-box">Mobile-friendly</div>
+<div class="value-box">Service accessible partout</div>
+<div class="value-box">Support local</div>
+
+</div>
+
+</section>
+
+
+<section class="section">
+
+<h2>Nos offres & options premium</h2>
+
+<div class="plans">
+
+<div class="plan">
+<h3>Gratuit</h3>
+<ul>
+<li>Création de compte</li>
+<li>Accès aux annonces normales</li>
+<li>Messagerie simple</li>
+<li>5 réponses / publications par mois</li>
+</ul>
+<button onclick="location.href='poster.html'">
+Choisir ce plan
+</button>
+</div>
+
+
+<div class="plan">
+<h3>Urgent – 4$</h3>
+<ul>
+<li>Badge urgent rouge</li>
+<li>Priorité en haut de liste</li>
+</ul>
+<button onclick="location.href='plan.html?plan=urgent'">
+Choisir ce plan
+</button>
+</div>
+
+
+<div class="plan">
+<h3>Boost – 5$</h3>
+<ul>
+<li>Apparition répétée</li>
+<li>Mise en avant sur l’accueil</li>
+</ul>
+<button onclick="location.href='plan.html?plan=boost'">
+Choisir ce plan
+</button>
+</div>
+
+
+<div class="plan">
+<h3>Ciblé – 10$/jour</h3>
+<ul>
+<li>Notifications ciblées</li>
+<li>Email + SMS</li>
+</ul>
+<button onclick="location.href='plan.html?plan=cible'">
+Choisir ce plan
+</button>
+</div>
+
+
+<div class="plan">
+<h3>Pack complet – 18$</h3>
+<ul>
+<li>Urgent + Boost</li>
+<li>Ciblé 1 jour</li>
+</ul>
+<button onclick="location.href='plan.html?plan=pack'">
+Choisir ce plan
+</button>
+</div>
+
+</div>
+
+</section>
+
+
+<section class="section">
+
+<h2>Témoignages</h2>
+
+<div class="testimonials" id="testimonials"></div>
+
+<button class="avis" onclick="location.href='avis.html'">
+Laissez nous votre avis
+</button>
+
+</section>
+
+
+<section class="section final-cta">
+
+<h2>Prêt à travailler ?</h2>
+<p>Rejoignez CBC Station aujourd’hui.</p>
+
+<a href="signup.html">Créer un compte</a>
+<a href="poster.html">Publier une mission</a>
+
+</section>
+
+</main>
+
+<div id="floatingCTA" class="cta-container">
+  <!-- JS injectera ici les CTA -->
+</div>
+<footer>
+
+<div class="f-container">
+
+<div>
+<strong style="font-size:18px;">CBC Station</strong>
+<p>Plateforme de mise en relation Freelances ↔ Entreprises en RDC.</p>
+</div>
+
+<div>
+<a href="Apropos.html">À propos</a><br>
+<a href="support.html">Support client</a><br>
+<a href="contact.html">Contact</a>
+</div>
+
+<div>
+<a href="privacy.html">Confidentialité</a><br>
+<a href="mentions.html">Mentions légales</a>
+</div>
+
+</div>
+
+<small>🇨🇩 Disponible uniquement en RDC</small>
+
+</footer>
+
+<script>
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobile-menu');
+
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  mobileMenu.classList.toggle('open');
+});
+
+// fermer le menu quand on clique sur un lien
+document.querySelectorAll('#mobile-menu a').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+  });
+});
+
+// fermer le menu quand on clique sur l'overlay
+mobileMenu.addEventListener('click', e => {
+  if(e.target === mobileMenu){
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+  }
+});
+</script>
+<script>
+const animatedText = document.querySelector(".animated-text");
+
+const phrases = [
+  "CBC Station est une plateforme professionnelle qui met en relation des entreprises vérifiées et des freelances à travers toute la République Démocratique du Congo.",
+  "CBC Station ezali plateforme ya mosala ya professionnel oyo ekangisaka ba entreprise oyo e vérifier na ba freelances na ekolo République Démocratique du Congo mobimba.",
+  "CBC Station is a professional platform connecting verified companies and freelancers across the Democratic Republic of Congo."
+];
+
+const typingSpeed = 40; // vitesse d'écriture (ms par lettre)
+const pauseTime = 1000; // pause après phrase écrite (ms)
+
+let phraseIndex = 0;
+
+function autoType() {
+  const currentPhrase = phrases[phraseIndex];
+  let charIndex = 0;
+
+  function typeChar() {
+    if (charIndex < currentPhrase.length) {
+      animatedText.textContent += currentPhrase.charAt(charIndex);
+      charIndex++;
+      setTimeout(typeChar, typingSpeed);
+    } else {
+      setTimeout(eraseChar, pauseTime);
+    }
+  }
+
+  function eraseChar() {
+    if (charIndex > 0) {
+      animatedText.textContent = currentPhrase.substring(0, charIndex - 1);
+      charIndex--;
+      setTimeout(eraseChar, typingSpeed / 2);
+    } else {
+      phraseIndex = (phraseIndex + 1) % phrases.length;
+      setTimeout(autoType, 500);
+    }
+  }
+
+  typeChar();
+}
+
+// Lancer l'animation
+autoType();
+</script>
+
+<script type="module" src="/js/index.js"></script>
+
+</body>
+</html>
