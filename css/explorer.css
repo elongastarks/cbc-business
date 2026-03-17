@@ -393,21 +393,27 @@ footer small { display:block; margin-top:25px; opacity:0.7; font-size:12px; text
   max-height: calc((190px * 3) + (18px * 2)); /* 3 cartes visibles + gaps */
   overflow-y: auto; /* scroll vertical indépendant */
 }
-
-  /* Feed central - PC / Tablette */
+/* Feed central ajusté - PC / Tablette */
 .feed {
   width: 100%;
-  max-height: calc(((200px * 0.8) + (20px * 0.8)) * 2); /* 2 lignes visibles réduites de 20% */
-  overflow-y: auto; /* scroll vertical si plus de 6 cartes */
-  margin: 10px 15px; /* marge verticale et horizontale */
-  gap: 10px; /* espace entre les cartes */
+  max-height: calc((180px * 2) + (15px * 1)); /* deux lignes visibles légèrement plus longues */
+  overflow-y: auto; /* scroll vertical si beaucoup de cartes */
+  margin: 8px 13px; /* marge verticale et horizontale réduite */
+  gap: 7px; /* espace entre les cartes réduit */
 }
-  /* Grille des cartes */
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 cartes par ligne */
-    gap: 20px;
-  }
+
+/* Cards ajustées */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 cartes par ligne */
+  gap: 10px; /* réduit l’espace horizontal et vertical */
+}
+
+.card {
+  height: 180px; /* hauteur réduite pour mieux tenir dans le feed */
+  margin: 0; /* marge interne de la carte réduite */
+}
+  
 }
 /* ================= MOBILE / TABLETTE PETITE ================= */
 @media (max-width: 900px) {
