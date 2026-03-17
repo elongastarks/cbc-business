@@ -394,13 +394,14 @@ footer small { display:block; margin-top:25px; opacity:0.7; font-size:12px; text
   overflow-y: auto; /* scroll vertical indépendant */
 }
 
-  /* Feed central */
-  .feed {
-    width: 100%;
-    max-height: calc((200px + 20px) * 2); /* 2 lignes visibles de cartes */
-    overflow-y: auto; /* scroll vertical si plus de 6 cartes */
-  }
-
+  /* Feed central - PC / Tablette */
+.feed {
+  width: 100%;
+  max-height: calc(((200px * 0.8) + (20px * 0.8)) * 2); /* 2 lignes visibles réduites de 20% */
+  overflow-y: auto; /* scroll vertical si plus de 6 cartes */
+  margin: 10px 15px; /* marge verticale et horizontale */
+  gap: 10px; /* espace entre les cartes */
+}
   /* Grille des cartes */
   .cards {
     display: grid;
