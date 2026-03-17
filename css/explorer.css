@@ -397,8 +397,10 @@ footer small { display:block; margin-top:25px; opacity:0.7; font-size:12px; text
 /* Feed central */
   .feed {
     width: 100%;
-    max-height: calc((195px + 18px) * 2); /* 2 lignes visibles de cartes */
-    overflow-y: auto; /* scroll vertical si plus de 6 cartes */
+    max-height: calc((200px * 3) + (15px * 2)); /* hauteur = 3 cartes visibles + gaps */
+    overflow-y: auto; /* scroll vertical si plus de 3 lignes */
+    margin: 10px 15px; /* marge réduite */
+    padding: 5px 0; /* un petit padding */
   }
 
   /* Grille des cartes */
