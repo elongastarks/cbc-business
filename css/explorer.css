@@ -393,27 +393,33 @@ footer small { display:block; margin-top:25px; opacity:0.7; font-size:12px; text
   max-height: calc((190px * 3) + (18px * 2)); /* 3 cartes visibles + gaps */
   overflow-y: auto; /* scroll vertical indépendant */
 }
-/* Feed central ajusté - PC / Tablette */
+/* ================= FEED CENTRAL AJUSTÉ - PC / TABLETTE ================= */
 .feed {
   width: 100%;
-  max-height: calc((180px * 2) + (15px * 1)); /* deux lignes visibles légèrement plus longues */
+  max-height: calc((180px * 2) + (15px * 1)); /* 2 lignes visibles légèrement plus longues */
   overflow-y: auto; /* scroll vertical si beaucoup de cartes */
-  margin: 8px 13px; /* marge verticale et horizontale réduite */
-  gap: 7px; /* espace entre les cartes réduit */
+  margin: 10px 15px; /* marge verticale et horizontale réduite */
+  padding: 0; /* pas de padding interne pour le feed */
 }
 
-/* Cards ajustées */
+/* Grille des cartes */
 .cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 cartes par ligne */
+  grid-template-columns: repeat(3, 1fr); /* 3 cartes par ligne PC */
   gap: 10px; /* réduit l’espace horizontal et vertical */
 }
 
+/* Cartes individuelles */
 .card {
   height: 180px; /* hauteur réduite pour mieux tenir dans le feed */
-  margin: 0; /* marge interne de la carte réduite */
-}
-  
+  margin: 0; /* aucune marge interne externe */
+  padding: 15px; /* padding interne pour le contenu */
+  border-radius: 12px; 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  }
 }
 /* ================= MOBILE / TABLETTE PETITE ================= */
 @media (max-width: 900px) {
