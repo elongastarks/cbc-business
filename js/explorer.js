@@ -5,6 +5,7 @@ import {
   getDocs,
   query,
   where,
+  orderBy,
   enableIndexedDbPersistence
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 import { doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
@@ -49,7 +50,12 @@ function getURLParams() {
 
 /* -------------------- FIRESTORE -------------------- */
 async function fetchAnnonces() {
-  const q = query(collection(db, "annonces"), where("etat", "==", "actif"));
+  const q = query(
+    collection(db, "annonces"),
+    where("etat", "==", "actif"),
+    orderBy("date_creation", "desc") // ✅ CORRIGÉ
+  );
+
   const snap = await getDocs(q);
 
   const data = [];
@@ -76,13 +82,20 @@ async function fetchUsersVerified(userIDs) {
 
 /* -------------------- SCORE & TRI -------------------- */
 function computeScore(a) {
+  const now = Date.now();
+  const createdAt = a.date_creation?.toMillis?.() || now; // ✅ CORRIGÉ
+
+  const ageHours = (now - createdAt) / (1000 * 60 * 60);
+  const freshnessBoost = Math.max(0, 100 - ageHours);
+
   return (
     (a.views || 0) * 1 +
     (a.clicks || 0) * 3 +
     (a.commands || 0) * 5 +
     (a.boost ? 50 : 0) +
     (a.urgence ? 80 : 0) +
-    (verifiedMap[a.userID] ? 20 : 0)
+    (verifiedMap[a.userID] ? 20 : 0) +
+    freshnessBoost
   );
 }
 
