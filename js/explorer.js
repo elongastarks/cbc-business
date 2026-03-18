@@ -53,7 +53,7 @@ async function fetchAnnonces() {
   const q = query(
     collection(db, "annonces"),
     where("etat", "==", "actif"),
-    orderBy("date_creation", "desc") // ✅ CORRIGÉ
+    orderBy("date_creation", "desc") // ✅ 
   );
 
   const snap = await getDocs(q);
@@ -83,21 +83,25 @@ async function fetchUsersVerified(userIDs) {
 /* -------------------- SCORE & TRI -------------------- */
 function computeScore(a) {
   const now = Date.now();
-  const createdAt = a.date_creation?.toMillis?.() || now; // ✅ CORRIGÉ
+  const createdAt = a.date_creation?.toMillis?.() || now;
 
   const ageHours = (now - createdAt) / (1000 * 60 * 60);
-  const freshnessBoost = Math.max(0, 100 - ageHours);
 
-  return (
-    (a.views || 0) * 1 +
-    (a.clicks || 0) * 3 +
+  const baseScore =
+    (a.views || 0) * 3 +
+    (a.clicks || 0) * 1 +
     (a.commands || 0) * 5 +
-    (a.boost ? 50 : 0) +
-    (a.urgence ? 80 : 0) +
-    (verifiedMap[a.userID] ? 20 : 0) +
-    freshnessBoost
-  );
+    (a.boost ? 40 : 0) +
+    (a.urgence ? 60 : 0) +
+    (verifiedMap[a.userID] ? 15 : 0);
+
+  // 🔥 pénalité progressive
+  const decay = Math.exp(-ageHours / 72); // 3 jours
+
+  return Number((baseScore * decay).toFixed(10));
+  
 }
+
 
 function sortAnnonces(annonces) {
   return annonces.sort((a, b) => computeScore(b) - computeScore(a));
