@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Annonce - CBC Station</title>
+<link rel="stylesheet" href="/css/annonce.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <img src="cbc.jpg" alt="CBC Station">
+        <span>CBC Station</span>
+      </a>
+      
+      <nav class="nav-links">
+        <a href="index.html">Accueil</a>
+        <a href="explorer.html">Explorer</a>
+        <a href="poster.html">Publier</a>
+      </nav>
+
+      <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </header>
+
+  <aside id="mobile-menu">
+    <nav class="mobile-nav">
+      <a href="index.html">Accueil</a>
+      <a href="explorer.html">Explorer</a>
+      <a href="poster.html">Publier</a>
+      <a href="rendus.html">Rendues</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="login.html">Connexion</a>
+      <a href="signup.html">Inscription</a>
+      <a href="Apropos.html">À propos</a>
+      <a href="help.html">Help</a>
+    </nav>
+  </aside>
+
+  <!-- ================= CONTENU ================= -->
+  <div class="container annonce-page">
+
+    <!-- LEFT / OWNER -->
+    <aside class="owner-section fade-in" id="owner-section">
+      <div id="ownerProfile">
+        <!-- Injecté via JS -->
+      </div>
+    </aside>
+
+    <!-- LEFT / AUTRES ANNONCES PROPRIETAIRE -->
+    <aside class="owner-other-ads fade-in" id="ownerOtherAds">
+      <!-- Autres annonces du propriétaire -->
+    </aside>
+
+    <!-- MAIN -->
+    <main class="annonce-main fade-in">
+      <div class="annonce-header" id="annonceDetails">
+        <!-- Injecté via JS -->
+      </div>
+
+      <div id="postulerFormWrapper">
+        <div id="postuler-form" style="display:none;">
+          <textarea id="cv_message" placeholder="Décrivez vos compétences ou votre message..." rows="4"></textarea>
+          <button id="btn-publier" class="btn btn-primary">Publier candidature</button>
+        </div>
+      </div>
+
+      <div class="attachments" id="attachments">
+        <h3>Fichiers joints</h3>
+        <a href="#" id="pdf-link">Télécharger le PDF</a>
+      </div>
+
+      <div class="author" id="author-section">
+        <!-- Informations supplémentaires sur l'auteur -->
+      </div>
+    </main>
+
+    <!-- RIGHT / SUGGESTIONS -->
+    <aside class="suggestions-section fade-in" id="suggestions">
+      <!-- Injecté via JS: annonces similaires -->
+    </aside>
+
+  </div>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      mobileMenu.classList.toggle('open');
+    });
+    document.querySelectorAll('#mobile-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        mobileMenu.classList.remove('open');
+      });
+    });
+    mobileMenu.addEventListener('click', e => {
+      if(e.target === mobileMenu){
+        hamburger.classList.remove('active');
+        mobileMenu.classList.remove('open');
+      }
+    });
+  </script>
+<script type="module" src="js/annonce.js"></script>
+</body>
+</html>
