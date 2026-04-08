@@ -56,15 +56,16 @@ async function loadAnnonce() {
     </div>
     <div class="meta" id="meta-info">${annonce.categorie} • ${annonce.ville} / ${annonce.province} • ${new Date(annonce.date_creation.seconds * 1000).toLocaleDateString()}</div>
     <div class="resume">
-      <div id="type">Type : ${annonce.type}</div>
+      <div id="type">Type : ${user.type}</div>
       <div id="niveau">${annonce.type === "entreprise" ? "Niveau requis" : "Niveau atteint"} : ${annonce.licence || "-"}</div>
       <div id="salaire">Salaire / Budget : ${annonce.salaire ? annonce.salaire+" $" : "-"}</div>
       <div id="etat">État : ${annonce.etat}</div>
     </div>
     <div class="description">
       <h2>Description</h2>
-      <p id="description">${annonce.description || "-"}</p>
       <p id="pitch">${annonce.pitch || ""}</p>
+      <p id="description">${annonce.description || "-"}</p>
+      
     </div>
     <div class="stats">
       <div class="stat"><h3 id="views">${annonce.views || 0}</h3><p>Vues</p></div>
