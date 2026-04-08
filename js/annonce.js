@@ -121,28 +121,32 @@ async function loadAnnonce() {
   const btnLogin = document.getElementById("btn-login");
   const btnPostuler = document.getElementById("btn-postuler");
   const btnContacter = document.getElementById("btn-contacter");
+  const actionsDiv = document.querySelector(".actions");
+
+  btnLogin.onclick = () => window.location.href = "login.html";
 
   if(currentUser){
     const isOwner = currentUser.uid === annonce.userID;
     if(isOwner){
+      // Propriétaire
       btnLogin.style.display = "none";
       btnPostuler.style.display = "none";
       btnContacter.style.display = "none";
 
-      // Marquer comme rendue
-      if(!document.getElementById("btn-rendu")){
-        const rendueBtn = document.createElement("button");
-        rendueBtn.textContent = "Marquer comme rendue";
-        rendueBtn.id = "btn-rendu";
-        rendueBtn.className = "btn btn-secondary";
-        rendueBtn.onclick = async () => {
-          await updateDoc(annonceRef, { etat: "rendu" });
-          document.getElementById("etat").textContent = "État : rendu";
-          alert("Annonce marquée comme rendue !");
+      // Bouton Modifier l'annonce
+      if(!document.getElementById("btn-modifier")){
+        const modifierBtn = document.createElement("button");
+        modifierBtn.id = "btn-modifier";
+        modifierBtn.textContent = "Modifier l'annonce";
+        modifierBtn.className = "btn btn-primary";
+        modifierBtn.onclick = () => {
+          window.location.href = `modifier.html?annonceID=${annonceID}`;
         };
-        document.querySelector(".actions").appendChild(rendueBtn);
+        actionsDiv.appendChild(modifierBtn);
       }
+
     } else {
+      // Utilisateur connecté
       btnLogin.style.display = "none";
       btnPostuler.style.display = "inline-block";
       btnContacter.style.display = "inline-block";
@@ -152,6 +156,7 @@ async function loadAnnonce() {
       };
     }
   } else {
+    // Utilisateur non connecté
     btnLogin.style.display = "inline-block";
     btnPostuler.style.display = "none";
     btnContacter.style.display = "none";
