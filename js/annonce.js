@@ -19,15 +19,13 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// --- VARIABLES GLOBALES ---
+// --- VARIABLES ---
 const urlParams = new URLSearchParams(window.location.search);
 const annonceID = urlParams.get('id');
-
 if(!annonceID){
   alert("Annonce non spécifiée.");
   window.location.href = "/";
 }
-
 let currentUser = null;
 
 // --- AUTH ---
@@ -40,7 +38,6 @@ onAuthStateChanged(auth, user => {
 async function loadAnnonce() {
   const annonceRef = doc(db, "annonces", annonceID);
   const annonceSnap = await getDoc(annonceRef);
-
   if(!annonceSnap.exists()) {
     alert("Annonce introuvable.");
     window.location.href = "/";
@@ -86,7 +83,6 @@ async function loadAnnonce() {
   const ownerProfile = document.getElementById("ownerProfile");
   const userRef = doc(db,"users",annonce.userID);
   const userSnap = await getDoc(userRef);
-
   if(userSnap.exists()){
     const user = userSnap.data();
     ownerProfile.innerHTML = `
@@ -99,28 +95,14 @@ async function loadAnnonce() {
         </div>
       </div>
     `;
-    document.getElementById("badge-verified")?.remove(); // enlever badge existant
+    // Badge verified
+    document.getElementById("badge-verified")?.remove();
     const badgeVerified = document.createElement("span");
     badgeVerified.className = "badge verified";
     badgeVerified.id = "badge-verified";
     badgeVerified.textContent = "Vérifié";
     badgeVerified.style.display = user.verified ? "inline-block" : "none";
     document.querySelector(".badges").appendChild(badgeVerified);
-
-    // Autres annonces du propriétaire
-    const ownerOtherAdsContainer = document.getElementById("ownerOtherAds");
-    const userAnnoncesQuery = query(collection(db,"annonces"), where("userID","==",annonce.userID));
-    const userAnnoncesSnap = await getDocs(userAnnoncesQuery);
-    ownerOtherAdsContainer.innerHTML = `<h4>Autres annonces de ${user.name}</h4>`;
-    userAnnoncesSnap.forEach(docSnap => {
-      const ad = docSnap.data();
-      if(docSnap.id !== annonceID){
-        const adLink = document.createElement("a");
-        adLink.href = `annonce.html?id=${docSnap.id}`;
-        adLink.textContent = ad.titre;
-        ownerOtherAdsContainer.appendChild(adLink);
-      }
-    });
   }
 
   // --- FICHIERS ---
@@ -160,7 +142,6 @@ async function loadAnnonce() {
         };
         document.querySelector(".actions").appendChild(rendueBtn);
       }
-
     } else {
       btnLogin.style.display = "none";
       btnPostuler.style.display = "inline-block";
