@@ -1,7 +1,18 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-import {   
-  getFirestore, doc, getDoc, updateDoc, collection, query, where, getDocs, addDoc, increment   
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  updateDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  increment,
+  limit
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 
 // --- CONFIG FIREBASE ---
@@ -19,26 +30,29 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// --- VARIABLES ---
+// --- PARAM ---
 const urlParams = new URLSearchParams(window.location.search);
-const annonceID = urlParams.get('id');
-if(!annonceID){
+const annonceID = urlParams.get("id");
+
+if (!annonceID) {
   alert("Annonce non spécifiée.");
   window.location.href = "/";
 }
+
 let currentUser = null;
 
 // --- AUTH ---
-onAuthStateChanged(auth, user => {
+onAuthStateChanged(auth, (user) => {
   currentUser = user;
   loadAnnonce();
 });
 
-// --- FONCTION PRINCIPALE ---
+// --- LOAD ---
 async function loadAnnonce() {
   const annonceRef = doc(db, "annonces", annonceID);
   const annonceSnap = await getDoc(annonceRef);
-  if(!annonceSnap.exists()) {
+
+  if (!annonceSnap.exists()) {
     alert("Annonce introuvable.");
     window.location.href = "/";
     return;
@@ -46,33 +60,47 @@ async function loadAnnonce() {
 
   const annonce = annonceSnap.data();
 
-  // --- INJECTION ANNONCE DANS DOM ---
-  const annonceMain = document.getElementById("annonceDetails");
-  annonceMain.innerHTML = `
+  // --- OWNER ---
+  const ownerRef = doc(db, "users", annonce.userID);
+  const ownerSnap = await getDoc(ownerRef);
+  const owner = ownerSnap.exists() ? ownerSnap.data() : null;
+
+  // --- UI ANNONCE ---
+  document.getElementById("annonceDetails").innerHTML = `
     <h1 id="titre">${annonce.titre}</h1>
+
     <div class="badges">
-      <span class="badge urgent" style="display:${annonce.urgence ? 'inline-block':'none'}" id="badge-urgent">Urgent</span>
-      <span class="badge boost" style="display:${annonce.boost ? 'inline-block':'none'}" id="badge-boost">Boost</span>
+      <span class="badge urgent" style="display:${annonce.urgence ? "inline-block" : "none"}">Urgent</span>
+      <span class="badge boost" style="display:${annonce.boost ? "inline-block" : "none"}">Boost</span>
     </div>
-    <div class="meta" id="meta-info">${annonce.categorie} • ${annonce.ville} / ${annonce.province} • ${new Date(annonce.date_creation.seconds * 1000).toLocaleDateString()}</div>
+
+    <div class="meta">
+      ${annonce.categorie} • ${annonce.ville} / ${annonce.province} •
+      ${annonce.date_creation?.seconds
+        ? new Date(annonce.date_creation.seconds * 1000).toLocaleDateString()
+        : ""}
+    </div>
+
     <div class="resume">
-      <div id="type">Type : ${user.type}</div>
-      <div id="niveau">${annonce.type === "entreprise" ? "Niveau requis" : "Niveau atteint"} : ${annonce.licence || "-"}</div>
-      <div id="salaire">Salaire / Budget : ${annonce.salaire ? annonce.salaire+" $" : "-"}</div>
-      <div id="etat">État : ${annonce.etat}</div>
+      <div>Type : ${annonce.type}</div>
+      <div>Niveau : ${annonce.licence || "-"}</div>
+      <div>Budget : ${annonce.salaire ? annonce.salaire + " $" : "-"}</div>
+      <div>État : ${annonce.etat}</div>
     </div>
+
     <div class="description">
       <h2>Description</h2>
-      <p id="pitch">${annonce.pitch || ""}</p>
-      <p id="description">${annonce.description || "-"}</p>
-      
+      <p>${annonce.pitch || ""}</p>
+      <p>${annonce.description || "-"}</p>
     </div>
+
     <div class="stats">
-      <div class="stat"><h3 id="views">${annonce.views || 0}</h3><p>Vues</p></div>
-      <div class="stat"><h3 id="clicks">${annonce.clicks || 0}</h3><p>Clics</p></div>
-      <div class="stat"><h3 id="commands">${annonce.commands || 0}</h3><p>Candidatures</p></div>
-      <div class="stat"><h3 id="republis">${annonce.republis || 0}</h3><p>Re-publications</p></div>
+      <div><h3>${annonce.views || 0}</h3><p>Vues</p></div>
+      <div><h3>${annonce.clicks || 0}</h3><p>Clics</p></div>
+      <div><h3>${annonce.commands || 0}</h3><p>Candidatures</p></div>
+      <div><h3>${annonce.republis || 0}</h3><p>Reposts</p></div>
     </div>
+
     <div class="actions">
       <button id="btn-login" class="btn btn-primary">Se connecter</button>
       <button id="btn-postuler" class="btn btn-primary">Postuler</button>
@@ -80,74 +108,55 @@ async function loadAnnonce() {
     </div>
   `;
 
-  // --- OWNER PROFILE ---
-  const ownerProfile = document.getElementById("ownerProfile");
-  const userRef = doc(db,"users",annonce.userID);
-  const userSnap = await getDoc(userRef);
-  if(userSnap.exists()){
-    const user = userSnap.data();
-    ownerProfile.innerHTML = `
+  // --- OWNER PROFILE (CORRIGÉ DB USERS) ---
+  if (owner) {
+    document.getElementById("ownerProfile").innerHTML = `
       <div class="owner-card">
-        <img src="${user.photoURL || 'default-avatar.png'}" alt="${user.name}">
+        <img src="${owner.photoURL || "default-avatar.png"}">
         <div>
-          <h3>${user.name}</h3>
-          <p>Type : ${user.type}</p>
-          <p>Status : ${user.verified ? "🔰 Vérifié" : "Normal"}</p>
+          <h3>${owner.name}</h3>
+          <p>${owner.type}</p>
+          <p>${owner.country} • ${owner.ville} • ${owner.province}</p>
+          <p>${owner.bio || ""}</p>
+          <p>Disponibilité : ${owner.availability}</p>
+          <p>${owner.verified ? "🔰 Vérifié" : "Non vérifié"}</p>
         </div>
       </div>
     `;
-    // Badge verified
-    document.getElementById("badge-verified")?.remove();
-    const badgeVerified = document.createElement("span");
-    badgeVerified.className = "badge verified";
-    badgeVerified.id = "badge-verified";
-    badgeVerified.textContent = "Vérifié";
-    badgeVerified.style.display = user.verified ? "inline-block" : "none";
-    document.querySelector(".badges").appendChild(badgeVerified);
   }
 
-  // --- FICHIERS ---
-  const pdfLink = document.getElementById("pdf-link");
-  if(annonce.pdf_url){
-    pdfLink.href = annonce.pdf_url;
-    pdfLink.style.display = "inline";
-  } else {
-    document.getElementById("attachments").style.display = "none";
-  }
+  // --- VIEW +1 ---
+  await updateDoc(annonceRef, {
+    views: increment(1),
+  });
 
-  // --- INCREMENT VIEWS ---
-  await updateDoc(annonceRef, { views: (annonce.views || 0) + 1 });
-
-  // --- GESTION BOUTONS ---
+  // --- BTN LOGIC ---
   const btnLogin = document.getElementById("btn-login");
   const btnPostuler = document.getElementById("btn-postuler");
   const btnContacter = document.getElementById("btn-contacter");
-  const actionsDiv = document.querySelector(".actions");
+  const actions = document.querySelector(".actions");
 
-  btnLogin.onclick = () => window.location.href = "login.html";
+  btnLogin.onclick = () => (window.location.href = "login.html");
 
-  if(currentUser){
+  if (currentUser) {
     const isOwner = currentUser.uid === annonce.userID;
-    if(isOwner){
-      // Propriétaire
+
+    if (isOwner) {
       btnLogin.style.display = "none";
       btnPostuler.style.display = "none";
       btnContacter.style.display = "none";
 
-      // Bouton Modifier l'annonce
-      if(!document.getElementById("btn-modifier")){
-        const modifierBtn = document.createElement("button");
-        modifierBtn.id = "btn-modifier";
-        modifierBtn.textContent = "Modifier l'annonce";
-        modifierBtn.className = "btn btn-primary";
-        modifierBtn.onclick = () => {
+      if (!document.getElementById("btn-modifier")) {
+        const btn = document.createElement("button");
+        btn.id = "btn-modifier";
+        btn.textContent = "Modifier l'annonce";
+        btn.className = "btn btn-primary";
+        btn.onclick = () => {
           window.location.href = `modifier.html?annonceID=${annonceID}`;
         };
-        actionsDiv.appendChild(modifierBtn);
+        actions.appendChild(btn);
       }
-
     } else {
-      // Utilisateur connecté
       btnLogin.style.display = "none";
       btnPostuler.style.display = "inline-block";
       btnContacter.style.display = "inline-block";
@@ -157,65 +166,90 @@ async function loadAnnonce() {
       };
     }
   } else {
-    // Utilisateur non connecté
     btnLogin.style.display = "inline-block";
     btnPostuler.style.display = "none";
     btnContacter.style.display = "none";
   }
 
-  // --- FORMULAIRE POSTULER ---
+  // --- POSTULER ---
   btnPostuler.onclick = () => {
     document.getElementById("postuler-form").style.display = "block";
   };
 
+  // --- SUBMIT POSTULER ---
   document.getElementById("btn-publier").onclick = async () => {
-    if(!currentUser) return alert("Connectez-vous pour postuler.");
-    if(currentUser.uid === annonce.userID) return alert("Vous êtes le propriétaire de cette annonce.");
-    if(annonce.etat === "rendu") return alert("Annonce déjà rendue.");
+    if (!currentUser) return;
 
     const message = document.getElementById("cv_message").value.trim();
-    if(message.length < 5) return alert("Veuillez entrer un message valide.");
+    if (message.length < 5) return alert("Message trop court");
 
-    const cmdQuery = query(collection(db,"commands"), 
-      where("annonceID","==",annonceID), 
-      where("gestID","==",currentUser.uid)
+    const already = await getDocs(
+      query(
+        collection(db, "commands"),
+        where("annonceID", "==", annonceID),
+        where("gestID", "==", currentUser.uid)
+      )
     );
-    const cmdSnap = await getDocs(cmdQuery);
-    if(!cmdSnap.empty) return alert("Vous avez déjà postulé à cette annonce.");
 
-    const userSnapCmd = await getDoc(doc(db,"users",currentUser.uid));
-    const realName = userSnapCmd.exists() ? userSnapCmd.data().name : "Anonyme";
+    if (!already.empty) return alert("Déjà postulé");
 
-    await addDoc(collection(db,"commands"), {
-      name: realName,
-      count_annonce: annonce.count || 0,
+    const me = await getDoc(doc(db, "users", currentUser.uid));
+
+    await addDoc(collection(db, "commands"), {
+      name: me.exists() ? me.data().name : "user",
+      annonceID,
+      userID: annonce.userID,
+      gestID: currentUser.uid,
       cv_message: message,
-      date_commande: new Date(),
-      contacts: currentUser.email || "",
-      annonceID: annonceID,
-      userID : annonce.userID,
-      gestID: currentUser.uid
+      date_commande: new Date()
     });
 
-    await updateDoc(annonceRef, { commands: increment(1) });
-    document.getElementById("commands").textContent = (annonce.commands || 0) + 1;
-    alert("Candidature envoyée !");
-    document.getElementById("postuler-form").style.display = "none";
-    document.getElementById("cv_message").value = "";
-    btnPostuler.disabled = true;
+    await updateDoc(annonceRef, {
+      commands: increment(1),
+    });
+
+    alert("Candidature envoyée");
   };
 
-  // --- SUGGESTIONS ---
-  const suggestionsSection = document.getElementById("suggestions");
-  const suggestionsQuery = query(collection(db,"annonces"), where("categorie","==",annonce.categorie));
-  const suggestionsSnap = await getDocs(suggestionsQuery);
-  suggestionsSection.innerHTML = `<h3>Annonces similaires</h3>`;
-  suggestionsSnap.forEach(docSnap => {
-    const ad = docSnap.data();
-    if(docSnap.id !== annonceID){
-      const adDiv = document.createElement("div");
-      adDiv.innerHTML = `<a href="annonce.html?id=${docSnap.id}">${ad.titre}</a>`;
-      suggestionsSection.appendChild(adDiv);
+  // --- SUGGESTIONS LIMIT 5 ---
+  const suggSnap = await getDocs(
+    query(
+      collection(db, "annonces"),
+      where("categorie", "==", annonce.categorie),
+      limit(5)
+    )
+  );
+
+  const suggBox = document.getElementById("suggestions");
+  suggBox.innerHTML = "<h3>Annonces similaires</h3>";
+
+  suggSnap.forEach((d) => {
+    if (d.id !== annonceID) {
+      const a = d.data();
+      suggBox.innerHTML += `
+        <a href="annonce.html?id=${d.id}">${a.titre}</a>
+      `;
+    }
+  });
+
+  // --- LIMIT OWNER ADS (3 dernières) ---
+  const ownerAdsSnap = await getDocs(
+    query(
+      collection(db, "annonces"),
+      where("userID", "==", annonce.userID),
+      limit(3)
+    )
+  );
+
+  const ownerAdsBox = document.getElementById("ownerAds");
+  ownerAdsBox.innerHTML = "<h4>Ses annonces</h4>";
+
+  ownerAdsSnap.forEach((d) => {
+    if (d.id !== annonceID) {
+      const a = d.data();
+      ownerAdsBox.innerHTML += `
+        <a href="annonce.html?id=${d.id}">${a.titre}</a>
+      `;
     }
   });
 }
