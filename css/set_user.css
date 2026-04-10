@@ -1,0 +1,92 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f6fa;
+  margin: 0;
+}
+
+header {
+  background: #0d1b2a;
+  color: #fff;
+  padding: 15px 20px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.container {
+  max-width: 650px;
+  margin: 30px auto;
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.input-group {
+  margin-bottom: 12px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 13px;
+}
+
+input, select, textarea {
+  width: 95%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+textarea {
+  resize: none;
+  min-height: 80px;
+}
+
+.readonly {
+  background: #eee;
+  cursor: not-allowed;
+}
+
+button {
+  width: 95%;
+  padding: 12px;
+  background: #1b263b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: #415a77;
+}
+
+.message {
+  text-align: center;
+  margin-top: 12px;
+  font-weight: bold;
+}

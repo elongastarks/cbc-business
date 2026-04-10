@@ -1,0 +1,123 @@
+/* ===== RESET ===== */
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Inter", Arial, sans-serif;
+  margin: 0;
+  background: linear-gradient(180deg, #f5f6f9, #eef1f7);
+  color: #1e293b;
+}
+
+/* ===== HEADER PRO (WHITE SaaS STYLE) ===== */
+header {
+  background: #ffffff;
+  color: #0f172a;
+  padding: 14px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+header .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+header .logo img {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+}
+
+header nav a {
+  color: #0f172a;
+  margin-left: 15px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+header nav a:hover {
+  color: #0B5FFF;
+}
+
+/* ===== CONTAINER ===== */
+.container {
+  max-width: 760px;
+  margin: 40px auto;
+  background: white;
+  padding: 40px;
+  border-radius: 14px;
+  box-shadow: 0 10px 35px rgba(0,0,0,0.06);
+}
+
+/* ===== INPUTS ===== */
+.input-group { margin-bottom: 18px; }
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #d0d5dd;
+  background: #f9fafb;
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* ===== COUNTERS ===== */
+.counter {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 4px;
+  text-align: right;
+}
+
+/* ===== BUTTON ===== */
+.btn {
+  width: 100%;
+  padding: 14px;
+  background: #0B5FFF;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn:hover { opacity: 0.9; }
+
+/* ===== ALERT ===== */
+.alert {
+  display: none;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+}
+
+/* ===== LINK ===== */
+.comment-link {
+  display: block;
+  margin-top: 12px;
+  font-size: 14px;
+  color: #0B5FFF;
+  text-decoration: none;
+}
+
+.comment-link:hover {
+  text-decoration: underline;
+}

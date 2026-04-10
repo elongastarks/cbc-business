@@ -1,0 +1,156 @@
+* {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #f4f6f8;
+      color: #111;
+    }
+
+    /* ===== HEADER CLEAN ===== */
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header img {
+      height: 42px;
+      object-fit: contain;
+    }
+
+    header .actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    header button {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    header button.secondary {
+      background: #475569;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 0 15px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .section {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .section h2 {
+      margin-top: 0;
+      font-size: 18px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .save-btn {
+      background: #16a34a;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .stats {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      flex: 1;
+      min-width: 200px;
+      background: #f1f5f9;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .stat-box strong {
+      font-size: 22px;
+      display: block;
+    }
+
+    .actions-row {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .actions-row button {
+      padding: 10px 16px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-active { background: #16a34a; color: white; }
+    .btn-pending { background: #f59e0b; color: white; }
+    .btn-danger { background: #dc2626; color: white; }
+
+    .danger {
+      border-left: 5px solid #f59e0b;
+      background: #fff7ed;
+    }
+
+    .danger.red {
+      border-left-color: #dc2626;
+      background: #fef2f2;
+    }
