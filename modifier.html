@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Modifier l’annonce | CBC Station</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="categorie.js" defer></script>
+  <script src="js/cibles.js" defer></script>
+<link rel="stylesheet" href="/css/modifier.css">
+
+</head>
+
+<body>
+
+<header>
+  <img src="cbc.jpg" alt="CBC Station">
+  <div class="actions">
+    <button class="secondary" onclick="location.href='dashboard.html'">⬅ Dashboard</button>
+    <button onclick="location.href='commande.html'">Commandes</button>
+  </div>
+</header>
+
+<div class="container">
+  <h1>Modifier l’annonce</h1>
+
+  <!-- ===== INFOS ===== -->
+  <div class="section">
+    <h2>Informations</h2>
+
+    <div class="form-group">
+      <label>Titre</label>
+      <input type="text" id="titre">
+    </div>
+
+    <div class="form-group">
+      <label>Pitch (max 125)</label>
+      <textarea id="pitch" maxlength="125"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Description (max 800)</label>
+      <textarea id="description" maxlength="800"></textarea>
+    </div>
+
+    <!-- Niche + Catégorie (LOGIQUE PROPRE) -->
+    <div class="form-group">
+      <label>Niche</label>
+      <select id="niche"></select>
+
+      <label>Catégorie</label>
+      <select id="categorie"></select>
+    </div>
+
+    <div class="form-group">
+      <label>Tags</label>
+      <input type="text" id="tags">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Province (multi via cibles.js)</label>
+        <select id="province"></select>
+      </div>
+
+      <div class="form-group">
+        <label>Ville (multi optionnel)</label>
+        <select id="ville"></select>
+      </div>
+
+      <div class="form-group">
+        <label>Lieu</label>
+        <input type="text" id="lieu">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Licence</label>
+        <select id="licence">
+          <option value="">-- optionnel --</option>
+          <option>Autodidacte</option>
+          <option>Bac</option>
+          <option>Licence</option>
+          <option>Master</option>
+          <option>Doctorat</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Salaire</label>
+        <input type="number" id="salaire">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>PDF</label>
+      <input type="url" id="pdf_url">
+    </div>
+
+    <button class="save-btn">Enregistrer</button>
+  </div>
+
+  <!-- ===== STATS ===== -->
+  <div class="section">
+    <h2>Statistiques</h2>
+
+    <div class="stats">
+      <div class="stat-box">Vues<strong id="views">0</strong></div>
+      <div class="stat-box">Clics<strong id="clicks">0</strong></div>
+      <div class="stat-box">Commandes<strong id="commands">0</strong></div>
+    </div>
+  </div>
+
+  <!-- ===== ACTIONS ===== -->
+  <div class="section">
+    <h2>Actions</h2>
+
+    <div class="actions-row">
+      <button class="btn-active">Activer</button>
+      <button class="btn-pending">Pause</button>
+      <button>Commandes</button>
+    </div>
+  </div>
+
+  <!-- ===== RENDU ===== -->
+  <div class="section danger">
+    <h2>Rendu</h2>
+
+    <div class="form-group">
+      <label>Note</label>
+      <textarea></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>UserID client</label>
+      <input type="text">
+    </div>
+
+    <button>Marquer rendu</button>
+  </div>
+
+  <!-- ===== DELETE ===== -->
+  <div class="section danger red">
+    <h2>Suppression</h2>
+    <p>Action irréversible</p>
+    <button class="btn-danger">Supprimer</button>
+  </div>
+
+</div>
+<script type="module" src="js/modifier.js"></script>
+</body>
+</html>

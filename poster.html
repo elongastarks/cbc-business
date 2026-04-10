@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="description" content="Publiez une mission ou une annonce professionnelle sur CBC Station. Trouvez des talents en RDC rapidement.">
+<meta name="keywords" content="freelance RDC, emploi Congo, mission, recrutement, CBC Station">
+
+<title>Poster une mission – CBC Station</title>
+
+<!-- JS CORE -->
+<script src="categorie.js" defer></script>
+<script src="js/cibles.js" defer></script>
+<link rel="stylesheet" href="/css/poster.css">
+
+</head>
+
+<body>
+
+<header>
+  <div class="logo">
+    <img src="cbc.jpg" alt="CBC Station">
+    <span>CBC Station</span>
+  </div>
+
+  <nav>
+    <a href="/">Accueil</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="login.html">Connexion</a>
+  </nav>
+</header>
+
+<div class="container">
+
+  <h2>Publier une mission / annonce</h2>
+
+  <div id="alertBox" class="alert"></div>
+
+  <!-- TITRE -->
+  <div class="input-group">
+    <label>Titre *</label>
+    <input type="text" id="titre" required>
+  </div>
+
+  <!-- PITCH -->
+  <div class="input-group">
+    <label>Résumé *</label>
+    <textarea id="pitch" maxlength="125"></textarea>
+    <div class="counter" id="pitchCounter">0/125</div>
+  </div>
+
+  <!-- DESCRIPTION -->
+  <div class="input-group">
+    <label>Description *</label>
+    <textarea id="description" maxlength="800"></textarea>
+    <div class="counter" id="descCounter">0/800</div>
+  </div>
+
+  <!-- CATÉGORIE -->
+  <div class="input-group">
+    <label>Niche</label>
+    <select id="niche"></select>
+
+    <label>Catégorie *</label>
+    <select id="categorie" required></select>
+  </div>
+
+  <!-- TAGS -->
+  <div class="input-group">
+    <label>Tags</label>
+    <input type="text" id="tags">
+  </div>
+
+  <!-- PROVINCE -->
+  <div class="input-group">
+    <label>Province *</label>
+    <select id="province" required></select>
+  </div>
+
+  <!-- VILLE -->
+  <div class="input-group">
+    <label>Ville *</label>
+    <select id="ville" required></select>
+  </div>
+
+  <!-- LIEU -->
+  <div class="input-group">
+    <label>Quartier</label>
+    <input type="text" id="lieu">
+  </div>
+
+  <!-- LICENCE -->
+  <div class="input-group">
+    <label>Licence</label>
+    <select id="licence">
+      <option value="">-- optionnel --</option>
+      <option>Autodidacte</option>
+      <option>Bac</option>
+      <option>Licence</option>
+      <option>Master</option>
+      <option>Doctorat</option>
+    </select>
+  </div>
+
+  <!-- BUDGET -->
+  <div class="input-group">
+    <label>Budget</label>
+    <input type="number" id="salaire">
+  </div>
+
+  <!-- PDF -->
+  <div class="input-group">
+    <label>Document</label>
+    <input type="url" id="pdf_url">
+  </div>
+
+  <!-- LINK AVIS -->
+  <a href="avis.html" class="comment-link">
+    👉 Laisser un avis ici
+  </a>
+
+  <button id="postBtn" class="btn">Publier</button>
+
+</div>
+
+<!-- COUNTERS SCRIPT (SIMPLE ET PROPRE) -->
+<script>
+const pitch = document.getElementById("pitch");
+const description = document.getElementById("description");
+
+const pitchCounter = document.getElementById("pitchCounter");
+const descCounter = document.getElementById("descCounter");
+
+pitch.addEventListener("input", () => {
+  pitchCounter.textContent = `${pitch.value.length}/125`;
+});
+
+description.addEventListener("input", () => {
+  descCounter.textContent = `${description.value.length}/800`;
+});
+</script>
+
+<script type="module" src="js/poster.js"></script>
+</body>
+</html>
