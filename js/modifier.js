@@ -36,7 +36,7 @@ const db = getFirestore(app);
 const annonceID = new URLSearchParams(window.location.search).get("annonceID");
 
 /* =========================
-   DOM SAFE ACCESS (BY ID)
+   DOM
 ========================= */
 const $ = (id) => document.getElementById(id);
 
@@ -90,7 +90,7 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 /* =========================
-   LOAD ANNONCE
+   LOAD
 ========================= */
 async function loadAnnonce() {
   if (!annonceID) {
@@ -117,32 +117,43 @@ async function loadAnnonce() {
   }
 
   /* =========================
-     FILL FORM
+     PRE-FILL (SOURCE OF TRUTH)
   ========================= */
-  titre.value = annonce.titre || "";
-  pitch.value = annonce.pitch || "";
-  description.value = annonce.description || "";
+  titre.value = annonce.titre ?? "";
+  pitch.value = annonce.pitch ?? "";
+  description.value = annonce.description ?? "";
 
-  categorie.value = annonce.categorie || "";
-  niche.value = annonce.niche || "";
+  categorie.value = annonce.categorie ?? "";
+  niche.value = annonce.niche ?? "";
 
-  salaire.value = annonce.salaire || 0;
-  lieu.value = annonce.lieu || "";
-  licence.value = annonce.licence || "";
-  pdf_url.value = annonce.pdf_url || "";
+  salaire.value = annonce.salaire ?? 0;
+  lieu.value = annonce.lieu ?? "";
+  licence.value = annonce.licence ?? "";
+  pdf_url.value = annonce.pdf_url ?? "";
 
-  statut.value = annonce.etat || "actif";
+  statut.value = annonce.etat ?? "actif";
 
   /* =========================
-     AREA LOGIC (cibles.js compatible)
+     AREA SYNC (cibles.js MASTER)
   ========================= */
-  if (window.getTargetingData) {
-    const data = window.getTargetingData();
+  setTimeout(() => {
+    if (!window.getTargetingData) return;
 
-    // fallback safe
-    province.value = (annonce.province || "").split(",")[0] || "";
-    ville.value = (annonce.ville || "").split(",")[0] || "";
-  }
+    const area = window.getTargetingData();
+
+    // reset sets via UI simulation
+    Array.from(province.options).forEach(o => {
+      o.selected = (annonce.provinces || []).includes(o.value);
+    });
+
+    province.dispatchEvent(new Event("change"));
+
+    setTimeout(() => {
+      Array.from(ville.options).forEach(o => {
+        o.selected = (annonce.villes || []).includes(o.value);
+      });
+    }, 150);
+  }, 200);
 
   /* =========================
      STATS
@@ -151,50 +162,48 @@ async function loadAnnonce() {
   clicksEl.textContent = annonce.clicks || 0;
   commandsEl.textContent = annonce.commands || 0;
 
-  /* =========================
-     COMMAND LINK
-  ========================= */
   btnCommands.onclick = () => {
     location.href = `commande.html?annonceID=${annonceID}`;
   };
 }
 
 /* =========================
-   SAVE UPDATE (CLEAN + SAFE)
+   SAVE (NO DATA LOSS VERSION)
 ========================= */
 saveBtn.onclick = async () => {
-  if (!annonceID) return;
+  if (!annonce) return;
 
-  const target = window.getTargetingData ? window.getTargetingData() : {
-    provinces: [province.value],
-    villes: [ville.value]
+  const area = window.getTargetingData ? window.getTargetingData() : {
+    provinces: annonce.provinces || [],
+    villes: annonce.villes || []
   };
 
   const updated = {
-    titre: titre.value.trim(),
-    pitch: pitch.value.trim(),
-    description: description.value.trim(),
+    ...annonce,
 
-    categorie: categorie.value,
-    niche: niche.value,
+    titre: titre.value.trim() || annonce.titre,
+    pitch: pitch.value.trim() || annonce.pitch,
+    description: description.value.trim() || annonce.description,
 
-    salaire: Number(salaire.value || 0),
+    categorie: categorie.value || annonce.categorie,
+    niche: niche.value || annonce.niche,
 
-    province: target.provinces.join(","),
-    ville: target.villes.join(","),
+    salaire: salaire.value !== "" ? Number(salaire.value) : annonce.salaire,
 
-    lieu: lieu.value.trim(),
-    licence: licence.value,
+    provinces: area.provinces,
+    villes: area.villes,
 
-    pdf_url: pdf_url.value.trim(),
+    lieu: lieu.value.trim() || annonce.lieu,
+    licence: licence.value || annonce.licence,
 
-    etat: statut.value,
+    pdf_url: pdf_url.value.trim() || annonce.pdf_url,
+
+    etat: statut.value || annonce.etat,
 
     updatedAt: serverTimestamp()
   };
 
   await updateDoc(doc(db, "annonces", annonceID), updated);
-
   alert("Annonce mise à jour");
 };
 
@@ -212,7 +221,7 @@ btnPending.onclick = async () => {
 };
 
 /* =========================
-   RENDU SYSTEM (FIXED)
+   RENDU
 ========================= */
 renduBtn.onclick = async () => {
   const note = renduNote.value.trim();
@@ -249,7 +258,7 @@ renduBtn.onclick = async () => {
 };
 
 /* =========================
-   DELETE SAFE
+   DELETE
 ========================= */
 deleteBtn.onclick = async () => {
   if (!confirm("Supprimer définitivement ?")) return;
