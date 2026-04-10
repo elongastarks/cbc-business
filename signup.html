@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Inscription | CBC Station</title>
+<meta name="description" content="Créez votre compte sur CBC Station pour connecter entreprises et freelances en RDC. Plateforme professionnelle de mise en relation.">
+<meta name="keywords" content="CBC Station, freelance RDC, entreprise Congo, jobs Butembo, recrutement Afrique">
+<meta name="author" content="CBC Station">
+<link rel="canonical" href="https://www.cbcstation.com/signup.html">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Inscription | CBC Station">
+<meta property="og:description" content="Créez votre compte et connectez-vous aux opportunités business en RDC">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.cbcstation.com/signup.html">
+
+<script src="js/origine.js" defer></script>
+<style>
+:root {
+  --primary:#0B5FFF;
+  --dark:#111;
+  --muted:#666;
+  --bg:#f4f6fa;
+  --white:#fff;
+}
+
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:var(--bg);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+}
+
+/* CONTAINER */
+.container{
+  width:100%;
+  max-width:440px;
+  background:var(--white);
+  padding:30px;
+  border-radius:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* TITLE */
+h2{
+  text-align:center;
+  margin-bottom:25px;
+  color:var(--dark);
+}
+
+/* INPUT */
+.input-group{
+  margin-bottom:15px;
+}
+
+.input-group label{
+  display:block;
+  font-size:13px;
+  margin-bottom:5px;
+  color:var(--muted);
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea{
+  width:100%;
+  padding:12px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  font-size:14px;
+  outline:none;
+}
+
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus{
+  border-color:var(--primary);
+}
+
+/* TEXTAREA */
+textarea{
+  resize:none;
+}
+
+/* PASSWORD WRAP */
+.password-wrap{
+  position:relative;
+}
+
+.toggle-pass{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  font-size:12px;
+  color:var(--primary);
+}
+
+/* BUTTON */
+.btn{
+  width:100%;
+  padding:13px;
+  background:var(--primary);
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  font-weight:600;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+.btn:hover{
+  opacity:0.9;
+}
+
+/* ALERT */
+.alert{
+  display:none;
+  padding:10px;
+  margin-top:10px;
+  border-radius:6px;
+  text-align:center;
+  font-size:13px;
+}
+
+.alert-error{
+  background:#ffe0e0;
+  color:#c0392b;
+}
+
+.alert-success{
+  background:#e0ffeb;
+  color:#2ecc71;
+}
+
+/* FOOTER */
+.login-link{
+  text-align:center;
+  margin-top:15px;
+  font-size:14px;
+}
+
+.login-link a{
+  color:var(--primary);
+  font-weight:600;
+}
+
+/* RESPONSIVE */
+@media(max-width:500px){
+  .container{
+    margin:10px;
+    padding:20px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Créer un compte</h2>
+
+<!-- NAME -->
+<div class="input-group">
+<label>Nom complet *</label>
+<input type="text" maxlength="80" id="name" placeholder="Nom ou entreprise">
+</div>
+
+<!-- PHOTO -->
+<div class="input-group">
+<label>Photo (URL)</label>
+<input type="url" id="photoURL" placeholder="https://...">
+</div>
+
+<!-- EMAIL -->
+<div class="input-group">
+<label>Email *</label>
+<input type="email" id="email" placeholder="exemple@gmail.com">
+</div>
+
+<!-- TEL -->
+<div class="input-group">
+<label>Téléphone *</label>
+<input type="text" maxlength="20" id="tel" placeholder="+243...">
+</div>
+
+<!-- TYPE -->
+<div class="input-group">
+<label>Type de compte *</label>
+<select id="type">
+<option value="personnel">Personnel</option>
+<option value="entreprise">Entreprise</option>
+</select>
+</div>
+
+<!-- COUNTRY -->
+<div class="input-group">
+<label>Pays</label>
+<input type="text" value="Congo RDC" id="country" disabled>
+</div>
+
+<!-- PROVINCE -->
+<div class="input-group">
+<label>Province *</label>
+<select id="province">
+<option value="">Choisir</option>
+</select>
+</div>
+
+<!-- CITY -->
+<div class="input-group">
+<label>Ville *</label>
+<select id="ville">
+<option value="">Choisir</option>
+</select>
+</div>
+
+<!-- BIO -->
+<div class="input-group">
+<label>Bio *</label>
+<textarea maxlength="150" id="bio" placeholder="Décris-toi brièvement..."></textarea>
+<small id="bioCount">0/150</small>
+</div>
+
+<!-- AVAILABILITY -->
+<div class="input-group">
+<label>Disponibilité *</label>
+<select id="availability">
+<option value="disponible">Disponible</option>
+<option value="occupé">Occupé</option>
+</select>
+</div>
+
+<!-- PASSWORD -->
+<div class="input-group password-wrap">
+<label>Mot de passe *</label>
+<input type="password" id="password">
+<span class="toggle-pass" onclick="togglePassword()">Voir</span>
+</div>
+
+<button class="btn" id="signupBtn">Créer mon compte</button>
+
+<div id="alertBox" class="alert"></div>
+
+<div class="login-link">
+Déjà inscrit ? <a href="login.html">Se connecter</a>
+</div>
+
+</div>
+
+<!-- SCRIPTS -->
+<script>
+function togglePassword(){
+  const input = document.getElementById("password");
+  input.type = input.type === "password" ? "text" : "password";
+}
+
+// compteur bio
+const bio = document.getElementById("bio");
+const bioCount = document.getElementById("bioCount");
+
+bio.addEventListener("input", ()=>{
+  bioCount.textContent = bio.value.length + "/150";
+});
+</script>
+
+<script src="js/origine.js"></script>
+<script type="module" src="js/signup.js"></script>
+
+</body>
+</html>
