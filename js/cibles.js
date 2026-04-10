@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
      PROVINCES
   ========================= */
   function renderProvinces() {
-    provinceSelect.innerHTML = `<option value="">-- Provinces (multi) --</option>`;
+    provinceSelect.innerHTML = "";
 
     provinces.forEach(p => {
       const opt = document.createElement("option");
@@ -39,7 +39,9 @@ document.addEventListener("DOMContentLoaded", () => {
      VILLES
   ========================= */
   function renderVilles() {
-    villeSelect.innerHTML = `<option value="">-- Villes (optionnel) --</option>`;
+    const previousSelected = new Set(selectedVilles);
+
+    villeSelect.innerHTML = "";
 
     const villes = new Set();
 
@@ -51,6 +53,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const opt = document.createElement("option");
       opt.value = v;
       opt.textContent = v;
+
+      // 🔥 RESTORE sélection si encore valide
+      if (previousSelected.has(v)) {
+        opt.selected = true;
+      }
+
       villeSelect.appendChild(opt);
     });
   }
@@ -78,56 +86,37 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================
-     TOGGLE SAFE
-  ========================= */
-  function toggleSelection(set, value) {
-    if (set.has(value)) {
-      set.delete(value);
-    } else {
-      set.add(value);
-    }
-  }
-
-  /* =========================
-     EVENTS PROVINCES
+     EVENTS PROVINCES (MULTI REAL)
   ========================= */
   provinceSelect.addEventListener("change", () => {
 
-    const value = provinceSelect.value;
+    selectedProvinces.clear();
 
-    if (!value) return;
+    Array.from(provinceSelect.selectedOptions).forEach(opt => {
+      selectedProvinces.add(opt.value);
+    });
 
-    toggleSelection(selectedProvinces, value);
-
-    /* 🔥 IMPORTANT : recalcul cohérence */
     cleanInvalidVilles();
-
     renderVilles();
-
-    provinceSelect.value = "";
   });
 
   /* =========================
-     EVENTS VILLES
+     EVENTS VILLES (MULTI REAL)
   ========================= */
   villeSelect.addEventListener("change", () => {
 
-    const value = villeSelect.value;
+    selectedVilles.clear();
 
-    if (!value) return;
+    Array.from(villeSelect.selectedOptions).forEach(opt => {
+      const value = opt.value;
 
-    /* 🔥 VALIDATION AVANT AJOUT */
-    if (selectedProvinces.size > 0 &&
-        !isVilleValidForProvince(value, Array.from(selectedProvinces))) {
-      
-      alert("Cette ville ne correspond pas aux provinces sélectionnées.");
-      villeSelect.value = "";
-      return;
-    }
+      if (
+        selectedProvinces.size > 0 &&
+        !isVilleValidForProvince(value, Array.from(selectedProvinces))
+      ) return;
 
-    toggleSelection(selectedVilles, value);
-
-    villeSelect.value = "";
+      selectedVilles.add(value);
+    });
   });
 
   /* =========================
