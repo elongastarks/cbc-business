@@ -84,8 +84,8 @@
 <!-- BIO -->
 <div class="input-group">
 <label>Bio *</label>
-<textarea maxlength="150" id="bio" placeholder="Décris-toi brièvement..."></textarea>
-<small id="bioCount">0/150</small>
+<textarea maxlength="300" id="bio" placeholder="Décris-toi brièvement..."></textarea>
+<small id="bioCount">0/300</small>
 </div>
 
 <!-- AVAILABILITY -->
@@ -126,7 +126,7 @@ const bio = document.getElementById("bio");
 const bioCount = document.getElementById("bioCount");
 
 bio.addEventListener("input", ()=>{
-  bioCount.textContent = bio.value.length + "/150";
+  bioCount.textContent = bio.value.length + "/300";
 });
 </script>
 
