@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explorer - CBC Station</title>
+<meta name="description" content="Explorez toutes les annonces disponibles sur CBC Business. Trouvez, publiez et découvrez les dernières rendues.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.cbcstation.com/explorer">
+<!-- OpenGraph & Twitter Card -->
+<meta property="og:title" content="Explorer - CBC Station">
+<meta property="og:description" content="Explorez toutes les annonces disponibles sur CBC Business. Publiez et découvrez les dernières rendues et projets.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.cbcstation.com/explorer">
+<meta property="og:image" content="https://www.cbcstation.com/cbc.jpg">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Explorer - CBC Station">
+<meta name="twitter:description" content="Explorez toutes les annonces disponibles sur CBC Station. Publiez et découvrez les dernières rendues et projets.">
+<meta name="twitter:image" content="https://www.cbcstation.com/cbc.jpg">
+
+  <!-- Favicon principal -->
+<link rel="icon" type="image/png" sizes="48x48" href="https://www.cbcstation.com/favicon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://www.cbcstation.com/favicon.png">
+<link rel="apple-touch-icon" href="https://www.cbcstation.com/favicon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Explorer - CBC Station",
+  "url": "https://www.cbcstation.com/explorer",
+  "description": "Explorez toutes les annonces disponibles sur CBC Business. Publiez et découvrez les dernières rendues et projets.",
+  "inLanguage": "fr",
+  "publisher": {
+    "@type": "Organization",
+    "name": "CBC Station",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.cbcstation.com/cbc.jpg"
+    }
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Accueil",
+        "item": "https://www.cbcstation.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Explorer",
+        "item": "https://www.cbcstation.com/explorer"
+      }
+    ]
+  }
+}
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6273674196322358"
+     crossorigin="anonymous"></script>
+<link rel="stylesheet" href="css/explorer.css">
+<!-- IMPORTANT -->
+<script src="categorie.js" defer></script>
+<script type="module" src="js/cibles.js" defer></script>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <!-- Logo -->
+    <a href="/" class="logo">
+      <img src="cbc.jpg" alt="CBC Station Logo">
+      <span>CBC Station</span>
+    </a>
+
+    <!-- Navigation Desktop -->
+    <nav class="nav-links">
+      <a href="index.html">Accueil</a>
+      <a href="explorer.html">Explorer</a>
+      <a href="poster.html">Publier</a>
+    </nav>
+
+    <!-- Hamburger Mobile -->
+    <button class="hamburger" id="hamburger" aria-label="Ouvrir le menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ================= MOBILE MENU ================= -->
+<aside id="mobile-menu" aria-hidden="true" aria-label="Menu mobile">
+  <nav class="mobile-nav">
+    <a href="index.html">Accueil</a>
+    <a href="poster.html">Publier</a>
+    <a href="rendus.html">Rendues</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="login.html">Connexion</a>
+    <a href="signup.html">Inscription</a>
+    <a href="support.html">Support client</a>
+    <a href="Apropos.html">À propos</a>
+    <a href="help.html">Help</a>
+  </nav>
+</aside>
+
+<!-- Overlay pour mobile -->
+<div id="mobile-menu-overlay"></div>
+
+<!-- ================= LAYOUT PRINCIPAL ================= -->
+<div class="layout">
+
+  <!-- ================= LEFT SIDEBAR ================= -->
+  <aside class="sidebar-left">
+    <h3>Filtres</h3>
+
+    <div class="filters">
+
+      <!-- Recherche -->
+      <div class="search-bar">
+        <input type="text" id="search" name="search" placeholder="Rechercher...">
+        <button id="searchBtn" aria-label="Rechercher">🔍</button>
+      </div>
+
+      <!-- TYPE USER -->
+      <select id="userType">
+        <option value="">Tous les profils</option>
+        <option value="entreprise">Entreprise</option>
+        <option value="personnel">Personnel</option>
+      </select>
+      
+      <select id="licence" name="licence">
+         <option value="">Tous les niveaux</option>
+      <option value="Autodidacte">Autodidacte</option>
+      <option value="Certificat">Certificat</option>
+      <option value="Bac">Bac</option>
+      <option value="Licence">Licence</option>
+      <option value="Master">Master</option>
+      <option value="Doctorat">Doctorat</option>
+      </select>
+      
+      <select id="niche" name="niche" required>
+        <option value="">-- Choisir une niche --</option>
+      </select>
+
+      <select id="categorie" name="categorie">
+        <option value="">Toutes les catégories</option>
+      </select>
+
+      <div class="area-block">
+
+        <label>Provinces (multi)</label>
+        <select id="province" multiple></select>
+
+        <label>Villes (multi)</label>
+        <select id="ville" multiple></select>
+      </div>
+      
+      <!-- FLAGS -->
+      <div class="checkboxes">
+        <label><input type="checkbox" id="boostOnly"> Boost</label>
+        <label><input type="checkbox" id="urgentOnly"> Urgent</label>
+      </div>
+
+      <!-- Bouton Filtrer -->
+      <button id="applyFilters">Filtrer</button>
+    </div>
+  </aside>
+
+  <!-- ================= FEED CENTRAL ================= -->
+  <main class="feed" role="main">
+    <h2>Explorer les annonces</h2>
+
+    <!-- Cartes annonces -->
+    <div class="cards" id="cardsContainer"></div>
+
+    <!-- Message si aucune annonce -->
+    <div class="no-results" id="noResults">
+      Aucune annonce trouvée.
+    </div>
+
+    <!-- Pagination -->
+    <div id="pagination"></div>
+  </main>
+
+  <!-- ================= RIGHT SIDEBAR ================= -->
+  <aside class="sidebar-right">
+    <div class="box" id="urgentBox">
+      <h4>🔥 Urgentes</h4>
+      <p>Annonces urgentes</p>
+    </div>
+  </aside>
+
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="f-container">
+    <!-- Branding -->
+    <div class="f-brand">
+      <strong>CBC Station</strong>
+      <p>Plateforme Freelances ↔ Entreprises en RDC.</p>
+    </div>
+
+    <!-- Navigation -->
+    <div class="f-nav">
+      <a href="index.html">Accueil</a>
+      <a href="Apropos.html">À propos</a>
+      <a href="support.html">Support client</a>
+      <a href="contact.html">Contact</a>
+    </div>
+
+    <!-- Légal -->
+    <div class="f-legal">
+      <a href="privacy.html">Confidentialité</a>
+      <a href="mentions.html">Mentions légales</a>
+    </div>
+  </div>
+
+  <small>🇨🇩 Disponible uniquement en RDC</small>
+</footer>
+
+<script src="app.js"></script>
+<script>
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobile-menu');
+
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  mobileMenu.classList.toggle('open');
+});
+
+// fermer le menu quand on clique sur un lien
+document.querySelectorAll('#mobile-menu a').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+  });
+});
+
+// fermer le menu quand on clique sur l'overlay
+mobileMenu.addEventListener('click', e => {
+  if(e.target === mobileMenu){
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+  }
+});
+</script>
+<script type="module" src="js/explorer.js"></script>
+</body>
+</html>
