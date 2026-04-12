@@ -88,7 +88,8 @@ async function fetchUsersVerified(ids){
       const u = d.data();
       verifiedMap[u.userID] = {
   verified: !!u.verified,
-  type: u.type || null
+  type: u.type || null,
+  photoURL: u.photoURL || null
 };
     });
   }
@@ -210,7 +211,7 @@ function createCard(a){
   card.innerHTML = `
     <div class="card-top">
       <div class="owner">
-        <img class="avatar" src="${a.owner?.photoURL || 'default.png'}">
+        <img class="avatar" src="${verifiedMap[a.userID]?.photoURL || 'default.png'}">
         <div class="title-block">
           <div class="title">${a.titre}</div>
           <div class="meta">${a.categorie || "-"} • Score ${computeScore(a).toFixed(1)}</div>
@@ -318,7 +319,7 @@ return;
     card.className = "urgent-card";
 
     card.innerHTML = `
-      <img src="${a.owner?.photoURL || 'default.png'}">
+      <img src="${verifiedMap[a.userID]?.photoURL || 'default.png'}">
       <div class="urgent-content">
         <strong>${a.titre}</strong>
         <div>${a.pitch || ""}</div>
