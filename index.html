@@ -161,12 +161,12 @@ document.addEventListener("DOMContentLoaded", () => {
 <h2>Ils utilisent CBC Station</h2>
 
 <div class="proof-logos">
-
-<div class="proof-item">Entreprise locale</div>
-<div class="proof-item">Startup RDC</div>
-<div class="proof-item">PME Congo</div>
-<div class="proof-item">Freelances certifiés</div>
-
+<div class="proof-item">Entreprises en RDC (Kinshasa, Goma, Lubumbashi)</div>
+<div class="proof-item">Startups tech congolaises</div>
+<div class="proof-item">PME et commerces locaux</div>
+<div class="proof-item">Freelances vérifiés (design, dev, marketing)</div>
+<div class="proof-item">ONG et projets humanitaires</div>
+<div class="proof-item">Agences digitales & consultants</div>
 </div>
 
 </section>
@@ -286,6 +286,49 @@ Voir tous les services rendus
 
 </section>
 
+  <section class="info-block">
+
+  <!-- HEADER FLEX -->
+  <div class="info-block-header">
+    <h2>Recrutement en RDC : Trouvez un emploi ou des freelances avec CBC Station</h2>
+
+  <p>
+  CBC Station centralise les opportunités d’emploi et de freelance en République Démocratique du Congo.
+  Que vous soyez à Kinshasa, Goma, Lubumbashi, Bukavu ou ailleurs, accédez à des missions fiables
+  dans l’informatique, le marketing, les ONG, la logistique ou le commerce.
+  </p>
+  <button class="info-toggle">Voir plus</button>
+  </div>
+
+  <div class="info-content hidden">
+    
+    <h3>Comment utiliser la plateforme pour trouver un travail ?</h3>
+    <p>
+    Créez votre compte en quelques minutes, complétez votre profil, puis explorez les annonces.
+    Filtrez par ville, domaine ou type de service et postulez directement.
+    Chaque annonce est modérée pour limiter les fraudes et garantir la qualité.
+    </p>
+
+    <h3>Secteurs qui recrutent en RDC</h3>
+    <p>
+    Les secteurs les plus actifs incluent les télécommunications, l’informatique,
+    les ONG, le secteur minier, la finance et la logistique.
+    CBC Station met en avant les opportunités les plus pertinentes selon la demande du marché.
+    </p>
+
+    <h3>Publier une offre ou proposer ses services</h3>
+    <p>
+    Les entreprises peuvent publier une annonce en quelques clics et recevoir rapidement
+    des candidatures qualifiées. Les freelances peuvent proposer leurs services
+    et être contactés directement via la plateforme.
+    <br><br>
+    <strong>Commencez maintenant :</strong> 
+    <a href="poster.html">publier une annonce</a>
+    </p>
+
+  </div>
+
+  </section>
 
 <section class="section">
 
@@ -483,7 +526,32 @@ function autoType() {
 // Lancer l'animation
 autoType();
 </script>
+<script>
+const toggleBtn = document.querySelector(".info-toggle");
+const content = document.querySelector(".info-content");
 
+if(toggleBtn && content){
+
+  toggleBtn.addEventListener("click", (e)=>{
+    e.stopPropagation();
+
+    const isHidden = content.classList.toggle("hidden");
+    toggleBtn.textContent = isHidden ? "Voir plus" : "Voir moins";
+  });
+
+  // fermer si clic ailleurs
+  document.addEventListener("click", (e)=>{
+    if(!content.classList.contains("hidden")){
+      if(!e.target.closest(".info-block")){
+        content.classList.add("hidden");
+        toggleBtn.textContent = "Voir plus";
+      }
+    }
+  });
+
+}
+</script>
+  
 <script type="module" src="/js/index.js"></script>
 
 </body>
