@@ -54,23 +54,20 @@ onAuthStateChanged(auth, (user) => {
 ========================= */
 const TOTAL_PROVINCES = 26;
 
-function cleanList(str = "") {
-  return [...new Set(
-    str
-      .split(",")
-      .map(x => x.trim().toLowerCase())
-      .filter(Boolean)
-  )];
-}
+function formatArea(area = {}) {
+  const p = Array.isArray(area.provinces)
+    ? [...new Set(area.provinces.map(x => x.trim().toLowerCase()))]
+    : [];
 
-function formatArea(provinces = "", villes = "") {
-  const p = cleanList(provinces);
-  const v = cleanList(villes);
+  const v = Array.isArray(area.villes)
+    ? [...new Set(area.villes.map(x => x.trim().toLowerCase()))]
+    : [];
 
   const parts = [];
 
-  // CAS ULTRA PRO : toutes les provinces réelles
-  if (p.length >= TOTAL_PROVINCES) {
+  const hasAllProvinces = p.length >= TOTAL_PROVINCES;
+
+  if (hasAllProvinces) {
     return "📍 Toute la RDC";
   }
 
@@ -78,7 +75,7 @@ function formatArea(provinces = "", villes = "") {
     parts.push(`📍 Provinces: ${p.join(", ")}`);
   }
 
-  if (v.length && p.length < TOTAL_PROVINCES) {
+  if (v.length && !hasAllProvinces) {
     parts.push(`🏙 Villes: ${v.join(", ")}`);
   }
 
@@ -131,7 +128,8 @@ async function loadAnnonce() {
       ${annonce.date_creation?.seconds
         ? new Date(annonce.date_creation.seconds * 1000).toLocaleDateString()
         : ""}
-        <br> ${region}
+        <br><strong>région supportée :</strong>
+        <br><i>${region}</i>
     </div>
 
     <div class="resume">
