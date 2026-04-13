@@ -38,6 +38,7 @@ if (!annonceID) {
   alert("Annonce introuvable");
   location.href = "/";
 }
+const TOTAL_PROVINCES = 26;
 
 let currentUser = null;
 
@@ -53,24 +54,38 @@ onAuthStateChanged(auth, (user) => {
    FORMAT AREA LOGIC
 ========================= */
 function formatArea(provinces = "", villes = "") {
-  const p = provinces ? provinces.split(",").filter(Boolean) : [];
-  const v = villes ? villes.split(",").filter(Boolean) : [];
+  const p = provinces
+    ? provinces.split(",").map(x => x.trim()).filter(Boolean)
+    : [];
 
-  if (p.length === 0 && v.length === 0) {
-    return "Toute la RDC";
-  }
-
-  if (p.length > 10) {
-    return "Toute la RDC";
-  }
+  const v = villes
+    ? villes.split(",").map(x => x.trim()).filter(Boolean)
+    : [];
 
   const parts = [];
 
-  if (p.length) parts.push(`📍 Provinces: ${p.join(", ")}`);
-  if (v.length) parts.push(`🏙 Villes: ${v.join(", ")}`);
+  // CAS PRO : toutes les provinces
+  if (p.length === TOTAL_PROVINCES) {
+    return "📍 Toute la RDC";
+  }
+
+  // provinces normales
+  if (p.length) {
+    parts.push(`📍 Provinces: ${p.join(", ")}`);
+  }
+
+  // villes seulement si provinces pas complètes
+  if (v.length && p.length !== TOTAL_PROVINCES) {
+    parts.push(`🏙 Villes: ${v.join(", ")}`);
+  }
+
+  // rien
+  if (!p.length && !v.length) {
+    return "📍 Toute la RDC";
+  }
 
   return parts.join(" • ");
-}
+      }
 
 /* =========================
    LOAD
@@ -110,10 +125,11 @@ async function loadAnnonce() {
     </div>
 
     <div class="meta">
-      ${annonce.categorie} • ${region} • 
+      ${annonce.categorie} •
       ${annonce.date_creation?.seconds
         ? new Date(annonce.date_creation.seconds * 1000).toLocaleDateString()
         : ""}
+        <br> ${region}
     </div>
 
     <div class="resume">
@@ -158,6 +174,17 @@ async function loadAnnonce() {
         </div>
       </div>
     `;
+    const pdfLink = document.getElementById("pdf-link");
+
+if (pdfLink) {
+  if (annonce.pdf_url) {
+    pdfLink.href = annonce.pdf_url;
+    pdfLink.target = "_blank";
+    pdfLink.download = "";
+  } else {
+    pdfLink.style.display = "none";
+  }
+            }
   }
 
   /* =========================
