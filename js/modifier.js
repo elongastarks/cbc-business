@@ -173,10 +173,10 @@ async function loadAnnonce() {
 saveBtn.onclick = async () => {
   if (!annonce) return;
 
-  const area = window.getTargetingData ? window.getTargetingData() : {
-    provinces: annonce.provinces || [],
-    villes: annonce.villes || []
-  };
+  const area = window.getTargetingData?.() || {
+  provinces: annonce.area?.provinces || [],
+  villes: annonce.area?.villes || []
+};
 
   const updated = {
     ...annonce,
@@ -190,8 +190,10 @@ saveBtn.onclick = async () => {
 
     salaire: salaire.value !== "" ? Number(salaire.value) : annonce.salaire,
 
-    provinces: area.provinces,
-    villes: area.villes,
+    area: {
+  provinces: area.provinces || [],
+  villes: area.villes || []
+},
 
     lieu: lieu.value.trim() || annonce.lieu,
     licence: licence.value || annonce.licence,
