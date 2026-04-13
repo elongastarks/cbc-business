@@ -521,6 +521,73 @@ body{
   box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
 
+/*  info */
+.info-block {
+  background: #fff;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+  margin: 40px 0;
+}
+
+.info-block-header {
+  display: block; /* ← clé */
+}
+
+/* titre full largeur */
+.info-block h2 {
+  font-size: 20px;
+  line-height: 1.4;
+  margin: 0 0 10px 0;
+}
+
+/* bouton en dessous du h2 */
+.info-toggle {
+  display: inline-block;
+  margin-bottom: 10px;
+
+  border: none;
+  background: var(--primary);
+  color: #fff;
+
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.info-toggle:hover {
+  background: #0b5ed7;
+}
+
+/* texte */
+.info-block p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* contenu caché */
+.info-content {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* sous titres */
+.info-content h3 {
+  font-size: 15px;
+  color: #111;
+}
+
+/* hidden */
+.hidden {
+  display: none;
+}
+
 /*    PLANS     */
 
 .plans{
