@@ -17,6 +17,10 @@ body {
   background: var(--bg);
   color: var(--dark);
 }
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
 
 a {
   text-decoration: none;
@@ -120,7 +124,7 @@ header {
 /* ================= GRID ================= */
 .annonce-page {
   display: grid;
-  grid-template-columns: 280px minmax(500px, 1fr) 320px;
+  grid-template-columns: 280px 1fr 310px;
   gap: 20px;
   margin-top: 20px;
 }
@@ -165,6 +169,7 @@ header {
 .annonce-main {
   display: flex;
   flex-direction: column;
+  min-width: 0;
   gap: 20px;
 }
 
