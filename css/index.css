@@ -332,8 +332,10 @@ body{
    PREUVE SOCIALE
 ------- */
 .proof-item,
-.example{
+.example, .value-box, .step{
   max-width: 98%;
+  white-space: normal;
+  line-height: 1.4;
 }
 .proof{
   text-align:center;
