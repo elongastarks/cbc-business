@@ -279,8 +279,9 @@ if (pdfLink) {
   query(
     collection(db, "annonces"),
     where("categorie", "==", annonce.categorie),
-    orderBy("boost", "desc"),
-    limit(10)
+where("boost", "==", true),
+orderBy("date_creation", "desc"),
+limit(10)
   )
 );
 
