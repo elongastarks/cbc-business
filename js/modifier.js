@@ -143,14 +143,14 @@ async function loadAnnonce() {
 
     // reset sets via UI simulation
     Array.from(province.options).forEach(o => {
-      o.selected = (annonce.provinces || []).includes(o.value);
+      o.selected = (annonce.area?.provinces || []).includes(o.value);
     });
 
     province.dispatchEvent(new Event("change"));
 
     setTimeout(() => {
       Array.from(ville.options).forEach(o => {
-        o.selected = (annonce.villes || []).includes(o.value);
+        o.selected = (annonce.area?.villes || []).includes(o.value);
       });
     }, 150);
   }, 200);
