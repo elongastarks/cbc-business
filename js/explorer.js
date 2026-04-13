@@ -235,7 +235,7 @@ function createCard(a){
       </div>
       <div class="pitch">${a.description || ""}</div>
       <div class="area">
-       <strong>provinces cibles :</strong> ${(a.area?.provinces||[]).join(", ")} / <br> <strong>villes :</strong> ${(a.area?.villes||[]).join(", ")}
+       <strong>provinces Supportées : </strong> ${(a.area?.provinces||[]).join(", ")}
       </div>
       <div class="stats">
         👁 ${a.views||0} | 🖱 ${a.clicks||0} | 📦 ${a.commands||0}
