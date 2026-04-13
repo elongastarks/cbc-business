@@ -179,34 +179,34 @@ saveBtn.onclick = async () => {
 };
 
   const updated = {
-    ...annonce,
+  const updated = {
+  titre: titre.value.trim(),
+  pitch: pitch.value.trim(),
+  description: description.value.trim(),
 
-    titre: titre.value.trim() || annonce.titre,
-    pitch: pitch.value.trim() || annonce.pitch,
-    description: description.value.trim() || annonce.description,
+  categorie: categorie.value,
+  niche: niche.value,
 
-    categorie: categorie.value || annonce.categorie,
-    niche: niche.value || annonce.niche,
+  salaire: salaire.value !== "" ? Number(salaire.value) : null,
 
-    salaire: salaire.value !== "" ? Number(salaire.value) : annonce.salaire,
+  area: {
+    provinces: area.provinces || [],
+    villes: area.villes || []
+  },
 
-    area: {
-  provinces: area.provinces || [],
-  villes: area.villes || []
-},
+  lieu: lieu.value.trim(),
+  licence: licence.value,
 
-    lieu: lieu.value.trim() || annonce.lieu,
-    licence: licence.value || annonce.licence,
+  pdf_url: pdf_url.value.trim(),
 
-    pdf_url: pdf_url.value.trim() || annonce.pdf_url,
+  etat: statut.value,
 
-    etat: statut.value || annonce.etat,
-
-    updatedAt: serverTimestamp()
-  };
+  updatedAt: serverTimestamp()
+};
 
   await updateDoc(doc(db, "annonces", annonceID), updated);
   alert("Annonce mise à jour");
+   location.href = "dashboard.html";
 };
 
 /* =========================
