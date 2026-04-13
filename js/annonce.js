@@ -164,11 +164,10 @@ async function loadAnnonce() {
       <div class="owner-card">
         <img src="${owner.photoURL || "default.png"}"><br>
         <div>
-          <h3>${owner.name}</h3>
-          <p>${owner.type}</p>
-          <p>${owner.country} • ${owner.ville} • ${owner.province}</p>
+          <h3>${owner.name}</h3><label>${owner.verified ? "🔰 Vérifié" : "Non vérifié"}</label>
+          <i>${owner.type}</i>
+          <p>${owner.country} • ${owner.province} • ${owner.ville}</p>
           <p>${owner.bio || ""}</p>
-          <p>${owner.verified ? "🔰 Vérifié" : "Non vérifié"}</p>
         </div>
       </div>
     `;
