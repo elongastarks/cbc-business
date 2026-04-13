@@ -162,7 +162,7 @@ async function loadAnnonce() {
   if (owner) {
     document.getElementById("ownerProfile").innerHTML = `
       <div class="owner-card">
-        <img src="${owner.photoURL || "default.png"}">
+        <img src="${owner.photoURL || "default.png"}"><br>
         <div>
           <h3>${owner.name}</h3>
           <p>${owner.type}</p>
@@ -276,34 +276,49 @@ if (pdfLink) {
      SMART SUGGESTIONS (BOOST + URGENT + AREA + CATEGORY)
   ========================= */
   const suggSnap = await getDocs(
-    query(
-      collection(db, "annonces"),
-      where("categorie", "==", annonce.categorie),
-      orderBy("boost", "desc"),
-      limit(10)
-    )
-  );
+  query(
+    collection(db, "annonces"),
+    where("categorie", "==", annonce.categorie),
+    orderBy("boost", "desc"),
+    limit(10)
+  )
+);
 
-  const suggBox = document.getElementById("suggestions");
-  suggBox.innerHTML = "<h3>🔥 Suggestions intelligentes</h3>";
+const suggBox = document.getElementById("suggestions");
 
-  suggSnap.forEach((d) => {
-    if (d.id === annonceID) return;
+// header stable
+suggBox.innerHTML = "<h3>🔥 Suggestions intelligentes</h3>";
 
-    const a = d.data();
+let hasResults = false;
 
-    const badge = a.boost
-      ? "⚡ Boost"
-      : a.urgence
-      ? "🔥 Urgent"
-      : "";
+suggSnap.forEach((d) => {
+  if (d.id === annonceID) return;
 
-    suggBox.innerHTML += `
-      <a href="annonce.html?id=${d.id}">
-        ${a.titre} ${badge}
-      </a>
-    `;
-  });
+  const a = d.data();
+  hasResults = true;
+
+  const badge = a.boost
+    ? "⚡ Boost"
+    : a.urgence
+    ? "🔥 Urgent"
+    : "";
+
+  suggBox.innerHTML += `
+    <a href="annonce.html?id=${d.id}">
+      ${a.titre || "Sans titre"} ${badge}
+      <small>${a.pitch || ""}</small>
+    </a>
+  `;
+});
+
+// CAS VIDE
+if (!hasResults) {
+  suggBox.innerHTML += `
+    <div class="empty-suggestions">
+      Aucune suggestion disponible pour cette catégorie.
+    </div>
+  `;
+}
 
   /* =========================
      OWNER ADS
