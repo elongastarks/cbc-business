@@ -38,7 +38,6 @@ if (!annonceID) {
   alert("Annonce introuvable");
   location.href = "/";
 }
-const TOTAL_PROVINCES = 26;
 
 let currentUser = null;
 
@@ -53,39 +52,42 @@ onAuthStateChanged(auth, (user) => {
 /* =========================
    FORMAT AREA LOGIC
 ========================= */
-function formatArea(provinces = "", villes = "") {
-  const p = provinces
-    ? provinces.split(",").map(x => x.trim()).filter(Boolean)
-    : [];
+const TOTAL_PROVINCES = 26;
 
-  const v = villes
-    ? villes.split(",").map(x => x.trim()).filter(Boolean)
-    : [];
+function cleanList(str = "") {
+  return [...new Set(
+    str
+      .split(",")
+      .map(x => x.trim().toLowerCase())
+      .filter(Boolean)
+  )];
+}
+
+function formatArea(provinces = "", villes = "") {
+  const p = cleanList(provinces);
+  const v = cleanList(villes);
 
   const parts = [];
 
-  // CAS PRO : toutes les provinces
-  if (p.length === TOTAL_PROVINCES) {
+  // CAS ULTRA PRO : toutes les provinces réelles
+  if (p.length >= TOTAL_PROVINCES) {
     return "📍 Toute la RDC";
   }
 
-  // provinces normales
   if (p.length) {
     parts.push(`📍 Provinces: ${p.join(", ")}`);
   }
 
-  // villes seulement si provinces pas complètes
-  if (v.length && p.length !== TOTAL_PROVINCES) {
+  if (v.length && p.length < TOTAL_PROVINCES) {
     parts.push(`🏙 Villes: ${v.join(", ")}`);
   }
 
-  // rien
   if (!p.length && !v.length) {
     return "📍 Toute la RDC";
   }
 
   return parts.join(" • ");
-      }
+}
 
 /* =========================
    LOAD
@@ -174,17 +176,23 @@ async function loadAnnonce() {
         </div>
       </div>
     `;
-    const pdfLink = document.getElementById("pdf-link");
+    
+const pdfLink = document.getElementById("pdf-link");
+
+const pdfUrl = annonce.pdf_url?.trim();
 
 if (pdfLink) {
-  if (annonce.pdf_url) {
-    pdfLink.href = annonce.pdf_url;
+  if (pdfUrl && pdfUrl.startsWith("http")) {
+    pdfLink.href = pdfUrl;
     pdfLink.target = "_blank";
-    pdfLink.download = "";
+    pdfLink.removeAttribute("style");
+    pdfLink.download = "document.pdf";
   } else {
-    pdfLink.style.display = "none";
+    pdfLink.closest(".attachments").innerHTML =
+      "<p>Aucun fichier joint</p>";
   }
-            }
+}
+
   }
 
   /* =========================
