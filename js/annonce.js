@@ -55,35 +55,33 @@ onAuthStateChanged(auth, (user) => {
 const TOTAL_PROVINCES = 26;
 
 function formatArea(area = {}) {
-  const p = Array.isArray(area.provinces)
-    ? [...new Set(area.provinces.map(x => x.trim().toLowerCase()))]
+  const p = Array.isArray(area?.provinces)
+    ? [...new Set(area.provinces.map(x => x.trim()))]
     : [];
 
-  const v = Array.isArray(area.villes)
-    ? [...new Set(area.villes.map(x => x.trim().toLowerCase()))]
+  const v = Array.isArray(area?.villes)
+    ? [...new Set(area.villes.map(x => x.trim()))]
     : [];
+
+  const hasProvinces = p.length > 0;
+  const hasVilles = v.length > 0;
+
+  // CAS ULTRA STRICT : toutes les provinces
+  if (p.length === TOTAL_PROVINCES) {
+    return "📍 Toute la RDC";
+  }
 
   const parts = [];
 
-  const hasAllProvinces = p.length >= TOTAL_PROVINCES;
-
-  if (hasAllProvinces) {
-    return "📍 Toute la RDC";
-  }
-
-  if (p.length) {
+  if (hasProvinces) {
     parts.push(`📍 Provinces: ${p.join(", ")}`);
   }
 
-  if (v.length && !hasAllProvinces) {
+  if (hasVilles) {
     parts.push(`🏙 Villes: ${v.join(", ")}`);
   }
 
-  if (!p.length && !v.length) {
-    return "📍 Toute la RDC";
-  }
-
-  return parts.join(" • ");
+  return parts.length ? parts.join(" • ") : "📍 Non spécifié";
 }
 
 /* =========================
@@ -110,8 +108,8 @@ async function loadAnnonce() {
   /* =========================
      AREA CLEAN DISPLAY
   ========================= */
-  const region = formatArea(annonce.province, annonce.ville);
-
+  const region = formatArea(annonce.area);
+  
   /* =========================
      RENDER MAIN
   ========================= */
