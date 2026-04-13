@@ -331,7 +331,10 @@ body{
 /* -----+
    PREUVE SOCIALE
 ------- */
-
+.proof-item,
+.example{
+  max-width: 98%;
+}
 .proof{
   text-align:center;
   padding:40px 20px;
