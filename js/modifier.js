@@ -1,3 +1,5 @@
+// MODIFIER.js version finale, propre
+
 /* =========================
    FIREBASE IMPORTS CLEAN
 ========================= */
@@ -53,7 +55,7 @@ const lieu = $("lieu");
 const licence = $("licence");
 const pdf_url = $("pdf_url");
 
-const statut = document.querySelector("select");
+const statut = $("status");
 
 const viewsEl = $("views");
 const clicksEl = $("clicks");
@@ -64,11 +66,10 @@ const btnActive = document.querySelector(".btn-active");
 const btnPending = document.querySelector(".btn-pending");
 const btnCommands = document.querySelector(".btn-commands");
 
-const renduNote = document.querySelector(".danger textarea");
-const renduUser = document.querySelector(".danger input");
-const renduBtn = document.querySelector(".danger button");
-
-const deleteBtn = document.querySelector(".danger.red button");
+const renduNote = $("rendu_note");
+const renduUser = $("rendu_user");
+const deleteBtn = $("delete_btn");
+const renduBtn = document.querySelector(".btn-rendu");
 
 /* =========================
    STATE
@@ -123,15 +124,17 @@ async function loadAnnonce() {
   pitch.value = annonce.pitch ?? "";
   description.value = annonce.description ?? "";
 
+  setTimeout(() => {
   categorie.value = annonce.categorie ?? "";
   niche.value = annonce.niche ?? "";
+}, 200);
 
   salaire.value = annonce.salaire ?? 0;
   lieu.value = annonce.lieu ?? "";
   licence.value = annonce.licence ?? "";
   pdf_url.value = annonce.pdf_url ?? "";
 
-  statut.value = annonce.etat ?? "actif";
+  statut.textContent = annonce.etat ?? "actif";
 
   /* =========================
      AREA SYNC (cibles.js MASTER)
@@ -142,17 +145,20 @@ async function loadAnnonce() {
     const area = window.getTargetingData();
 
     // reset sets via UI simulation
-    Array.from(province.options).forEach(o => {
-      o.selected = (annonce.area?.provinces || []).includes(o.value);
+    if (province?.options && ville?.options) {
+  Array.from(province.options).forEach(o => {
+    o.selected = (annonce.area?.provinces || []).includes(o.value);
+  });
+
+  province.dispatchEvent(new Event("change"));
+
+  setTimeout(() => {
+    Array.from(ville.options).forEach(o => {
+      o.selected = (annonce.area?.villes || []).includes(o.value);
     });
-
-    province.dispatchEvent(new Event("change"));
-
-    setTimeout(() => {
-      Array.from(ville.options).forEach(o => {
-        o.selected = (annonce.area?.villes || []).includes(o.value);
-      });
-    }, 150);
+  }, 150);
+}
+  
   }, 200);
 
   /* =========================
@@ -179,53 +185,59 @@ saveBtn.onclick = async () => {
 };
 
   const updated = {
-  const updated = {
-  titre: titre.value.trim(),
-  pitch: pitch.value.trim(),
-  description: description.value.trim(),
+  ...annonce,
 
-  categorie: categorie.value,
-  niche: niche.value,
+  titre: titre.value.trim() || annonce.titre,
+  pitch: pitch.value.trim() || annonce.pitch,
+  description: description.value.trim() || annonce.description,
 
-  salaire: salaire.value !== "" ? Number(salaire.value) : null,
+  categorie: categorie.value || annonce.categorie,
+  niche: niche.value || annonce.niche,
+
+  salaire: salaire.value !== "" ? Number(salaire.value) : annonce.salaire,
 
   area: {
-    provinces: area.provinces || [],
-    villes: area.villes || []
+    provinces: area.provinces?.length ? area.provinces : (annonce.area?.provinces || []),
+    villes: area.villes?.length ? area.villes : (annonce.area?.villes || [])
   },
 
-  lieu: lieu.value.trim(),
-  licence: licence.value,
+  lieu: lieu.value.trim() || annonce.lieu,
+  licence: licence.value || annonce.licence,
 
-  pdf_url: pdf_url.value.trim(),
+  pdf_url: pdf_url.value.trim() || annonce.pdf_url,
 
-  etat: statut.value,
+  etat: annonce.etat,
 
   updatedAt: serverTimestamp()
 };
 
   await updateDoc(doc(db, "annonces", annonceID), updated);
   alert("Annonce mise à jour");
-   location.href = "dashboard.html";
+  location.href = "dashboard.html";
 };
 
 /* =========================
    ACTIONS
 ========================= */
-btnActive.onclick = async () => {
+btnActive?.addEventListener("click", async () => {
   await updateDoc(doc(db, "annonces", annonceID), { etat: "actif" });
-  statut.value = "actif";
+
+  annonce.etat = "actif";              // 🔥 sync mémoire
+  statut.textContent = "actif";        // 🔥 UI correct
 };
 
-btnPending.onclick = async () => {
+btnPending?.addEventListener("click", async () => {
   await updateDoc(doc(db, "annonces", annonceID), { etat: "pending" });
-  statut.value = "pending";
+
+  annonce.etat = "pending";
+  statut.textContent = "pending";
 };
+
 
 /* =========================
    RENDU
 ========================= */
-renduBtn.onclick = async () => {
+renduBtn?.addEventListener("click", async () => {
   const note = renduNote.value.trim();
   const forID = renduUser.value.trim();
 
