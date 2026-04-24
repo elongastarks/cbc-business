@@ -32,6 +32,11 @@
       <label>Titre</label>
       <input type="text" id="titre">
     </div>
+    
+    <div class="form-group">
+      <label>Status</label>
+      <i id="status">...</i>
+    </div>
 
     <div class="form-group">
       <label>Pitch (max 125)</label>
@@ -59,7 +64,7 @@
 
     <div class="form-row">
       <div class="form-group">
-        <label>Province (multi via )</label>
+        <label>Province (multi via)</label>
         <select id="province" multiple></select>
       </div>
 
@@ -119,7 +124,7 @@
     <div class="actions-row">
       <button class="btn-active">Activer</button>
       <button class="btn-pending">Pause</button>
-      <button>Commandes</button>
+      <button class="btn-commands">Commandes</button>
     </div>
   </div>
 
@@ -129,22 +134,22 @@
 
     <div class="form-group">
       <label>Note</label>
-      <textarea></textarea>
+      <textarea id="rendu_note"></textarea>
     </div>
 
     <div class="form-group">
       <label>UserID client</label>
-      <input type="text">
+      <input id="rendu_user" type="text">
     </div>
 
-    <button>Marquer rendu</button>
+    <button class="btn-rendu">Marquer rendu</button>
   </div>
 
   <!-- ===== DELETE ===== -->
   <div class="section danger red">
     <h2>Suppression</h2>
     <p>Action irréversible</p>
-    <button class="btn-danger">Supprimer</button>
+    <button id="delete_btn" class="btn-danger">Supprimer</button>
   </div>
 
 </div>
