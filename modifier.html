@@ -20,7 +20,34 @@
     <button onclick="location.href='commande.html'">Commandes</button>
   </div>
 </header>
-
+<div id="devAlert" style="
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #ff4d4f;
+  color: white;
+  padding: 14px 16px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 9999;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+">
+  ⚠️ Cette page est en cours de développement. Elle ne fonctionne pas encore.
+  <span 
+    onclick="document.getElementById('devAlert').style.display='none'" 
+    style="
+      margin-left: 15px;
+      cursor: pointer;
+      font-weight: bold;
+      background: rgba(255,255,255,0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+    "
+  >✖</span>
+</div>
+  
 <div class="container">
   <h1>Modifier l’annonce</h1>
 
